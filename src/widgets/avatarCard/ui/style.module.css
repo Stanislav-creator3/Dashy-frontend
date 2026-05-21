@@ -1,0 +1,15 @@
+.image {
+    background-size: cover;
+    background-position: center;
+    border-radius: 30px;
+
+    &:after {
+        content: "";
+        position: absolute;
+        inset: 0 0 0 0;
+        backdrop-filter: blur(20px);
+        border-radius: 30px;
+        -webkit-mask: linear-gradient(180deg, transparent, black 80%);
+        mask: linear-gradient(180deg, transparent, black 80%);
+    }
+}

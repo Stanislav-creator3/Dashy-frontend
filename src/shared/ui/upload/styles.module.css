@@ -1,0 +1,74 @@
+.root {
+    position: relative;
+    font-size: 0;
+    z-index: 0;
+}
+
+.root:hover .label {
+    opacity: 0.5;
+}
+
+.progress {
+    margin-top: 32px;
+    margin-bottom: 12px;
+    width: 62%;
+}
+
+.icon {
+    font-size: 48px;
+    color: var(--whiteColor);
+}
+
+.abort {
+    font-size: 21px;
+    color: var(--whiteColor);
+}
+
+.label {
+    pointer-events: none;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    background-color: gray;
+    transition: opacity 0.3s;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    visibility: hidden;
+}
+
+.label.visible {
+    pointer-events: auto;
+    visibility: visible;
+}
+
+.label.drop {
+    visibility: visible;
+    opacity: 0.5;
+}
+
+.input {
+    display: none;
+}
+
+.loading {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    background-color: rgba(var(--gray1Color), 0.5);
+}

@@ -1,0 +1,13 @@
+
+export const KEYS_API = {
+  ACCOUNT: "ACCOUNT",
+  TIME_TRACKER: "TIME_TRACKER",
+  PROJECTS: "PROJECTS",
+  COLLECTIONS: "COLLECTIONS",
+  PAGES: "PAGES",
+  BLOCKS: "BLOCKS",
+  COVER: "COVER",
+  RECENT_PAGES: "RECENT_PAGES",
+};
+
+export const BASE_API_URL = "http://localhost:4000";

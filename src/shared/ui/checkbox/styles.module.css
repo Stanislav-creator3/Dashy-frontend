@@ -1,0 +1,29 @@
+.input {
+    position: relative;
+    cursor: pointer;
+    appearance: none;
+    margin-right: 5px;
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 100%;
+}
+
+.input::after {
+    content: "";
+    position: absolute;
+    width: 0px;
+    height: 0px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='1.9rem' viewBox='0 -960 960 960' width='30' stroke='%23FFFFFF' stroke-width='30' fill='%23FFFFFF'%3E%3Cpath d='M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    transition: 300ms;
+}
+
+.input:checked {
+    transition: 300ms;
+}
+
+.input:checked::after {
+    width: 1.9rem;
+    height: 1.9rem;
+    transition: 300ms;
+}

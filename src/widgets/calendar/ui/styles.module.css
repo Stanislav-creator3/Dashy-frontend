@@ -1,0 +1,78 @@
+.calendarContainer {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  min-height: 600px;
+}
+
+.eventCard {
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  min-height: 60px;
+}
+
+.eventCard:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.timeSlot {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  min-height: 64px;
+}
+
+.dayColumn {
+  position: relative;
+  min-height: 640px;
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.dayColumn:last-child {
+  border-right: none;
+}
+
+.verticalLine {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 100%;
+  border-left: 2px dotted #d1d5db;
+  z-index: 1;
+}
+
+.attendeeAvatar {
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.attendeeAvatar:hover {
+  transform: scale(1.1);
+  z-index: 10;
+}
+
+.timeColumn {
+  min-width: 80px;
+  padding-right: 16px;
+}
+
+
+
+.weekNavigation {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  padding: 12px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.weekRange {
+  background: rgba(59, 130, 246, 0.1);
+  border-radius: 8px;
+  padding: 4px 8px;
+  font-size: 0.875rem;
+  color: #1f2937;
+  font-weight: 500;
+}
