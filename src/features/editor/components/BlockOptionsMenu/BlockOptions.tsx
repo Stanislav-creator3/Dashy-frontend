@@ -14,7 +14,7 @@ import {
   useInteractions,
   useTransitionStyles,
 } from "@floating-ui/react";
-import { useBlockOptionsMenuItems } from "./useBlockOptionsMenuItems";
+import { useBlockOptionsMenuItems } from "../../hooks/useBlockOptionsMenuItems";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { BlockOptionsMenuItem } from "./BlockOptionsMenuItem";
 import { useState } from "react";

@@ -1,7 +1,7 @@
 "use client";
 
 import { LexicalEditor, LexicalNode } from "lexical";
-import { TextColorOptions } from "./TextColorOptions";
+import { TextColorOptions } from "../components/BlockOptionsMenu/TextColorOptions";
 
 export function useBlockOptionsMenuItems({
   editor,
