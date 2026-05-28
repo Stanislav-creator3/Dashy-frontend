@@ -4,7 +4,7 @@ import { useOutsideClick } from "@/shared/hooks/useOutsideClick";
 import { iconsColors } from "@/widgets/iconSelect/model/iconsColor";
 import { LexicalEditor } from "lexical";
 import { Card, ColorList, Tooltip } from "@/shared/ui";
-import { SET_TEXT_STYLE_COMMAND } from "../plugins/TextStylePlugin";
+import { SET_TEXT_STYLE_COMMAND } from "../plugins/ColorStylePlugin";
 import { DEFAULT_BG } from "../nodes/CustomTextNode";
 
 export function BackgroundColor({

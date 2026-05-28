@@ -6,9 +6,10 @@ import { MdDragIndicator } from "react-icons/md";
 import { FaPlus } from "react-icons/fa6";
 import { Popover } from "@/shared/ui";
 import { DRAGGABLE_KEY } from "../../hooks/useDragListeners";
-import { $getNodeByKey } from "lexical";
+import { $createNodeSelection, $getNodeByKey, $getSelection, $setSelection } from "lexical";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { BlockOptionsMenu } from "../BlockOptionsMenu/BlockOptions";
+import { $isBlockNode } from "../../model/typeGuard";
 
 export function DraggableElement() {
   const [editor] = useLexicalComposerContext();
@@ -51,11 +52,15 @@ export function DraggableElement() {
         console.error("NO DRAGGABLE KEY");
         return false;
       }
-      let targetNodeKey: string | null = null;
-      editor.read(() => {
+      editor.update(() => {
         if (!draggable.htmlElement) return;
         const node = $getNodeByKey(draggableKey);
-        console.log("NODE", node);
+        if (!node) return
+        if (!$isBlockNode(node)) return
+        const selection = $createNodeSelection();
+        selection.add(draggableKey);
+        $setSelection(selection);
+
       });
     },
     [draggable, editor],

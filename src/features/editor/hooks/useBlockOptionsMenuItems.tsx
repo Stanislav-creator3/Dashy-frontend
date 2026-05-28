@@ -1,7 +1,8 @@
 "use client";
 
-import { LexicalEditor, LexicalNode } from "lexical";
+import { LexicalEditor } from "lexical";
 import { TextColorOptions } from "../components/BlockOptionsMenu/TextColorOptions";
+import { hasSetBackgroundColor } from "../utils/hasSetBackgroundColo";
 
 export function useBlockOptionsMenuItems({
   editor,
@@ -10,11 +11,15 @@ export function useBlockOptionsMenuItems({
   editor: LexicalEditor;
   nodeKey: string | null;
 }) {
-  return [
+  if (!nodeKey) return null;
+  const items = [
     {
       id: "color",
       tooltip: "Цвет",
-      render: () => <TextColorOptions editor={editor} nodeKey={nodeKey} />,
+      visible: hasSetBackgroundColor(nodeKey, editor),
+      render: () => <TextColorOptions editor={editor} />,
     },
   ];
+
+  return items.filter((item) => item.visible);
 }

@@ -17,7 +17,7 @@ import { defineExtension, TextNode } from "lexical";
 import { BlocksUpdatePlugin } from "../plugins/BlockUpdatePlugin";
 import { BlockDeletePlugin } from "../plugins/BlockDeletePlugin";
 import { FloatingMenuPlugin } from "../plugins/FloatingMenuPlugin";
-import { TextStylePlugin } from "../plugins/TextStylePlugin";
+import { ColorStylePlugin } from "../plugins/ColorStylePlugin";
 import { IBlock } from "../model/block.types";
 import { DndPlugin } from "../plugins/DndPlugin";
 import { useMemo } from "react";
@@ -133,7 +133,7 @@ export default function BlockEditor({
       <BlockDeletePlugin pageId={pageId} projectId={projectId} />
       <BlockPlaceholderPlugin />
       <FloatingMenuPlugin />
-      <TextStylePlugin />
+      <ColorStylePlugin />
       <MarkdownShortcutPlugin transformers={CUSTOM_TRANSFORMERS} />
       <DndPlugin pageId={pageId} projectId={projectId} />
     </LexicalExtensionComposer>

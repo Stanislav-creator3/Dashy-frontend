@@ -7,12 +7,12 @@ import {
   SELECTION_CHANGE_COMMAND,
 } from "lexical";
 import { ColorList, Tooltip } from "@/shared/ui";
-import { SET_TEXT_STYLE_COMMAND } from "../plugins/TextStylePlugin";
 import { DEFAULT_BG, DEFAULT_COLOR } from "../nodes/CustomTextNode";
 import ColorListText from "@/shared/ui/colorListText/ColorListText";
 import { getSelectionTextStyle } from "../utils/getSelectionTextStyle";
 import { useOutsideClick } from "@/shared/hooks/useOutsideClick";
 import { IoIosArrowDown } from "react-icons/io";
+import { SET_COLOR_STYLE_COMMAND } from "../plugins/ColorStylePlugin";
 
 export function TextColorItem({ editor }: { editor: LexicalEditor }) {
   const [color, setColor] = useState(DEFAULT_COLOR);
@@ -27,12 +27,12 @@ export function TextColorItem({ editor }: { editor: LexicalEditor }) {
 
   const handleColorSelect = (color: string) => {
     setColor(color);
-    editor.dispatchCommand(SET_TEXT_STYLE_COMMAND, { color: color });
+    editor.dispatchCommand(SET_COLOR_STYLE_COMMAND, { color: color });
   };
 
   const handleBackgroundSelect = (color: string) => {
     setBackground(color);
-    editor.dispatchCommand(SET_TEXT_STYLE_COMMAND, { backgroundColor: color });
+    editor.dispatchCommand(SET_COLOR_STYLE_COMMAND, { backgroundColor: color });
   };
 
   useEffect(() => {

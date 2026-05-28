@@ -1,76 +1,26 @@
+"use client";
+
 import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { iconsColors } from "@/widgets/iconSelect/model/iconsColor";
-import {
-  $getNodeByKey,
-  COMMAND_PRIORITY_EDITOR,
-  LexicalEditor,
-  SELECTION_CHANGE_COMMAND,
-} from "lexical";
-import { ColorList, Popover, Tooltip } from "@/shared/ui";
+import { LexicalEditor } from "lexical";
+import { ColorList, Popover } from "@/shared/ui";
 import ColorListText from "@/shared/ui/colorListText/ColorListText";
-import { useOutsideClick } from "@/shared/hooks/useOutsideClick";
 import { CgColorBucket } from "react-icons/cg";
-import { DEFAULT_BG, DEFAULT_COLOR } from "../../nodes/CustomTextNode";
-import { $isBlockNode } from "../../model/typeGuard";
+import { SET_COLOR_STYLE_COMMAND } from "../../plugins/ColorStylePlugin";
 
-export function TextColorOptions({
-  editor,
-  nodeKey,
-}: {
-  editor: LexicalEditor;
-  nodeKey: string | null;
-}) {
-  const [color, setColor] = useState(DEFAULT_COLOR);
-  const [background, setBackground] = useState(DEFAULT_BG);
-  const [isMixed, setIsMixed] = useState(false);
-
+export function TextColorOptions({ editor }: { editor: LexicalEditor }) {
   const [open, setOpen] = useState(false);
 
-  const ref = useOutsideClick(() => {
-    setOpen(false);
-  });
-
   const handleColorSelect = (color: string) => {
-    setColor(color);
-    editor.update(() => {
-      if (!nodeKey) return;
-      const node = $getNodeByKey(nodeKey);
-      if (!node) return;
-    });
+    editor.dispatchCommand(SET_COLOR_STYLE_COMMAND, { color: color });
+    setOpen(false);
   };
 
   const handleBackgroundSelect = (color: string) => {
-    setBackground(color);
-    editor.update(() => {
-      if (!nodeKey) return;
-      const node = $getNodeByKey(nodeKey);
-      if (!node) return;
-      if (!$isBlockNode(node)) return;
-      node.setBackgroundColor(color);
-    });
+    editor.dispatchCommand(SET_COLOR_STYLE_COMMAND, { backgroundColor: color });
+    setOpen(false);
   };
-
-  useEffect(() => {
-    return editor.registerCommand(
-      SELECTION_CHANGE_COMMAND,
-      () => {
-        editor.getEditorState().read(() => {
-          const style = getSelectionTextStyle();
-          setColor(style.color ?? DEFAULT_COLOR);
-          setBackground(style.backgroundColor ?? DEFAULT_BG);
-          setIsMixed(style.isMixed ?? false);
-        });
-
-        return false;
-      },
-      COMMAND_PRIORITY_EDITOR,
-    );
-  }, [editor]);
-
-  const colorBorder = isMixed
-    ? `2px dashed #999`
-    : `2px solid hsl(from ${color} h s l / 0.75)`;
 
   return (
     <Popover
@@ -80,15 +30,7 @@ export function TextColorOptions({
       trigger={
         <button className="p-1 flex w-full items-center gap-1 cursor-pointer rounded-md  hover:bg-bg-hover">
           <CgColorBucket size={18} />
-          <p
-            className="font-bold rounded-sm"
-            style={{
-              background: isMixed ? DEFAULT_BG : background,
-              color: color,
-            }}
-          >
-            Цвет
-          </p>
+          <p className="font-bold rounded-sm">Цвет</p>
         </button>
       }
     >

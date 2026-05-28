@@ -18,6 +18,7 @@ import { useBlockOptionsMenuItems } from "../../hooks/useBlockOptionsMenuItems";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { BlockOptionsMenuItem } from "./BlockOptionsMenuItem";
 import { useState } from "react";
+import { useNodeLabel } from "../../hooks/useNodeLabel";
 
 export function BlockOptionsMenu({
   trigger,
@@ -38,7 +39,8 @@ export function BlockOptionsMenu({
   const [activeItem, setActiveItem] = useState<string | null>(null);
 
   const items = useBlockOptionsMenuItems({ editor, nodeKey });
-  const { refs, floatingStyles, context, isPositioned } = useFloating({
+  const label = useNodeLabel(nodeKey);
+  const { refs, floatingStyles, context } = useFloating({
     open: open,
     onOpenChange: setOpen,
     placement: placement,
@@ -75,7 +77,7 @@ export function BlockOptionsMenu({
           <FloatingOverlay className="z-10">
             <FloatingFocusManager context={context}>
               <div
-                className="flex w-35 bg-background rounded-lg border-border border-1 shadow-2xl p-1"
+                className="flex flex-col w-35 bg-background rounded-lg border-border border-1 shadow-2xl p-1"
                 ref={refs.setFloating}
                 style={{
                   ...floatingStyles,
@@ -84,7 +86,12 @@ export function BlockOptionsMenu({
                 }}
                 {...getFloatingProps()}
               >
-                {items.map((item, index) => (
+                {label && (
+                  <div className="text-sm font-medium text-gray p-2">
+                    {label}
+                  </div>
+                )}
+                {items && items.map((item, index) => (
                   <BlockOptionsMenuItem
                     key={item.id}
                     isActive={activeItem === item.id}
