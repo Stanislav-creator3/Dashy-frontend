@@ -1,5 +1,4 @@
 import {
-  $createParagraphNode,
   $getNodeByKey,
   $isRootNode,
   ElementNode,
@@ -15,6 +14,7 @@ import {
 } from "./nodeId";
 import { $isBlockNode } from "../model/typeGuard";
 import { setBlockTempId } from "../model/blockState";
+import { $createCustomParagraphNode } from "../nodes/CustomParagraphNode";
 
 function genId(parentId?: string) {
   const suffix = globalThis.crypto?.randomUUID?.() ?? String(Date.now());
@@ -32,7 +32,7 @@ export function createNewBlockAfter(
   createBlocks: (data: IBlockCreate) => Promise<any>,
 ) {
   const context = getParentContainerAndChildren(currentBlock);
-  if (!context) return; 
+  if (!context) return;
   const { parentContainer, children } = context;
   const currentChild = children.find((node) => node.is(currentBlock));
 
@@ -48,7 +48,7 @@ export function createNewBlockAfter(
 
   const tempId = genId(parentId);
 
-  const newParagraph = $createParagraphNode();
+  const newParagraph = $createCustomParagraphNode();
   setOrderForNode(newParagraph, order);
   setBlockTempId(newParagraph, tempId);
   const nodeKey = newParagraph.getKey();

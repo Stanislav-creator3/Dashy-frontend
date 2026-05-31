@@ -5,7 +5,7 @@ import { ORDERED_LIST, TRANSFORMERS, UNORDERED_LIST } from "@lexical/markdown";
 import { CodeExtension } from "@lexical/code";
 import { LinkExtension } from "@lexical/link";
 import { CheckListExtension } from "@lexical/list";
-import { RichTextExtension } from "@lexical/rich-text";
+import { HeadingNode, RichTextExtension } from "@lexical/rich-text";
 import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
 import { HEADING_CUSTOM } from "../markdown/headingTransformer";
 import { BULLET_CUSTOM } from "../markdown/bulletTransformer";
@@ -13,7 +13,7 @@ import { EnterCreateBlockPlugin } from "../plugins/EnterCreateBlockPlugin";
 import { $createCustomTextNode, CustomTextNode } from "../nodes/CustomTextNode";
 import { BlockPlaceholderPlugin } from "../plugins/BlockPlaceholderPlugin";
 import { InitializeEditorPlugin } from "../plugins/InitializeEditorPlugin";
-import { defineExtension, TextNode } from "lexical";
+import { defineExtension, ParagraphNode, TextNode } from "lexical";
 import { BlocksUpdatePlugin } from "../plugins/BlockUpdatePlugin";
 import { BlockDeletePlugin } from "../plugins/BlockDeletePlugin";
 import { FloatingMenuPlugin } from "../plugins/FloatingMenuPlugin";
@@ -31,6 +31,14 @@ import { LexicalExtensionComposer } from "@lexical/react/LexicalExtensionCompose
 import { CalloutExtension } from "../extensions/calloutExtension";
 import { EditorPanelPlugin } from "../plugins/EditorPanelPlugin";
 import styles from "./BlockEditor.module.css";
+import {
+  $createCustomParagraphNode,
+  CustomParagraphNode,
+} from "../nodes/CustomParagraphNode";
+import {
+  $createCustomHeadingNode,
+  CustomHeadingNode,
+} from "../nodes/CustomHeadingNode";
 
 const EditorExtension = defineExtension({
   name: "NotionLikeEditor",
@@ -60,6 +68,8 @@ const EditorExtension = defineExtension({
   },
   nodes: [
     CustomTextNode,
+    CustomParagraphNode,
+    CustomHeadingNode,
     LinkPageNode,
     {
       replace: TextNode,
@@ -69,6 +79,11 @@ const EditorExtension = defineExtension({
         return custom;
       },
       withKlass: CustomTextNode,
+    },
+    {
+      replace: ParagraphNode,
+      with: () => $createCustomParagraphNode(),
+      withKlass: CustomParagraphNode,
     },
   ],
   dependencies: [

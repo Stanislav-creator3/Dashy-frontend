@@ -98,6 +98,7 @@ export interface IHeadingBlock extends IBaseBlock {
     level: number;
     align?: "left" | "center" | "right" | "justify";
     color?: string;
+    backgroundColor?: string;
   };
 }
 

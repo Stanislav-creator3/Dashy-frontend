@@ -33,7 +33,7 @@ import { IBlockCreate } from "../model/block.types";
 import { blocksApi } from "../api/blocks.api";
 import { pagesApi } from "@/entities/pages/api/pages.api";
 import { $isBlockNode } from "../model/typeGuard";
-import { getBlockTempId } from "../model/blockState";
+import { getBlockTempId, getParentBlockId } from "../model/blockState";
 
 export default function SlashMenuPlugin({
   pageId,
@@ -109,12 +109,13 @@ export default function SlashMenuPlugin({
       const nodeId = getBlockIdFromNode(topLevel) ?? "";
       const tempId = getBlockTempId(topLevel) ?? genId();
       const order = getOrderFromNode(topLevel) ?? 1;
+      const parentId = getParentBlockId(topLevel);
 
       if (nodeToReplace && nodeToReplace.isAttached()) {
         nodeToReplace.remove();
       }
 
-      const replacement = getNode(commandType, nodeId, order, tempId);
+      const replacement = getNode(commandType, nodeId, order, tempId, parentId);
 
       const children = topLevel.getChildren();
       if ($isListNode(replacement)) {

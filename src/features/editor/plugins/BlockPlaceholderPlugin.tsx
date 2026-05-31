@@ -12,6 +12,8 @@ import {
 import { $isHeadingNode } from "@lexical/rich-text";
 import style from "../ui/BlockEditor.module.css";
 import { $isListNode } from "@lexical/list";
+import { $isCustomParagraphNode } from "../nodes/CustomParagraphNode";
+import { $isCustomHeadingNode } from "../nodes/CustomHeadingNode";
 
 function isEmptyBlock(node: LexicalNode): boolean {
   if (!$isElementNode(node)) return false;
@@ -21,15 +23,15 @@ function isEmptyBlock(node: LexicalNode): boolean {
 }
 
 function getPlaceholderText(node: LexicalNode): string {
-  if ($isHeadingNode(node)) {
+  if ($isCustomHeadingNode(node)) {
     const level = Number(node.getTag().slice(1));
     return `Заголовок ${level}`;
   }
 
-  if($isListNode(node)) {
+  if ($isListNode(node)) {
     return `Список`;
   }
-  if ($isParagraphNode(node)) {
+  if ($isCustomParagraphNode(node)) {
     return `Наберите "/" для вставки`;
   }
   return `Наберите "/" для вставки`;

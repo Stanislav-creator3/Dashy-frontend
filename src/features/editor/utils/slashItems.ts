@@ -9,6 +9,8 @@ import {
 import { $createListNode } from "@lexical/list";
 import { $createCalloutNode } from "../nodes/CalloutNode";
 import { setBlockTempId } from "../model/blockState";
+import { $createCustomParagraphNode } from "../nodes/CustomParagraphNode";
+import { $createCustomHeadingNode } from "../nodes/CustomHeadingNode";
 
 export type SlashCommandType =
   | "text"
@@ -128,28 +130,28 @@ export const getNode = (
   let replacement;
   switch (type) {
     case "text":
-      replacement = $createParagraphNode();
+      replacement = $createCustomParagraphNode();
       setBlockIdForNode(replacement, nodeId);
       setBlockTempId(replacement, tempId);
       setOrderForNode(replacement, order);
       setParentBlockIdForNode(replacement, parentId);
       return replacement;
     case "h1":
-      replacement = $createHeadingNode("h1");
+      replacement = $createCustomHeadingNode("h1");
       setBlockIdForNode(replacement, nodeId);
       setBlockTempId(replacement, tempId);
       setOrderForNode(replacement, order);
       setParentBlockIdForNode(replacement, parentId);
       return replacement;
     case "h2":
-      replacement = $createHeadingNode("h2");
+      replacement = $createCustomHeadingNode("h2");
       setBlockIdForNode(replacement, nodeId);
       setBlockTempId(replacement, tempId);
       setOrderForNode(replacement, order);
       setParentBlockIdForNode(replacement, parentId);
       return replacement;
     case "h3":
-      replacement = $createHeadingNode("h3");
+      replacement = $createCustomHeadingNode("h3");
       setBlockIdForNode(replacement, nodeId);
       setBlockTempId(replacement, tempId);
       setOrderForNode(replacement, order);
@@ -195,7 +197,7 @@ export const getNode = (
       return replacement;
 
     default:
-      replacement = $createParagraphNode();
+      replacement = $createCustomParagraphNode();
       setBlockIdForNode(replacement, nodeId);
       setBlockTempId(replacement, tempId);
       setOrderForNode(replacement, order);

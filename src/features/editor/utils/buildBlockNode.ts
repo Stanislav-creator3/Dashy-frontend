@@ -14,6 +14,8 @@ import { $createCalloutNode } from "../nodes/CalloutNode";
 import { $createLinkPageNode } from "../nodes/LinkPage";
 import { setBlockIdForNode, setOrderForNode } from "./nodeId";
 import { setBlockTempId, setParentBlockId } from "../model/blockState";
+import { $createCustomParagraphNode } from "../nodes/CustomParagraphNode";
+import { $createCustomHeadingNode } from "../nodes/CustomHeadingNode";
 
 function applyBlockMeta<T extends LexicalNode>(node: T, block: IBlock): T {
   setBlockIdForNode(node, block.id);
@@ -27,7 +29,12 @@ function applyBlockMeta<T extends LexicalNode>(node: T, block: IBlock): T {
 export function buildBlockNode(block: IBlock, projectId: string): LexicalNode {
   switch (block.type) {
     case "Paragraph": {
-      const node = applyBlockMeta($createParagraphNode(), block);
+      const node = applyBlockMeta(
+        $createCustomParagraphNode(
+          block.props.backgroundColor ?? "transparent",
+        ),
+        block,
+      );
       appendTextSegments(node, block.content);
       return node;
     }
@@ -35,7 +42,10 @@ export function buildBlockNode(block: IBlock, projectId: string): LexicalNode {
     case "Heading": {
       const level = Math.min(Math.max(block.props.level ?? 1, 1), 6);
       const node = applyBlockMeta(
-        $createHeadingNode(`h${level}` as HeadingTagType),
+        $createCustomHeadingNode(
+          `h${level}` as HeadingTagType,
+          block.props.backgroundColor,
+        ),
         block,
       );
       appendTextSegments(node, block.content);

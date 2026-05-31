@@ -3,7 +3,6 @@ import {
   $createLineBreakNode,
   $isElementNode,
   $isLineBreakNode,
-  $isParagraphNode,
   $isTextNode,
   ElementNode,
   IS_BOLD,
@@ -26,6 +25,8 @@ import {
 import { $isListItemNode, $isListNode } from "@lexical/list";
 import { $isCalloutNode } from "../nodes/CalloutNode";
 import { $isBlockNode } from "./typeGuard";
+import { $isCustomParagraphNode } from "../nodes/CustomParagraphNode";
+import { $isCustomHeadingNode } from "../nodes/CustomHeadingNode";
 
 export function $createTextNodeFromSegment(segment: ITextSegment) {
   const textNode = $createCustomTextNode(
@@ -134,7 +135,7 @@ export function serializeBlock(node: LexicalNode): IBlock | null {
 
   const parentId = getParentBlockId(node);
 
-  if ($isParagraphNode(node)) {
+  if ($isCustomParagraphNode(node)) {
     return {
       id,
       order,
@@ -142,11 +143,13 @@ export function serializeBlock(node: LexicalNode): IBlock | null {
       type: "Paragraph",
       parentId,
       content: serializeTextChildren(node),
-      props: {},
+      props: {
+        backgroundColor: node.getBackgroundColor(),
+      },
     };
   }
 
-  if ($isHeadingNode(node)) {
+  if ($isCustomHeadingNode(node)) {
     return {
       id,
       tempId,
@@ -156,6 +159,7 @@ export function serializeBlock(node: LexicalNode): IBlock | null {
       content: serializeTextChildren(node),
       props: {
         level: Number(node.getTag().slice(1)),
+        backgroundColor: node.getBackgroundColor(),
       },
     };
   }

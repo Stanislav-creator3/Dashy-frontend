@@ -4,13 +4,20 @@ import { $isCodeNode } from "@lexical/code";
 import { $isListNode } from "@lexical/list";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $isHeadingNode, $isQuoteNode } from "@lexical/rich-text";
-import { $getNodeByKey, $isParagraphNode, LexicalNode } from "lexical";
+import { $getNodeByKey, LexicalNode } from "lexical";
 import { $isCalloutNode } from "../nodes/CalloutNode";
 import { $isLinkPageNode } from "../nodes/LinkPage";
+import { $isCustomParagraphNode } from "../nodes/CustomParagraphNode";
+import { $isCustomHeadingNode } from "../nodes/CustomHeadingNode";
 
 function getNodeLabel(node: LexicalNode) {
-  if ($isHeadingNode(node)) return "Заголовок";
-  if ($isParagraphNode(node)) return "Текст";
+  if ($isCustomHeadingNode(node)) {
+    const tag = node.getTag();
+    if (tag === "h1") return "Заголовок 1";
+    if (tag === "h2") return "Заголовок 2";
+    if (tag === "h3") return "Заголовок 3";
+  }
+  if ($isCustomParagraphNode(node)) return "Текст";
   if ($isQuoteNode(node)) return "Цитата";
   if ($isCodeNode(node)) return "Код";
   if ($isCalloutNode(node)) return "Выноска";

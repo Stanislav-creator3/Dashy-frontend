@@ -1,9 +1,6 @@
 // plugins/ToolbarPlugin.tsx
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import {
-  $createHeadingNode,
-  type HeadingTagType,
-} from "@lexical/rich-text";
+import { $createHeadingNode, type HeadingTagType } from "@lexical/rich-text";
 import { $getSelection, $isRangeSelection } from "lexical";
 import {
   getBlockTempIdFromNode,
@@ -13,6 +10,7 @@ import {
   setOrderForNode,
   setBlockTempIdForNode,
 } from "../utils/nodeId";
+import { $createCustomHeadingNode } from "../nodes/CustomHeadingNode";
 
 export function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
@@ -31,7 +29,9 @@ export function ToolbarPlugin() {
         getBlockTempIdFromNode(topLevel) ??
         existingId ??
         `temp-${crypto.randomUUID()}`;
-      const headingNode = $createHeadingNode(`h${level}` as HeadingTagType);
+      const headingNode = $createCustomHeadingNode(
+        `h${level}` as HeadingTagType,
+      );
       setBlockIdForNode(headingNode, existingId ?? tempId);
       setBlockTempIdForNode(headingNode, tempId);
       setOrderForNode(headingNode, getOrderFromNode(topLevel) ?? 1);

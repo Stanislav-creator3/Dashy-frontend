@@ -8,7 +8,6 @@ import {
   LexicalCommand,
   createCommand,
   CLICK_COMMAND,
-  $createParagraphNode,
   $isParagraphNode,
 } from "lexical";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
@@ -17,8 +16,16 @@ import { blocksApi } from "../api/blocks.api";
 import { IBlockCreate } from "../model/block.types";
 import { $isBlockNode } from "../model/typeGuard";
 import { pagesApi } from "@/entities/pages/api/pages.api";
-import { getOrderFromNode, setBlockIdForNode, setOrderForNode } from "../utils/nodeId";
+import {
+  getOrderFromNode,
+  setBlockIdForNode,
+  setOrderForNode,
+} from "../utils/nodeId";
 import { setBlockTempId } from "../model/blockState";
+import {
+  $createCustomParagraphNode,
+  $isCustomParagraphNode,
+} from "../nodes/CustomParagraphNode";
 
 const genId = () =>
   `temp-${globalThis.crypto?.randomUUID?.() ?? String(Date.now())}`;
@@ -66,7 +73,7 @@ export function CreateOnClickPlugin({
 
           if (clickY > lastRect.bottom) {
             if (
-              $isParagraphNode(lastNode) &&
+              $isCustomParagraphNode(lastNode) &&
               lastNode.getTextContent() === ""
             ) {
               lastNode.select();
@@ -77,7 +84,7 @@ export function CreateOnClickPlugin({
               if ($isBlockNode(lastNode)) {
                 order = (getOrderFromNode(lastNode) ?? 0) + 1;
               }
-              const paragraph = $createParagraphNode();
+              const paragraph = $createCustomParagraphNode();
               setOrderForNode(paragraph, order);
               setBlockTempId(paragraph, tempId);
               nodeKey = paragraph.getKey();

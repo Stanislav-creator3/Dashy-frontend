@@ -27,6 +27,7 @@ import {
   setOrderForNode,
 } from "../utils/nodeId";
 import { createTempId } from "../utils/createTempId";
+import { $createCustomParagraphNode } from "./CustomParagraphNode";
 
 export const DEFAULT_BG = "var(--color-gray)";
 export const DEFAULT_ICON = "💡";
@@ -63,7 +64,7 @@ export class CalloutNode extends ElementNode {
 
     dom.dataset.callout = "true";
     dom.className =
-      "flex gap-2 my-2 rounded-[8px] py-3 px-5 items-start border border-[color:var(--color-border)]";
+      "flex gap-2 my-2 rounded-md py-3 px-5 items-start border border-[color:var(--color-border)]";
     dom.style.backgroundColor = this.getBackgroundColor();
 
     content.className = "flex flex-col min-w-0";
@@ -133,7 +134,7 @@ export class CalloutNode extends ElementNode {
     const children = this.getChildren();
 
     if (children.length === 0) {
-      const paragraph = $createParagraphNode();
+      const paragraph = $createCustomParagraphNode();
       setBlockIdForNode(paragraph, getBlockId(this));
       setBlockTempIdForNode(
         paragraph,
@@ -150,7 +151,7 @@ export class CalloutNode extends ElementNode {
     );
 
     if (!hasOnlyElementChildren) {
-      const paragraph = $createParagraphNode();
+      const paragraph = $createCustomParagraphNode();
       setBlockIdForNode(paragraph, getBlockId(this));
       setBlockTempIdForNode(
         paragraph,
@@ -207,7 +208,7 @@ export class CalloutNode extends ElementNode {
 }
 
 export function $createCalloutParagraphNode(parentId?: string) {
-  const paragraph = $createParagraphNode();
+  const paragraph = $createCustomParagraphNode();
   const tempId = createTempId(parentId);
   setBlockTempId(paragraph, tempId);
   return paragraph;

@@ -1,9 +1,10 @@
-import { $createParagraphNode, $getRoot } from "lexical";
+import { $getRoot } from "lexical";
 import { useEffect, useRef } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { IBlock } from "../model/block.types";
-import { setBlockId, setBlockOrder, setBlockTempId } from "../model/blockState";
+import { setBlockOrder, setBlockTempId } from "../model/blockState";
 import { buildBlockNode } from "../utils/buildBlockNode";
+import { $createCustomParagraphNode } from "../nodes/CustomParagraphNode";
 
 export function InitializeEditorPlugin({
   blocks,
@@ -36,7 +37,7 @@ export function InitializeEditorPlugin({
         // защита
         if (root.getChildrenSize() === 0) {
           const tempId = `temp-${crypto.randomUUID()}`;
-          const p = $createParagraphNode();
+          const p = $createCustomParagraphNode();
           setBlockOrder(p, 1);
           setBlockTempId(p, tempId);
           root.append(p);
