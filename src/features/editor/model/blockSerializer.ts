@@ -1,4 +1,3 @@
-import { $isHeadingNode, $isQuoteNode } from "@lexical/rich-text";
 import {
   $createLineBreakNode,
   $isElementNode,
@@ -27,6 +26,7 @@ import { $isCalloutNode } from "../nodes/CalloutNode";
 import { $isBlockNode } from "./typeGuard";
 import { $isCustomParagraphNode } from "../nodes/CustomParagraphNode";
 import { $isCustomHeadingNode } from "../nodes/CustomHeadingNode";
+import { $isCustomQuoteNode } from "../nodes/CustomQuoteNode";
 
 export function $createTextNodeFromSegment(segment: ITextSegment) {
   const textNode = $createCustomTextNode(
@@ -230,7 +230,7 @@ export function serializeBlock(node: LexicalNode): IBlock | null {
     };
   }
 
-  if ($isQuoteNode(node)) {
+  if ($isCustomQuoteNode(node)) {
     return {
       id,
       order,
@@ -238,7 +238,9 @@ export function serializeBlock(node: LexicalNode): IBlock | null {
       tempId,
       type: "Quote",
       content: serializeTextChildren(node),
-      props: {},
+      props: {
+        backgroundColor: node.getBackgroundColor(),
+      },
     };
   }
 

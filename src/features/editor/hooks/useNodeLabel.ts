@@ -13,9 +13,9 @@ import { $isCustomHeadingNode } from "../nodes/CustomHeadingNode";
 function getNodeLabel(node: LexicalNode) {
   if ($isCustomHeadingNode(node)) {
     const tag = node.getTag();
-    if (tag === "h1") return "Заголовок 1";
-    if (tag === "h2") return "Заголовок 2";
-    if (tag === "h3") return "Заголовок 3";
+    if (tag === "h1") return "Заголовок H1";
+    if (tag === "h2") return "Заголовок H2";
+    if (tag === "h3") return "Заголовок H3";
   }
   if ($isCustomParagraphNode(node)) return "Текст";
   if ($isQuoteNode(node)) return "Цитата";

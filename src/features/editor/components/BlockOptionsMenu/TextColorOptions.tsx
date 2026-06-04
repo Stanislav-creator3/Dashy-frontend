@@ -37,7 +37,7 @@ export function TextColorOptions({ editor }: { editor: LexicalEditor }) {
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, x: -40 }}
+            initial={{ opacity: 1, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -6 }}
             transition={{

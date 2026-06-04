@@ -39,6 +39,11 @@ import {
   $createCustomHeadingNode,
   CustomHeadingNode,
 } from "../nodes/CustomHeadingNode";
+import {
+  $createCustomQuoteNode,
+  CustomQuoteNode,
+} from "../nodes/CustomQuoteNode";
+import { QuoteNode } from "@lexical/rich-text";
 
 const EditorExtension = defineExtension({
   name: "NotionLikeEditor",
@@ -56,7 +61,8 @@ const EditorExtension = defineExtension({
       underline: "border-b border-b-2 border-text",
       strikethrough: "line-through",
     },
-    quote: "border-l-4 border-foreground pl-4 text-text my-2",
+    quote:
+      "relative before:content-[''] before:border-l-4 before:absolute before:left-1 before:top-1 before:bottom-1 before:border-foreground pl-4 text-text my-2",
     list: {
       ul: "list-disc",
       ol: "list-decimal",
@@ -70,6 +76,7 @@ const EditorExtension = defineExtension({
     CustomTextNode,
     CustomParagraphNode,
     CustomHeadingNode,
+    CustomQuoteNode,
     LinkPageNode,
     {
       replace: TextNode,

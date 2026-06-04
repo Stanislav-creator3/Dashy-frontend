@@ -1,11 +1,7 @@
 import { $createCodeNode } from "@lexical/code";
 import { $createListItemNode, $createListNode } from "@lexical/list";
-import {
-  $createHeadingNode,
-  $createQuoteNode,
-  type HeadingTagType,
-} from "@lexical/rich-text";
-import { $createParagraphNode, type LexicalNode } from "lexical";
+import { $createQuoteNode } from "@lexical/rich-text";
+import { type LexicalNode } from "lexical";
 import { getIcon } from "@/shared/utils/getIcon";
 import { renderIcon } from "@/shared/utils/renderIcon";
 import { type IBlock } from "../model/block.types";
@@ -15,7 +11,11 @@ import { $createLinkPageNode } from "../nodes/LinkPage";
 import { setBlockIdForNode, setOrderForNode } from "./nodeId";
 import { setBlockTempId, setParentBlockId } from "../model/blockState";
 import { $createCustomParagraphNode } from "../nodes/CustomParagraphNode";
-import { $createCustomHeadingNode } from "../nodes/CustomHeadingNode";
+import {
+  $createCustomHeadingNode,
+  HeadingTagType,
+} from "../nodes/CustomHeadingNode";
+import { $createCustomQuoteNode } from "../nodes/CustomQuoteNode";
 
 function applyBlockMeta<T extends LexicalNode>(node: T, block: IBlock): T {
   setBlockIdForNode(node, block.id);
@@ -53,7 +53,10 @@ export function buildBlockNode(block: IBlock, projectId: string): LexicalNode {
     }
 
     case "Quote": {
-      const node = applyBlockMeta($createQuoteNode(), block);
+      const node = applyBlockMeta(
+        $createCustomQuoteNode(block.props.backgroundColor),
+        block,
+      );
       appendTextSegments(node, block.content);
       return node;
     }

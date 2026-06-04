@@ -271,6 +271,10 @@ p[data-placeholder].placeholder {
   position: relative;
 }
 
+p[data-placeholder].placeholder::before {
+  left: 4px;
+}
+
 /* Для заголовков */
 h1[data-placeholder].placeholder,
 h2[data-placeholder].placeholder,
@@ -279,6 +283,12 @@ h4[data-placeholder].placeholder,
 h5[data-placeholder].placeholder,
 h6[data-placeholder].placeholder {
   position: relative;
+}
+
+h1[data-placeholder].placeholder::before,
+h2[data-placeholder].placeholder::before,
+h3[data-placeholder].placeholder::before {
+  left: 4px;
 }
 
 /* Для списков */
@@ -292,7 +302,6 @@ ol[data-placeholder].placeholder::before,
 ul[data-placeholder].placeholder::before {
   left: 1.5rem;
 }
-
 
 /* DND */
 

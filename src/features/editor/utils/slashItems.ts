@@ -1,6 +1,5 @@
 import { MenuOption } from "@lexical/react/LexicalTypeaheadMenuPlugin";
-import { $createParagraphNode } from "lexical";
-import { $createHeadingNode, $createQuoteNode } from "@lexical/rich-text";
+import { $createQuoteNode } from "@lexical/rich-text";
 import {
   setBlockIdForNode,
   setOrderForNode,
@@ -11,6 +10,7 @@ import { $createCalloutNode } from "../nodes/CalloutNode";
 import { setBlockTempId } from "../model/blockState";
 import { $createCustomParagraphNode } from "../nodes/CustomParagraphNode";
 import { $createCustomHeadingNode } from "../nodes/CustomHeadingNode";
+import { $createCustomQuoteNode } from "../nodes/CustomQuoteNode";
 
 export type SlashCommandType =
   | "text"
@@ -173,7 +173,7 @@ export const getNode = (
       setParentBlockIdForNode(replacement, parentId);
       return replacement;
     case "quote":
-      replacement = $createQuoteNode();
+      replacement = $createCustomQuoteNode();
       setBlockIdForNode(replacement, nodeId);
       setBlockTempId(replacement, tempId);
       setOrderForNode(replacement, order);

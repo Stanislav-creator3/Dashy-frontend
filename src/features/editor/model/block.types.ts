@@ -147,7 +147,9 @@ export interface IBulletBlock extends IBaseBlock {
 export interface IQuoteBlock extends IBaseBlock {
   type: "Quote";
   content: ITextSegment[];
-  props: {};
+  props: {
+    backgroundColor?: string;
+  };
 }
 
 export interface ICodeBlock extends IBaseBlock {

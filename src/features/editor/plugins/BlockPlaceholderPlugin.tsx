@@ -2,14 +2,7 @@
 
 import { useEffect } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import {
-  $getRoot,
-  $isElementNode,
-  $isParagraphNode,
-  ElementNode,
-  LexicalNode,
-} from "lexical";
-import { $isHeadingNode } from "@lexical/rich-text";
+import { $getRoot, $isElementNode, ElementNode, LexicalNode } from "lexical";
 import style from "../ui/BlockEditor.module.css";
 import { $isListNode } from "@lexical/list";
 import { $isCustomParagraphNode } from "../nodes/CustomParagraphNode";
