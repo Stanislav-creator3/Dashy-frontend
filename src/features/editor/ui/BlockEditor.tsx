@@ -13,7 +13,12 @@ import { EnterCreateBlockPlugin } from "../plugins/EnterCreateBlockPlugin";
 import { $createCustomTextNode, CustomTextNode } from "../nodes/CustomTextNode";
 import { BlockPlaceholderPlugin } from "../plugins/BlockPlaceholderPlugin";
 import { InitializeEditorPlugin } from "../plugins/InitializeEditorPlugin";
-import { defineExtension, ParagraphNode, TextNode } from "lexical";
+import {
+  configExtension,
+  defineExtension,
+  ParagraphNode,
+  TextNode,
+} from "lexical";
 import { BlocksUpdatePlugin } from "../plugins/BlockUpdatePlugin";
 import { BlockDeletePlugin } from "../plugins/BlockDeletePlugin";
 import { FloatingMenuPlugin } from "../plugins/FloatingMenuPlugin";
@@ -44,6 +49,7 @@ import {
   CustomQuoteNode,
 } from "../nodes/CustomQuoteNode";
 import { QuoteNode } from "@lexical/rich-text";
+import { ReactExtension } from "@lexical/react/ReactExtension";
 
 const EditorExtension = defineExtension({
   name: "NotionLikeEditor",
@@ -100,6 +106,7 @@ const EditorExtension = defineExtension({
     LinkExtension,
     CheckListExtension,
     CalloutExtension,
+    configExtension(ReactExtension, { contentEditable: null }),
   ],
 });
 

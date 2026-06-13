@@ -251,7 +251,21 @@
 }
 
 /* Placeholder для блоков */
-[data-placeholder].placeholder::before {
+
+.node-placeholder:has(br):not(:has(span))::before {
+  position: absolute;
+  content: attr(data-placeholder);
+  color: rgba(136, 136, 136, 0.6);
+}
+
+ul[data-placeholder].node-placeholder::before,
+ol[data-placeholder].node-placeholder::before {
+  content: attr(data-placeholder);
+  color: rgba(136, 136, 136, 0.6);
+  position: absolute;
+}
+
+/* [data-placeholder].placeholder::before {
   display: block;
   content: attr(data-placeholder);
   position: absolute;
@@ -267,33 +281,33 @@
 }
 
 /* Для параграфов */
-p[data-placeholder].placeholder {
+/* p[data-placeholder].placeholder {
   position: relative;
 }
 
 p[data-placeholder].placeholder::before {
   left: 4px;
-}
+} */
 
 /* Для заголовков */
-h1[data-placeholder].placeholder,
+/* h1[data-placeholder].placeholder,
 h2[data-placeholder].placeholder,
 h3[data-placeholder].placeholder,
 h4[data-placeholder].placeholder,
 h5[data-placeholder].placeholder,
 h6[data-placeholder].placeholder {
   position: relative;
-}
+} */
 
-h1[data-placeholder].placeholder::before,
+/* h1[data-placeholder].placeholder::before,
 h2[data-placeholder].placeholder::before,
 h3[data-placeholder].placeholder::before {
   left: 4px;
-}
+} */
 
 /* Для списков */
 
-ol[data-placeholder].placeholder,
+/* ol[data-placeholder].placeholder,
 ul[data-placeholder].placeholder {
   position: relative;
 }
@@ -301,7 +315,9 @@ ul[data-placeholder].placeholder {
 ol[data-placeholder].placeholder::before,
 ul[data-placeholder].placeholder::before {
   left: 1.5rem;
-}
+} */
+
+/* Для цитат */
 
 /* DND */
 

@@ -67,7 +67,7 @@ export class CalloutNode extends ElementNode {
       "flex gap-2 my-2 rounded-md py-3 px-5 items-start border border-[color:var(--color-border)]";
     dom.style.backgroundColor = this.getBackgroundColor();
 
-    content.className = "flex flex-col min-w-0";
+    content.className = "flex flex-col min-w-0 w-full";
     content.dataset.calloutContent = "true";
 
     const button = document.createElement("button");
