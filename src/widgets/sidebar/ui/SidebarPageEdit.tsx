@@ -18,7 +18,7 @@ export function SidebarPagEdit({
 }: {
   pageId: string;
   projectId: string;
-  parentId: string;
+  parentId: string | null;
   title: string;
   isEdit: boolean;
   setIsEdit: (value: boolean) => void;

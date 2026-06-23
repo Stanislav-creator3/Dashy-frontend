@@ -4,6 +4,17 @@ import { MdDeleteOutline } from "react-icons/md";
 import { MdOutlineEdit } from "react-icons/md";
 import { pagesApi } from "@/entities/pages/api/pages.api";
 import { useSideBarItem } from "@/widgets/sidebar/hooks/useSidebarItem";
+import { IPageList } from "@/entities/pages/model/page.types";
+
+function removeFromTree(
+  items: IPageList[] | undefined,
+  id: string,
+): IPageList[] {
+  if (!items) return [];
+  return items
+    .filter((item) => item.id !== id)
+    .map((item) => ({ ...item, children: removeFromTree(item.children, id) }));
+}
 
 export const useMenuEditItems = (
   pageId: string,
@@ -18,17 +29,16 @@ export const useMenuEditItems = (
     mutationFn: pagesApi.deletePage,
     onMutate: () => {
       queryClient.cancelQueries({
-        queryKey: pagesApi.getPageList({ projectId, parentId: parentId })
-          .queryKey,
+        queryKey: pagesApi.getPageList({ projectId, parentId: null }).queryKey,
       });
       const prevList = queryClient.getQueryData(
-        pagesApi.getPageList({ projectId, parentId: parentId }).queryKey,
+        pagesApi.getPageList({ projectId, parentId: null }).queryKey,
       );
 
       queryClient.setQueryData(
-        pagesApi.getPageList({ projectId, parentId: parentId }).queryKey,
+        pagesApi.getPageList({ projectId, parentId: null }).queryKey,
         (data) => {
-          const dataFilter = data?.filter((item) => item.id !== pageId);
+          const dataFilter = removeFromTree(data, pageId);
           if (dataFilter?.length === 0) {
             close();
           }

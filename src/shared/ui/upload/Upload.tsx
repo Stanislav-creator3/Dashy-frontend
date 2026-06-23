@@ -36,7 +36,10 @@ export default function Upload({
 
   const handleFile = (file?: File) => {
     if (!file) return;
-
+    setPreview((prev) => {
+      if (prev) URL.revokeObjectURL(prev);
+      return URL.createObjectURL(file);
+    });
     onChange(file);
   };
 

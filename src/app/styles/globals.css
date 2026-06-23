@@ -63,6 +63,16 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* dnd */
+  --dnd-dragging: oklch(0.9 0.12 95);
+  --dnd-foreground: oklch(0.145 0 0);
+  --dnd-primary: oklch(0.205 0 0);
+  --dnd-primary-foreground: oklch(0.985 0 0);
+  --dnd-accent: oklch(0.97 0 0);
+  --dnd-accent-foreground: oklch(0.205 0 0);
+  --dnd-border: oklch(0.922 0 0);
+  --dnd-ring: oklch(0.708 0 0);
 }
 
 .dark {
@@ -178,6 +188,7 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-dnd-dragging: var(--dnd-dragging);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);

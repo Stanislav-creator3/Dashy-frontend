@@ -60,10 +60,10 @@ export const pagesApi = {
 
   getPageList: ({
     projectId,
-    parentId,
+    parentId = null,
   }: {
     projectId: string;
-    parentId: string | null;
+    parentId?: string | null;
   }) => {
     return queryOptions({
       queryKey: [KEYS_API.PAGES, projectId, parentId],
@@ -173,6 +173,29 @@ export const pagesApi = {
       throw new Error(errorData.message);
     }
     return await response.json();
+  },
+
+  reorderPages: async ({
+    projectId,
+    pages,
+  }: {
+    projectId: string;
+    pages: Array<{ id: string; parentId: string | null; position: number }>;
+  }) => {
+    const response = await fetch(`${BASE_API_URL}/${projectId}/pages/reorder`, {
+      method: "PATCH",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ pages }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response
+        .json()
+        .catch(() => ({ message: "Ошибка сервера" }));
+      throw new Error(errorData.message);
+    }
+    return response.json();
   },
 
   changeCover: async ({

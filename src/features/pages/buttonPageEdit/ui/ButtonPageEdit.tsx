@@ -31,7 +31,7 @@ export default function ButtonPageEdit({
   isHover?: boolean;
   pageId: string;
   projectId: string;
-  parentId: string;
+  parentId: string | null;
   setIsEdit: (value: boolean) => void;
 }) {
   const itemMenu = useMenuEditItems(pageId, parentId, projectId, setIsEdit);
@@ -43,7 +43,7 @@ export default function ButtonPageEdit({
           <motion.button
             className={cn(
               "bg-[rgba(0,0,0,0)] flex cursor-pointer rounded-xl py-2 px-1 gap-[3px]",
-              className
+              className,
             )}
             whileHover={{
               background: "var(--color-yellow)",

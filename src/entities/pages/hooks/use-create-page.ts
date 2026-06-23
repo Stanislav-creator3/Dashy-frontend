@@ -22,7 +22,7 @@ export function useCreatePage({
       queryClient.invalidateQueries(
         pagesApi.getPageList({
           projectId: projectId,
-          parentId: parentId || null,
+          parentId: null,
         }),
       );
     },

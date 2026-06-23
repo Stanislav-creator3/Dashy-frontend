@@ -7,6 +7,14 @@ import { getIcon } from "@/shared/utils/getIcon";
 import { match } from "path-to-regexp";
 import { useGetPageList } from "@/entities/pages/hooks/use-get-page-list";
 import { usePathname } from "next/navigation";
+import { DragDropProvider, useDraggable, useDroppable } from "@dnd-kit/react";
+import { move } from "@dnd-kit/helpers";
+import { useEffect, useRef, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { BASE_API_URL, KEYS_API } from "@/shared/config/api";
+import { IPageList } from "@/entities/pages/model/page.types";
+import { SidebarTree } from "./SidebarTree";
+import { useReorderPages } from "@/entities/pages/hooks/use-reorder-pages";
 
 export default function MainNav({
   isOpen,
@@ -15,8 +23,10 @@ export default function MainNav({
   isOpen: boolean;
   projectId: string;
 }) {
+  const queryClient = useQueryClient();
   const pathname = usePathname();
   const { data, isLoading } = useGetPageList({ projectId, parentId: null });
+  const { mutate: reorderPages } = useReorderPages({ projectId }); // ← добавить
 
   return (
     <AnimatePresence mode="wait">
@@ -36,7 +46,7 @@ export default function MainNav({
         <motion.div
           key="list"
           layout="position"
-          className="flex flex-col gap-1  scrollbar sidebar"
+          className="flex flex-col gap-1 scrollbar sidebar"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -45,40 +55,12 @@ export default function MainNav({
           }}
         >
           <ButtonNewPage projectId={projectId} />
-          <LayoutGroup>
-            <AnimatePresence>
-              {data?.map((item) => (
-                <motion.div
-                  layout
-                  transition={{
-                    layout: {
-                      type: "spring",
-                      bounce: 0.25,
-                    },
-                  }}
-                  key={item.id}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0, x: -30 }}
-                >
-                  <SidebarTreeItem
-                    parentId={item.parentId}
-                    icon={getIcon(item.icon ?? item.type)}
-                    iconColor={item.iconColor}
-                    title={item.title}
-                    id={item.id}
-                    hasChildren={item.children}
-                    level={1}
-                    isActive={
-                      !!match(`/projects/${projectId}/pages/${item.id}`)(
-                        pathname,
-                      )
-                    }
-                  />
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </LayoutGroup>
+          <SidebarTree
+            items={data || []}
+            pathname={pathname}
+            projectId={projectId}
+            onChange={reorderPages}
+          />
         </motion.div>
       )}
     </AnimatePresence>

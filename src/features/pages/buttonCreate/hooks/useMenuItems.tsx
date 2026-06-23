@@ -28,7 +28,7 @@ export const useMenuItems = ({
 
   const itemMenu = [
     {
-      onClick: () => onCreatePage("PAGE"),
+      onClick: () => onCreatePage(PAGE_TYPE.PAGE),
       label: (
         <p className="flex gap-1 items-center justify-center">
           <span>

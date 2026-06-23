@@ -22,14 +22,14 @@ export interface IPage {
 }
 
 export interface IPageList {
-  children: boolean;
+  children: IPageList[];
   id: string;
   title: string;
   icon: string | null;
   iconColor?: string;
   type: PAGE_TYPE;
   position: number;
-  parentId: string;
+  parentId: string | null;
 }
 
 export interface ICreatePage {

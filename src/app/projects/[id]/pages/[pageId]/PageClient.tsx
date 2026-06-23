@@ -8,6 +8,7 @@ import { PageHeader } from "@/widgets/pageHeader";
 import { pagesApi } from "@/entities/pages/api/pages.api";
 import { useEffect } from "react";
 import { KEYS_API } from "@/shared/config/api";
+import { useSortable } from "@dnd-kit/react/sortable";
 
 export default function PageClient({
   pageId,

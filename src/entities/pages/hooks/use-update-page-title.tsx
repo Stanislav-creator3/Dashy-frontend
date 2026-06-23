@@ -18,16 +18,16 @@ export function useUpdatePageTitle({
     mutationFn: pagesApi.updatePage,
     onMutate: (data) => {
       queryClient.cancelQueries({
-        queryKey: pagesApi.getPageList({ projectId, parentId }).queryKey,
+        queryKey: pagesApi.getPageList({ projectId }).queryKey,
       });
 
       const prevList = queryClient.getQueryData(
-        pagesApi.getPageList({ projectId, parentId }).queryKey,
+        pagesApi.getPageList({ projectId }).queryKey,
       );
 
       if (data.body.title !== "undefined") {
         queryClient.setQueryData(
-          pagesApi.getPageList({ projectId, parentId }).queryKey,
+          pagesApi.getPageList({ projectId }).queryKey,
           (list) => {
             return list?.map((item) => {
               if (item.id === pageId) {
@@ -43,6 +43,7 @@ export function useUpdatePageTitle({
         queryClient.setQueryData(
           pagesApi.getByIdPage({ id: pageId, projectId }).queryKey,
           (item) => {
+            console.log(item);
             if (!item) return;
             return {
               ...item,
@@ -71,9 +72,7 @@ export function useUpdatePageTitle({
           }),
         );
       }
-      queryClient.invalidateQueries(
-        pagesApi.getPageList({ projectId, parentId }),
-      );
+      queryClient.invalidateQueries(pagesApi.getPageList({ projectId }));
       queryClient.invalidateQueries(
         pagesApi.getByIdPage({ id: pageId, projectId }),
       );
