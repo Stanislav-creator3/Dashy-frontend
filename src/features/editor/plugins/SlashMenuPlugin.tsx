@@ -22,18 +22,15 @@ import {
   SlashCommandType,
   SlashMenuOption,
 } from "../utils/slashItems";
-import {
-  getBlockIdFromNode,
-  getOrderFromNode,
-  setBlockIdForNode,
-} from "../utils/nodeId";
-import { $isCalloutNode } from "../nodes/CalloutNode";
+import { getBlockIdFromNode, getOrderFromNode } from "../utils/nodeId";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { IBlockCreate } from "../model/block.types";
 import { blocksApi } from "../api/blocks.api";
 import { pagesApi } from "@/entities/pages/api/pages.api";
-import { $isBlockNode } from "../model/typeGuard";
 import { getBlockTempId, getParentBlockId } from "../model/blockState";
+
+const genId = () =>
+  `temp-${globalThis.crypto?.randomUUID?.() ?? String(Date.now())}`;
 
 export default function SlashMenuPlugin({
   pageId,
@@ -62,8 +59,6 @@ export default function SlashMenuPlugin({
 
   const checkForTriggerMatch = useCallback(
     (text: string, editor: LexicalEditor): MenuTextMatch | null => {
-      // Open slash-menu only when current block starts with "/query"
-      // and has no text before slash.
       const match = text.match(/^\/([^\s]*)$/);
       if (!match) return null;
 
@@ -109,7 +104,7 @@ export default function SlashMenuPlugin({
       const nodeId = getBlockIdFromNode(topLevel) ?? "";
       const tempId = getBlockTempId(topLevel) ?? genId();
       const order = getOrderFromNode(topLevel) ?? 1;
-      const parentId = getParentBlockId(topLevel);
+      const parentId = getParentBlockId(topLevel) ?? null;
 
       if (nodeToReplace && nodeToReplace.isAttached()) {
         nodeToReplace.remove();
@@ -177,7 +172,4 @@ export default function SlashMenuPlugin({
       }
     />
   );
-}
-function genId(): string | null {
-  throw new Error("Function not implemented.");
 }

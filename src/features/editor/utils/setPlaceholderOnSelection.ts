@@ -51,7 +51,6 @@ export const setPlaceholderOnSelection = ({
 
   const anchor = selection.anchor;
 
-  console.log(anchor.getNode());
   const placeholder = getPlaceholderText(anchor.getNode());
   if (placeholder) {
     const selectedHtmlElement = editor.getElementByKey(anchor.key);

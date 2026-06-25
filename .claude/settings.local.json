@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(awk -F: '{print $1\": \"$0}')",
+      "Bash(awk 'BEGIN{c=\"\"} /class /{c=$0} /isInline/{print \"  [in \"c\"] -> \"$0}')",
+      "Bash(awk 'NR>=9626 && NR<=9695' node_modules/lexical/Lexical.dev.mjs)"
+    ]
+  }
+}

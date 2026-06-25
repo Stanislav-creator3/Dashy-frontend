@@ -31,7 +31,7 @@ export function buildBlockNode(block: IBlock, projectId: string): LexicalNode {
     case "Paragraph": {
       const node = applyBlockMeta(
         $createCustomParagraphNode(
-          block.props.backgroundColor ?? "transparent",
+          block.props?.backgroundColor ?? "transparent",
         ),
         block,
       );
@@ -40,11 +40,11 @@ export function buildBlockNode(block: IBlock, projectId: string): LexicalNode {
     }
 
     case "Heading": {
-      const level = Math.min(Math.max(block.props.level ?? 1, 1), 6);
+      const level = Math.min(Math.max(block.props?.level ?? 1, 1), 6);
       const node = applyBlockMeta(
         $createCustomHeadingNode(
           `h${level}` as HeadingTagType,
-          block.props.backgroundColor,
+          block.props?.backgroundColor,
         ),
         block,
       );
@@ -54,7 +54,7 @@ export function buildBlockNode(block: IBlock, projectId: string): LexicalNode {
 
     case "Quote": {
       const node = applyBlockMeta(
-        $createCustomQuoteNode(block.props.backgroundColor),
+        $createCustomQuoteNode(block.props?.backgroundColor),
         block,
       );
       appendTextSegments(node, block.content);
@@ -124,8 +124,8 @@ export function buildBlockNode(block: IBlock, projectId: string): LexicalNode {
     }
 
     case "Callout": {
-      const node = applyBlockMeta($createCalloutNode(block.props.icon), block);
-      node.setBackgroundColor(block.props.backgroundColor ?? "transparent");
+      const node = applyBlockMeta($createCalloutNode(block.props?.icon), block);
+      node.setBackgroundColor(block.props?.backgroundColor ?? "transparent");
 
       if (block.children.length > 0) {
         node.clear();
