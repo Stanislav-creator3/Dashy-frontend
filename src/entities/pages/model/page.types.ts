@@ -34,6 +34,7 @@ export interface IPageList {
 
 export interface ICreatePage {
   parentId: string | null;
+  position?: "start" | "end";
   type: PAGE_TYPE;
 }
 

@@ -20,7 +20,7 @@ import { useSidebarStore } from "../model/store";
 import { renderIcon } from "@/shared/utils/renderIcon";
 import { getCollapsedIds, getVisible } from "@/shared/utils/utils";
 import { UniqueIdentifier } from "@dnd-kit/abstract";
-import { TREE_INDENT, INDENTATION } from "../model/constants";
+import { INDENTATION } from "../model/constants";
 
 export function SidebarTree({
   items,

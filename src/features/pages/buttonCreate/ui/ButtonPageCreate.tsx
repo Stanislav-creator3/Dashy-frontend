@@ -6,7 +6,7 @@ import { useMenuItems } from "../hooks/useMenuItems";
 
 interface IButtonPageCreateProps extends HTMLMotionProps<"button"> {
   className?: string;
-  parentId: string ;
+  parentId: string;
   projectId: string;
 }
 
@@ -23,7 +23,7 @@ export default function ButtonPageCreate({
         <motion.button
           className={cn(
             "flex items-center justify-center bg-black w-6 h-6 cursor-pointer rounded-2xl",
-            className
+            className,
           )}
           whileHover={{
             background: "var(--color-yellow)",

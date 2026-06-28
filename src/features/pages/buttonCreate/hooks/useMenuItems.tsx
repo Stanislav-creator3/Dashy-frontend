@@ -22,7 +22,7 @@ export const useMenuItems = ({
     }
     mutate({
       projectId,
-      data: { parentId, type },
+      data: { parentId, type, position: "end" },
     });
   };
 

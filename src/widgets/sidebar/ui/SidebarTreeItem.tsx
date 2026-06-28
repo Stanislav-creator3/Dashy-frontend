@@ -209,50 +209,6 @@ export function SidebarTreeItem({
           </motion.div>
         )}
       </AnimatePresence>
-      {/* <AnimatePresence>
-        {isOpen && children && (
-          <motion.div
-            variants={childrenContainer}
-            initial="closed"
-            animate="open"
-            exit="closed"
-            layout
-            className="flex flex-col gap-1 overflow-hidden"
-            style={{ paddingLeft: `${level * 10}px` }}
-          >
-            {children.length > 0 ? (
-              children.map((item, index) => (
-                <motion.div
-                  key={item.id}
-                  variants={childItem}
-                  initial="closed"
-                  animate="open"
-                  exit="closed"
-                >
-                  <SidebarTreeItem
-                    index={index}
-                    key={item.id}
-                    parentId={id}
-                    icon={getIcon(item.icon ?? item.type)}
-                    iconColor={item.iconColor}
-                    title={item.title}
-                    id={item.id}
-                    hasChildren={item.children}
-                    level={level + 0.5}
-                    isActive={
-                      !!match(`/projects/${params.id}/pages/${item.id}`)(
-                        pathname,
-                      )
-                    }
-                  />
-                </motion.div>
-              ))
-            ) : (
-              <p className="text sm text-text">Страницы отсутствуют</p>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence> */}
     </motion.li>
   );
 }

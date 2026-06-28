@@ -40,7 +40,7 @@ async function getPage(
   const response = await fetch(`${BASE_API_URL}/${id}/pages/${pageId}`, {
     method: "GET",
     headers,
-    next: { revalidate: 3600 },
+    cache: "no-store",
   });
 
   if (!response.ok) {
