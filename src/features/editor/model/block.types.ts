@@ -152,6 +152,13 @@ export interface IQuoteBlock extends IBaseBlock {
   };
 }
 
+export interface IBoardBlock extends IBaseBlock {
+  type: "Board";
+  props: {
+    backgroundColor?: string;
+  };
+}
+
 export interface ICodeBlock extends IBaseBlock {
   type: "Code";
   content: ITextSegment[];
@@ -179,7 +186,8 @@ export type IBlock =
   | IQuoteBlock
   | ICodeBlock
   | ITodoList
-  | ICalloutBlock;
+  | ICalloutBlock
+  | IBoardBlock;
 
 export interface IBlockCreate {
   type: string;

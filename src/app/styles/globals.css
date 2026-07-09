@@ -73,6 +73,38 @@
   --dnd-accent-foreground: oklch(0.205 0 0);
   --dnd-border: oklch(0.922 0 0);
   --dnd-ring: oklch(0.708 0 0);
+
+  /* board */
+  --board-default-bg: oklch(0.98 0 0);
+  --board-default-text: oklch(0.329 0.011 91.7);
+  --board-default-border: oklch(0.87 0 0);
+  --board-gray-bg: oklch(0.913 0.003 84.6);
+  --board-gray-text: oklch(0.329 0.011 91.7);
+  --board-gray-border: oklch(0.864 0.004 91.5);
+  --board-brown-bg: oklch(0.916 0.017 44.8);
+  --board-brown-text: oklch(0.399 0.045 45.9);
+  --board-brown-border: oklch(0.867 0.025 49.7);
+  --board-orange-bg: oklch(0.918 0.042 59.1);
+  --board-orange-text: oklch(0.482 0.106 51);
+  --board-orange-border: oklch(0.871 0.062 56.4);
+  --board-yellow-bg: oklch(0.948 0.05 85.7);
+  --board-yellow-text: oklch(0.542 0.101 85.1);
+  --board-yellow-border: oklch(0.91 0.075 87.1);
+  --board-green-bg: oklch(0.928 0.031 145.3);
+  --board-green-text: oklch(0.483 0.08 149.3);
+  --board-green-border: oklch(0.88 0.045 145.2);
+  --board-blue-bg: oklch(0.911 0.024 231.9);
+  --board-blue-text: oklch(0.455 0.069 233.3);
+  --board-blue-border: oklch(0.867 0.036 232.1);
+  --board-purple-bg: oklch(0.913 0.024 313.1);
+  --board-purple-text: oklch(0.418 0.106 305);
+  --board-purple-border: oklch(0.865 0.039 311.1);
+  --board-pink-bg: oklch(0.926 0.026 349.8);
+  --board-pink-text: oklch(0.468 0.117 353.7);
+  --board-pink-border: oklch(0.877 0.041 352.2);
+  --board-red-bg: oklch(0.935 0.033 29.4);
+  --board-red-text: oklch(0.471 0.15 29.8);
+  --board-red-border: oklch(0.874 0.054 29.7);
 }
 
 .dark {
@@ -134,6 +166,38 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  /* board — тёмная тема */
+  --board-default-bg: oklch(0.289 0 89.9);
+  --board-default-text: oklch(0.87 0 89.9);
+  --board-default-border: oklch(0.337 0 89.9);
+  --board-gray-bg: oklch(0.39 0 89.9);
+  --board-gray-text: oklch(0.87 0 89.9);
+  --board-gray-border: oklch(0.431 0 89.9);
+  --board-brown-bg: oklch(0.342 0.039 43.5);
+  --board-brown-text: oklch(0.825 0.034 51.2);
+  --board-brown-border: oklch(0.397 0.043 49.4);
+  --board-orange-bg: oklch(0.385 0.059 55.9);
+  --board-orange-text: oklch(0.804 0.077 61.2);
+  --board-orange-border: oklch(0.438 0.067 56.3);
+  --board-yellow-bg: oklch(0.412 0.055 91.4);
+  --board-yellow-text: oklch(0.844 0.091 93.1);
+  --board-yellow-border: oklch(0.468 0.055 90.3);
+  --board-green-bg: oklch(0.34 0.034 147.9);
+  --board-green-text: oklch(0.802 0.058 146.6);
+  --board-green-border: oklch(0.401 0.039 147.4);
+  --board-blue-bg: oklch(0.358 0.037 232.9);
+  --board-blue-text: oklch(0.799 0.047 229);
+  --board-blue-border: oklch(0.421 0.043 229);
+  --board-purple-bg: oklch(0.328 0.057 305.7);
+  --board-purple-text: oklch(0.77 0.068 308);
+  --board-purple-border: oklch(0.383 0.063 305.3);
+  --board-pink-bg: oklch(0.341 0.054 354.1);
+  --board-pink-text: oklch(0.769 0.066 352.2);
+  --board-pink-border: oklch(0.393 0.063 354);
+  --board-red-bg: oklch(0.331 0.055 27.1);
+  --board-red-text: oklch(0.759 0.063 27.4);
+  --board-red-border: oklch(0.384 0.061 27.5);
 }
 
 @theme inline {

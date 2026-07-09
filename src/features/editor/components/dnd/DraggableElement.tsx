@@ -6,7 +6,12 @@ import { MdDragIndicator } from "react-icons/md";
 import { FaPlus } from "react-icons/fa6";
 import { Popover } from "@/shared/ui";
 import { DRAGGABLE_KEY } from "../../hooks/useDragListeners";
-import { $createNodeSelection, $getNodeByKey, $getSelection, $setSelection } from "lexical";
+import {
+  $createNodeSelection,
+  $getNodeByKey,
+  $getSelection,
+  $setSelection,
+} from "lexical";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { BlockOptionsMenu } from "../BlockOptionsMenu/BlockOptions";
 import { $isBlockNode } from "../../model/typeGuard";
@@ -55,12 +60,11 @@ export function DraggableElement() {
       editor.update(() => {
         if (!draggable.htmlElement) return;
         const node = $getNodeByKey(draggableKey);
-        if (!node) return
-        if (!$isBlockNode(node)) return
+        if (!node) return;
+        if (!$isBlockNode(node)) return;
         const selection = $createNodeSelection();
         selection.add(draggableKey);
         $setSelection(selection);
-
       });
     },
     [draggable, editor],
@@ -72,10 +76,10 @@ export function DraggableElement() {
 
   return (
     <div
-      className="absolute flex items-center justify-between gap-1 transition-all duration-150"
+      className="absolute flex items-center justify-between pr-3 gap-1 transition-all duration-150"
       style={{
         top: activeDraggable.data.top,
-        left: activeDraggable.data.left - 40,
+        left: activeDraggable.data.left - 50,
         height: activeDraggable.data.height,
       }}
     >
@@ -85,7 +89,6 @@ export function DraggableElement() {
         setOpen={setPopoverOpen}
         trigger={
           <button
-            // onClick={() => void}
             className="
        flex items-center justify-center
        p-1
@@ -94,9 +97,9 @@ export function DraggableElement() {
        rounded-sm
        transition-colors duration-150
        hover:bg-bg-hover
-       w-6 h-6"
+       w-8 h-8"
           >
-            <FaPlus className="text-text" size={12} />
+            <FaPlus className="text-text" size={20} />
           </button>
         }
       >
@@ -111,8 +114,8 @@ export function DraggableElement() {
           <div
             className="
        flex items-center justify-center
-       w-6 h-6
-       cursor-grab 
+       w-8 h-8
+       cursor-grab
        rounded-sm
        transition-colors duration-150
        hover:bg-bg-hover"

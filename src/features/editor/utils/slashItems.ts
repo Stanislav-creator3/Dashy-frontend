@@ -11,6 +11,7 @@ import { setBlockTempId } from "../model/blockState";
 import { $createCustomParagraphNode } from "../nodes/CustomParagraphNode";
 import { $createCustomHeadingNode } from "../nodes/CustomHeadingNode";
 import { $createCustomQuoteNode } from "../nodes/CustomQuoteNode";
+import { $createBoardNode } from "../board/nodes/boardNode";
 
 export type SlashCommandType =
   | "text"
@@ -21,7 +22,8 @@ export type SlashCommandType =
   | "quote"
   | "ListNumber"
   | "todo"
-  | "callout";
+  | "callout"
+  | "board";
 
 export type SlashCommandItem = {
   title: string;
@@ -98,6 +100,13 @@ export const SLASH_COMMANDS: SlashCommandItem[] = [
     type: "callout",
     keywords: ["callout", "notice", "important"],
     category: "Базовые блоки",
+  },
+  {
+    title: "Доска",
+    description: "Кабан доска",
+    type: "board",
+    keywords: ["board"],
+    category: "Базы данных",
   },
 ];
 
@@ -190,6 +199,14 @@ export const getNode = (
 
     case "callout":
       replacement = $createCalloutNode();
+      setBlockIdForNode(replacement, nodeId);
+      setBlockTempId(replacement, tempId);
+      setOrderForNode(replacement, order);
+      setParentBlockIdForNode(replacement, parentId);
+      return replacement;
+
+    case "board":
+      replacement = $createBoardNode();
       setBlockIdForNode(replacement, nodeId);
       setBlockTempId(replacement, tempId);
       setOrderForNode(replacement, order);

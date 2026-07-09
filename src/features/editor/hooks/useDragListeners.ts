@@ -7,6 +7,7 @@ import { DRAGGABLE_WRAPPER_ID } from "../components/DraggableWrapper";
 import { useOnDragEnter } from "./useOnDragEnter";
 import { $getNodeByKey, COMMAND_PRIORITY_LOW, DRAGOVER_COMMAND } from "lexical";
 import { $isCalloutNode } from "../nodes/CalloutNode";
+import { $isBoardNode } from "../board/nodes/boardNode";
 
 export const DRAGGABLE_KEY = "draggable-key";
 
@@ -45,6 +46,7 @@ export function useDragListeners() {
         const element = editor.getElementByKey(key);
         const disabled = editor.getEditorState().read(() => {
           const node = $getNodeByKey(key);
+          if ($isBoardNode(node)) return;
           if (!node) return false;
           const parent = node.getParent();
           if (!$isCalloutNode(parent)) return false;
@@ -82,6 +84,7 @@ export function useDragListeners() {
         const disabled = editor.getEditorState().read(() => {
           const node = $getNodeByKey(key);
           if (!node) return false;
+          if ($isBoardNode(node)) return;
           const parent = node.getParent();
           if (!$isCalloutNode(parent)) return false;
           return parent.getFirstChild()?.getKey() === node.getKey();

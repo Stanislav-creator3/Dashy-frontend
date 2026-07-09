@@ -4,6 +4,7 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import {
   $getNodeByKey,
   $getRoot,
+  $isDecoratorNode,
   $isElementNode,
   RootNode,
   type ElementNode,
@@ -22,7 +23,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { blocksApi } from "../api/blocks.api";
 import { pagesApi } from "@/entities/pages/api/pages.api";
 
-function getCurrentBlock(node: LexicalNode | null): ElementNode | null {
+function getCurrentBlock(node: LexicalNode | null): LexicalNode | null {
   let current: LexicalNode | null = node;
 
   while (current !== null) {
@@ -30,8 +31,9 @@ function getCurrentBlock(node: LexicalNode | null): ElementNode | null {
     if (!parent) return null;
 
     if (
-      (parent.is($getRoot()) || parent.isShadowRoot?.()) &&
-      $isElementNode(current)
+      ((parent.is($getRoot()) || parent.isShadowRoot?.()) &&
+        $isElementNode(current)) ||
+      $isDecoratorNode(current)
     ) {
       return getBlockIdFromNode(current) || getBlockTempIdFromNode(current)
         ? current

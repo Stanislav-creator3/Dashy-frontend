@@ -1,5 +1,6 @@
 import {
   $createLineBreakNode,
+  $isDecoratorNode,
   $isElementNode,
   $isLineBreakNode,
   $isTextNode,
@@ -27,6 +28,7 @@ import { $isBlockNode } from "./typeGuard";
 import { $isCustomParagraphNode } from "../nodes/CustomParagraphNode";
 import { $isCustomHeadingNode } from "../nodes/CustomHeadingNode";
 import { $isCustomQuoteNode } from "../nodes/CustomQuoteNode";
+import { $isBoardNode } from "../board/nodes/boardNode";
 
 export function $createTextNodeFromSegment(segment: ITextSegment) {
   const textNode = $createCustomTextNode(
@@ -125,7 +127,7 @@ function getParentBlockId(node: LexicalNode): string | null {
 }
 
 export function serializeBlock(node: LexicalNode): IBlock | null {
-  if (!$isElementNode(node)) return null;
+  if (!$isElementNode(node) && !$isDecoratorNode(node)) return null;
 
   const id = getBlockIdFromNode(node);
   const tempId = getBlockTempIdFromNode(node) ?? id;
@@ -256,6 +258,17 @@ export function serializeBlock(node: LexicalNode): IBlock | null {
         icon: node.getIcon(),
         backgroundColor: node.getBackgroundColor(),
       },
+    };
+  }
+
+  if ($isBoardNode(node)) {
+    return {
+      id,
+      order,
+      parentId,
+      tempId,
+      type: "Board",
+      props: {},
     };
   }
 

@@ -25,6 +25,8 @@ import Separator from "./separator/Separator";
 import Heading from "./Heading/Heading";
 import Carousel from "./carousel/Carousel";
 import TimeAgo from "./timeAgo/TimeAgo";
+import ButtonEdit from "./button/ButtonEdit";
+import LuSettings2 from "./customIcon/LuSettings2";
 
 export {
   Tooltip,
@@ -54,4 +56,6 @@ export {
   Heading,
   Carousel,
   TimeAgo,
+  ButtonEdit,
+  LuSettings2,
 };

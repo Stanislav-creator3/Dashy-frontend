@@ -2,25 +2,57 @@
 import {
   autoUpdate,
   flip,
+  FloatingNode,
   FloatingPortal,
+  FloatingTree,
   offset,
   useClick,
   useDismiss,
   useFloating,
+  useFloatingNodeId,
+  useFloatingParentNodeId,
+  useFloatingTree,
   useHover,
   useInteractions,
   useTransitionStyles,
 } from "@floating-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Placement } from "@floating-ui/utils";
 
-export default function PopoverFlutingUI({
+interface PopoverProps {
+  trigger: React.ReactNode;
+  children: React.ReactNode;
+  offsetValue?: number;
+  enabledClick?: boolean;
+  placement?: Placement;
+  delay?: number;
+  setOpen?: (open: boolean) => void;
+  open?: boolean;
+  fallbackAxisSideDirection?: "none" | "start" | "end";
+}
+
+export default function Popover(props: PopoverProps) {
+  const parentId = useFloatingParentNodeId();
+
+  if (parentId === null) {
+    return (
+      <FloatingTree>
+        <PopoverFlutingUI {...props} />
+      </FloatingTree>
+    );
+  }
+
+  return <PopoverFlutingUI {...props} />;
+}
+
+function PopoverFlutingUI({
   trigger,
   children,
   placement = "top-start",
   enabledClick = false,
   offsetValue = 10,
   setOpen,
+  delay = 0,
   open,
   fallbackAxisSideDirection = "none",
 }: {
@@ -29,11 +61,14 @@ export default function PopoverFlutingUI({
   offsetValue?: number;
   enabledClick?: boolean;
   placement?: Placement;
+  delay?: number;
   setOpen?: (open: boolean) => void;
   open?: boolean;
   fallbackAxisSideDirection?: "none" | "start" | "end";
 }) {
   const [defaultOpen, setDefaultOpen] = useState(false);
+  const tree = useFloatingTree();
+  const nodeId = useFloatingNodeId();
 
   const isOpen = open ?? defaultOpen;
 
@@ -46,6 +81,7 @@ export default function PopoverFlutingUI({
   };
 
   const { refs, floatingStyles, context, isPositioned } = useFloating({
+    nodeId,
     open: isOpen,
     onOpenChange: setIsOpen,
     placement: placement,
@@ -63,8 +99,9 @@ export default function PopoverFlutingUI({
   const hover = useHover(context, {
     enabled: enabledClick ? false : true,
     delay: {
-      close: 400
-    }
+      open: delay,
+      close: 400,
+    },
   });
 
   const click = useClick(context, {
@@ -81,8 +118,19 @@ export default function PopoverFlutingUI({
     click,
     dismiss,
   ]);
+
+  useEffect(() => {
+    if (isOpen) {
+      tree?.nodesRef.current.forEach((node) => {
+        if (node.id !== nodeId) {
+          node.context?.onOpenChange(false);
+        }
+      });
+    }
+  }, [isOpen, nodeId, tree]);
+
   return (
-    <>
+    <FloatingNode id={nodeId}>
       <div ref={refs.setReference} {...getReferenceProps()}>
         {trigger}
       </div>
@@ -93,7 +141,7 @@ export default function PopoverFlutingUI({
             ref={refs.setFloating}
             style={{
               ...floatingStyles,
-              zIndex: 10,
+              zIndex: 9999,
               ...styles,
             }}
             {...getFloatingProps()}
@@ -102,6 +150,6 @@ export default function PopoverFlutingUI({
           </div>
         )}
       </FloatingPortal>
-    </>
+    </FloatingNode>
   );
 }

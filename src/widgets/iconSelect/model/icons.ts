@@ -27,6 +27,7 @@ import { TfiText } from "react-icons/tfi";
 import { LuHeading1, LuHeading2, LuHeading3, LuListTodo } from "react-icons/lu";
 import { FaListOl, FaListUl, FaQuoteLeft } from "react-icons/fa";
 import { RiTextSnippet } from "react-icons/ri";
+import { CgBoard } from "react-icons/cg";
 
 export interface IIconList {
   icon: IconType;
@@ -198,5 +199,12 @@ export const iconsList = [
     name: "callout",
     category: "general",
     label: "Коллаут",
-  }
+  },
+
+  {
+    icon: CgBoard,
+    name: "board",
+    category: "general",
+    label: "Доска",
+  },
 ];

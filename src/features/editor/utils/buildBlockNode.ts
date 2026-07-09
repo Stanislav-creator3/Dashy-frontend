@@ -1,7 +1,6 @@
 import { $createCodeNode } from "@lexical/code";
 import { $createListItemNode, $createListNode } from "@lexical/list";
-import { $createQuoteNode } from "@lexical/rich-text";
-import { type LexicalNode } from "lexical";
+import { $createParagraphNode, type LexicalNode } from "lexical";
 import { getIcon } from "@/shared/utils/getIcon";
 import { renderIcon } from "@/shared/utils/renderIcon";
 import { type IBlock } from "../model/block.types";
@@ -16,6 +15,7 @@ import {
   HeadingTagType,
 } from "../nodes/CustomHeadingNode";
 import { $createCustomQuoteNode } from "../nodes/CustomQuoteNode";
+import { $createBoardNode } from "../board/nodes/boardNode";
 
 function applyBlockMeta<T extends LexicalNode>(node: T, block: IBlock): T {
   setBlockIdForNode(node, block.id);
@@ -136,6 +136,19 @@ export function buildBlockNode(block: IBlock, projectId: string): LexicalNode {
       }
 
       return node;
+    }
+
+    case "Board": {
+      const node = applyBlockMeta($createBoardNode(), block);
+      node.setProps({
+        projectId,
+      });
+
+      return node;
+    }
+
+    default: {
+      return $createParagraphNode();
     }
   }
 }

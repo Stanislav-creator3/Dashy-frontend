@@ -50,6 +50,7 @@ import {
 } from "../nodes/CustomQuoteNode";
 import { QuoteNode } from "@lexical/rich-text";
 import { ReactExtension } from "@lexical/react/ReactExtension";
+import { BoardNode } from "../board";
 
 const EditorExtension = defineExtension({
   name: "NotionLikeEditor",
@@ -83,6 +84,7 @@ const EditorExtension = defineExtension({
     CustomParagraphNode,
     CustomHeadingNode,
     CustomQuoteNode,
+    BoardNode,
     LinkPageNode,
     {
       replace: TextNode,
