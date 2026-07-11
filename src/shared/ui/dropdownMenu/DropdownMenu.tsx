@@ -1,183 +1,255 @@
 "use client";
 
-import { useOutsideClick } from "@/shared/hooks/useOutsideClick";
-import { usePosition } from "@/shared/hooks/usePosition";
 import { cn } from "@/shared/utils/utils";
 import { AnimatePresence, motion } from "motion/react";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  MouseEvent as ReactMouseEvent,
-} from "react";
-import { createPortal } from "react-dom";
+import React, { useEffect, useRef, useState } from "react";
 import { DropdownMenuItem } from "./DropdownMenuItem";
-import GooeyFilter from "../gooeyFilter/GooeyFilter";
+import {
+  autoUpdate,
+  flip,
+  FloatingFocusManager,
+  FloatingList,
+  FloatingNode,
+  FloatingPortal,
+  FloatingTree,
+  offset,
+  safePolygon,
+  shift,
+  useClick,
+  useDismiss,
+  useFloating,
+  useFloatingNodeId,
+  useFloatingParentNodeId,
+  useFloatingTree,
+  useHover,
+  useInteractions,
+  useListNavigation,
+  useRole,
+  useTransitionStyles,
+  useTypeahead,
+} from "@floating-ui/react";
+import { IoIosArrowForward } from "react-icons/io";
 
-export default function DropdownMenu({
-  children,
-  items,
-  direction = "bottom",
-  className,
-}: {
-  children: React.ReactNode;
-  items: {
-    onClick?: () => void;
-    href?: string;
-    label: React.ReactNode;
-  }[];
+interface DropdownMenuItemProps {
+  onClick?: () => void;
+  href?: string;
+  label: React.ReactNode;
+  children?: DropdownMenuItemProps[];
+}
+
+export const MenuContext = React.createContext<{
+  activeIndex: number | null;
+  getItemProps: (
+    userProps?: React.HTMLProps<HTMLElement>,
+  ) => Record<string, unknown>;
+  isOpen: boolean;
+}>({
+  activeIndex: null,
+  getItemProps: () => ({}),
+  isOpen: false,
+});
+
+interface DropdownMenuComponentProps {
+  trigger: React.ReactNode;
+  items?: DropdownMenuItemProps[];
   className?: string;
-  direction?: "bottom" | "top";
-}) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [highlightedIndex, setHighlightedIndex] = useState(-1);
-  const indexes = useMemo(() => items.map((_, index) => index), [items]);
+  enabledClick?: boolean;
+  index?: number;
+  totalIndex?: number;
+}
 
-  const menuRef = useRef<HTMLDivElement>(null);
-  const elements = useRef<Record<number, HTMLDivElement>>({});
-  const targetRef = useRef<HTMLDivElement>(null);
-  const position = usePosition({
-    isOpen,
-    direction,
-    targetRef,
-    floatingRef: menuRef,
+export default function DropdownMenu(props: DropdownMenuComponentProps) {
+  const parentId = useFloatingParentNodeId();
+
+  if (parentId === null) {
+    return (
+      <FloatingTree>
+        <DropdownComponentMenu {...props} />
+      </FloatingTree>
+    );
+  }
+
+  return <DropdownComponentMenu {...props} />;
+}
+
+export function DropdownComponentMenu({
+  trigger,
+  items,
+  className,
+  enabledClick = false,
+  index = 0,
+  totalIndex = 1,
+}: DropdownMenuComponentProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [selectedIndex, setSelectedIndex] = React.useState<number | null>(null);
+  const tree = useFloatingTree();
+  const nodeId = useFloatingNodeId();
+  const parentId = useFloatingParentNodeId();
+
+  const isNested = parentId != null;
+
+  const { refs, floatingStyles, context } = useFloating({
+    nodeId: nodeId,
+    open: isOpen,
+    onOpenChange: setIsOpen,
+    placement: isNested ? "right-start" : "bottom-start",
+    middleware: [
+      offset({ mainAxis: isNested ? 10 : 4, alignmentAxis: isNested ? -4 : 0 }),
+      flip(),
+      shift(),
+    ],
+    whileElementsMounted: autoUpdate,
   });
 
-  const ref = useOutsideClick(() => {
-    setIsOpen(false);
-    setHighlightedIndex(-1);
-  }, [menuRef]);
+  const listRef = useRef<Array<HTMLDivElement | null>>([]);
+  const labelsRef = React.useRef<Array<string | null>>([]);
 
-  const handleItemClick = (
-    event: KeyboardEvent | ReactMouseEvent<HTMLAnchorElement | HTMLButtonElement>,
-    item: (typeof items)[number]
-  ) => {
-    event.stopPropagation();
-    if (typeof item.onClick === "function") {
-      item.onClick();
-    }
-    setTimeout(() => {
-      setIsOpen(false);
-      setHighlightedIndex(-1);
-    }, 350);
-  };
+  const listNavigation = useListNavigation(context, {
+    listRef,
+    activeIndex,
+    selectedIndex,
+    onNavigate: setActiveIndex,
+    loop: true,
+    nested: isNested,
+  });
 
-  const handleKeyDown = useCallback(
-    (event: KeyboardEvent) => {
-      switch (event.code) {
-        case "ArrowDown":
-          event.preventDefault();
-          event.stopPropagation();
-          setHighlightedIndex((prev) => {
-            const index = prev === indexes.length - 1 ? 0 : prev + 1;
-            elements.current[indexes[index]]?.focus();
-            return index;
-          });
-          break;
-        case "ArrowUp": {
-          event.preventDefault();
-          event.stopPropagation();
-          setHighlightedIndex((prev) => {
-            const index = prev === 0 ? indexes.length - 1 : prev - 1;
-            elements.current[indexes[index]]?.focus();
-            return index;
-          });
-          break;
-        }
-        case "Enter": {
-          event.preventDefault();
-          if (highlightedIndex !== -1) {
-            const item = items[indexes[highlightedIndex]];
-            handleItemClick(event, item);
-          }
-          break;
-        }
-      }
-    },
-    [indexes, items, highlightedIndex, setIsOpen]
+  const typeahead = useTypeahead(context, {
+    listRef: labelsRef,
+    onMatch: isOpen ? setActiveIndex : undefined,
+    activeIndex,
+  });
+  const { isMounted, styles } = useTransitionStyles(context);
+
+  const click = useClick(context, {
+    enabled: isNested || enabledClick,
+    toggle: !isNested,
+    ignoreMouse: isNested,
+  });
+
+  const role = useRole(context, { role: "menu" });
+
+  const dismiss = useDismiss(context, {
+    bubbles: true,
+    outsidePressEvent: "mousedown",
+  });
+
+  const hover = useHover(context, {
+    enabled: isNested || !enabledClick,
+    delay: { open: isNested ? 75 : 0, close: 400 },
+    handleClose: safePolygon(),
+  });
+
+  const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions(
+    [hover, click, dismiss, role, listNavigation, typeahead],
   );
 
   useEffect(() => {
-    if (isOpen) {
-      document.addEventListener("keydown", handleKeyDown, true);
+    if (!tree) return;
+
+    function handleTreeClick() {
+      setIsOpen(false);
     }
+
+    function onSubMenuOpen(event: { nodeId: string; parentId: string }) {
+      if (event.nodeId !== nodeId && event.parentId === parentId) {
+        setIsOpen(false);
+      }
+    }
+
+    tree.events.on("click", handleTreeClick);
+    tree.events.on("menuopen", onSubMenuOpen);
+
     return () => {
-      document.removeEventListener("keydown", handleKeyDown, true);
+      tree.events.off("click", handleTreeClick);
+      tree.events.off("menuopen", onSubMenuOpen);
     };
-  }, [isOpen, handleKeyDown]);
+  }, [tree, nodeId, parentId]);
+
+  React.useEffect(() => {
+    if (isOpen && tree) {
+      tree.events.emit("menuopen", { parentId, nodeId });
+    }
+  }, [tree, isOpen, nodeId, parentId]);
 
   return (
-    <>
-      <div
-        onClick={() => {
-          setIsOpen((prev) => !prev), setHighlightedIndex(-1);
-        }}
-        ref={(node) => {
-          targetRef.current = node;
-          ref.current = node;
-        }}
-      >
-        {children}
-      </div>
-
-      {createPortal(
-        <AnimatePresence mode="wait" initial={false}>
-          {isOpen && (
-            <motion.div
-              ref={menuRef}
-              initial={{
-                opacity: 0,
-              }}
-              animate={{
-                opacity: 1,
-              }}
-              exit={{ opacity: 0, transition: { duration: 0.5 } }}
-              transition={{
-                duration: 0.2,
-              }}
-              className={cn(
-                "absolute z-50 flex text-black rounded-lg shadow-2xl",
-                position.transform,
-                className
-              )}
-              style={{
-                top: position.top,
-                left: position.left,
-              }}
-            >
-              <ul
-                className="flex relative flex-col"
-                style={{
-                  filter: "url(#goo-effect)",
-                }}
-              >
-                <GooeyFilter />
-
-                {items.map((item, index) => (
-                  <DropdownMenuItem
-                    ref={(node: HTMLDivElement) => {
-                      elements.current[index] = node ?? null;
-                    }}
-                    index={index}
-                    key={index}
-                    isActive={index === indexes[highlightedIndex]}
-                    onMouseEnter={() =>
-                      setHighlightedIndex(indexes.indexOf(index))
-                    }
-                    onClick={(event) => handleItemClick(event, item)}
-                    href={item.href}
-                    label={item.label}
-                    totalIndex={items.length}
-                  />
-                ))}
-              </ul>
-            </motion.div>
-          )}
-        </AnimatePresence>,
-        document.body
+    <FloatingNode id={nodeId}>
+      {isNested ? (
+        <DropdownMenuItem
+          ref={refs.setReference}
+          submenu
+          submenuOpen={isOpen}
+          index={index}
+          totalIndex={totalIndex}
+          label={
+            <div className="flex w-full items-center justify-between">
+              {trigger}
+              <span>
+                <IoIosArrowForward />
+              </span>
+            </div>
+          }
+          {...getReferenceProps()}
+        />
+      ) : (
+        <div ref={refs.setReference} {...getReferenceProps()}>
+          {trigger}
+        </div>
       )}
-    </>
+      <MenuContext.Provider value={{ activeIndex, getItemProps, isOpen }}>
+        <FloatingList elementsRef={listRef} labelsRef={labelsRef}>
+          <FloatingPortal>
+            <AnimatePresence mode="wait">
+              {isMounted && (
+                <FloatingFocusManager
+                  context={context}
+                  modal={false}
+                  initialFocus={isNested || !enabledClick ? -1 : 0}
+                  returnFocus={!isNested}
+                >
+                  <motion.div
+                    ref={refs.setFloating}
+                    style={{ ...floatingStyles, zIndex: 10, ...styles }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0, transition: { duration: 0.5 } }}
+                    transition={{ duration: 0.2 }}
+                    className={cn(
+                      "flex text-black rounded-lg shadow-2xl p-0.5 glass focus:outline-none",
+                      className,
+                    )}
+                    {...getFloatingProps()}
+                  >
+                    <ul className="flex relative flex-col gap-0.5">
+                      {items?.map((item, index) =>
+                        item.children ? (
+                          <DropdownComponentMenu
+                            key={index}
+                            trigger={item.label}
+                            items={item.children}
+                            className={className}
+                            index={index}
+                            totalIndex={items.length}
+                          />
+                        ) : (
+                          <DropdownMenuItem
+                            key={index}
+                            index={index}
+                            totalIndex={items.length}
+                            label={item.label}
+                            href={item.href}
+                            onClick={item.onClick}
+                          />
+                        ),
+                      )}
+                    </ul>
+                  </motion.div>
+                </FloatingFocusManager>
+              )}
+            </AnimatePresence>
+          </FloatingPortal>
+        </FloatingList>
+      </MenuContext.Provider>
+    </FloatingNode>
   );
 }

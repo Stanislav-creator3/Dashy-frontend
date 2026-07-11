@@ -3,7 +3,10 @@
     "allow": [
       "Bash(awk -F: '{print $1\": \"$0}')",
       "Bash(awk 'BEGIN{c=\"\"} /class /{c=$0} /isInline/{print \"  [in \"c\"] -> \"$0}')",
-      "Bash(awk 'NR>=9626 && NR<=9695' node_modules/lexical/Lexical.dev.mjs)"
+      "Bash(awk 'NR>=9626 && NR<=9695' node_modules/lexical/Lexical.dev.mjs)",
+      "Bash(node /private/tmp/claude-501/-Users-stasmakeev-Desktop---------Dashy-frontend/52e15d8c-0704-4920-be62-96510aed04ff/scratchpad/dropdown-test.mjs)",
+      "Bash(ls ~/Library/Caches/ms-playwright/ 2>/dev/null)",
+      "Bash(npx playwright *)"
     ]
   }
 }

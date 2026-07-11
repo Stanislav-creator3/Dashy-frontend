@@ -14,7 +14,7 @@ const GooeyFilter = () => {
           <feColorMatrix
             in="blur"
             type="matrix"
-            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -9"
+            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -13"
             result="goo"
           />
           <feComposite in="SourceGraphic" in2="goo" operator="atop" />
