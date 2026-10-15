@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, LuSettings2 } from "@/shared/ui";
+import { Card, DropdownMenu, LuSettings2, Popover } from "@/shared/ui";
 import {
   autoUpdate,
   flip,
@@ -18,6 +18,7 @@ import {
 import { motion, Variants } from "motion/react";
 import { useState } from "react";
 import { useBoardSettings } from "../hooks/useBoardSettings";
+import { BoardColorId } from "../model/boardColors";
 
 const buttonVariants: Variants = {
   default: {
@@ -33,13 +34,13 @@ const buttonVariants: Variants = {
 export function BoardSettings({
   placement = "left",
   offsetValue = 10,
+  color,
 }: {
   placement?: Placement;
   offsetValue?: number;
+  color: BoardColorId;
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [activeItem, setActiveItem] = useState<string | null>(null);
-  const { items } = useBoardSettings();
   const { refs, floatingStyles, context } = useFloating({
     open: isOpen,
     onOpenChange: setIsOpen,
@@ -66,42 +67,28 @@ export function BoardSettings({
     dismiss,
   ]);
   return (
-    <>
-      <div ref={refs.setReference} {...getReferenceProps()}>
-        <motion.button
-          initial="default"
-          whileHover="hover"
-          variants={buttonVariants}
-          className="flex items-center p-1 rounded-md cursor-pointer"
+    <DropdownMenu
+      enabledClick={true}
+      trigger={
+        <Popover
+          placement="top"
+          trigger={
+            <motion.button
+              initial="default"
+              whileHover="hover"
+              variants={buttonVariants}
+              className="flex items-center p-1 rounded-md cursor-pointer"
+            >
+              <LuSettings2 size={20} />
+            </motion.button>
+          }
         >
-          <LuSettings2 size={20} />
-        </motion.button>
-      </div>
-      <FloatingPortal>
-        {isMounted && (
-          <FloatingOverlay className="z-10">
-            <FloatingFocusManager context={context}>
-              <div
-                ref={refs.setFloating}
-                style={{
-                  ...floatingStyles,
-                  zIndex: 10,
-                  ...styles,
-                }}
-                {...getFloatingProps()}
-              >
-                <Card>
-                  {items.map((item) => (
-                    <div key={item.id} title={item.tooltip}>
-                      {item.render()}
-                    </div>
-                  ))}
-                </Card>
-              </div>
-            </FloatingFocusManager>
-          </FloatingOverlay>
-        )}
-      </FloatingPortal>
-    </>
+          <div className="p-1 bg-foreground rounded-lg text-white text-sm">
+            Настройки
+          </div>
+        </Popover>
+      }
+      items={[]}
+    />
   );
 }

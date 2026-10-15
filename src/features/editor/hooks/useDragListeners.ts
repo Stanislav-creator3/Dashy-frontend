@@ -2,8 +2,8 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { useEditorKeys } from "./useEditorKeys";
 import { useEffect } from "react";
 import styles from "../ui/BlockEditor.module.css";
-import { draggableStore, useReset } from "../model/draggableStore";
-import { DRAGGABLE_WRAPPER_ID } from "../components/DraggableWrapper";
+import { useDraggableContext, useReset } from "../model/draggableStore";
+import { DRAGGABLE_WRAPPER_SELECTOR } from "../components/DraggableWrapper";
 import { useOnDragEnter } from "./useOnDragEnter";
 import { $getNodeByKey, COMMAND_PRIORITY_LOW, DRAGOVER_COMMAND } from "lexical";
 import { $isCalloutNode } from "../nodes/CalloutNode";
@@ -11,36 +11,37 @@ import { $isBoardNode } from "../board/nodes/boardNode";
 
 export const DRAGGABLE_KEY = "draggable-key";
 
-const setDraggableElement = ({ target }: MouseEvent) => {
-  if (!(target instanceof HTMLElement)) return;
-
-  const block = target.closest(`.${styles["draggable-block"]}`);
-  if (!(block instanceof HTMLElement)) return;
-
-  const wrapper = document.getElementById(DRAGGABLE_WRAPPER_ID);
-
-  if (!wrapper) return;
-
-  const blockRect = block.getBoundingClientRect();
-  const wrapperRect = wrapper.getBoundingClientRect();
-
-  draggableStore.getState().setDraggable({
-    htmlElement: block,
-    data: {
-      top: blockRect.top - wrapperRect.top - wrapper.scrollTop,
-      left: blockRect.left - wrapperRect.left - 23,
-      height: blockRect.height,
-    },
-  });
-};
-
 export function useDragListeners() {
   const [editor] = useLexicalComposerContext();
   const { keys } = useEditorKeys();
   const reset = useReset();
   const { handleOnDragEnter } = useOnDragEnter();
+  const setDraggable = useDraggableContext((state) => state.setDraggable);
 
   useEffect(() => {
+    const setDraggableElement = ({ target }: MouseEvent) => {
+      if (!(target instanceof HTMLElement)) return;
+
+      const block = target.closest(`.${styles["draggable-block"]}`);
+      if (!(block instanceof HTMLElement)) return;
+
+      const wrapper = block.closest(DRAGGABLE_WRAPPER_SELECTOR);
+
+      if (!wrapper) return;
+
+      const blockRect = block.getBoundingClientRect();
+      const wrapperRect = wrapper.getBoundingClientRect();
+
+      setDraggable({
+        htmlElement: block,
+        data: {
+          top: blockRect.top - wrapperRect.top - wrapper.scrollTop,
+          left: blockRect.left - wrapperRect.left - 23,
+          height: blockRect.height,
+        },
+      });
+    };
+
     const addListeners = () => {
       keys.forEach((key) => {
         const element = editor.getElementByKey(key);
@@ -103,7 +104,7 @@ export function useDragListeners() {
   }, [editor, keys]);
 
   useEffect(() => {
-    editor.registerCommand(
+    return editor.registerCommand(
       DRAGOVER_COMMAND,
       (event) => handleOnDragEnter(event),
       COMMAND_PRIORITY_LOW,

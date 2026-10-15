@@ -2,6 +2,7 @@ import { IBlock } from "@/features/editor/model/block.types";
 
 export enum PAGE_TYPE {
   PAGE = "PAGE",
+  CARD = "CARD",
   DATABASE = "DATABASE",
 }
 
@@ -35,6 +36,7 @@ export interface IPageList {
 export interface ICreatePage {
   parentId: string | null;
   position?: "start" | "end";
+  status?: string;
   type: PAGE_TYPE;
 }
 

@@ -17,7 +17,8 @@ type Story = StoryObj<typeof DropdownMenu>;
 
 export const Default: Story = {
   args: {
-    children: <Card className="cursor-pointer">Menu</Card>,
+    enabledClick: true,
+    trigger: <Card className="cursor-pointer">Menu</Card>,
     items: [
       {
         label: "Item 1",
@@ -26,6 +27,16 @@ export const Default: Story = {
       {
         label: "Item 2",
         onClick: () => alert("Item 2"),
+        children: [
+          {
+            label: "Subitem 1",
+            onClick: () => alert("Subitem 1"),
+          },
+          {
+            label: "Subitem 2",
+            onClick: () => alert("Subitem 2"),
+          },
+        ],
       },
       {
         label: "Item 3",

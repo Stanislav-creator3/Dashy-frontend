@@ -96,7 +96,7 @@ export default async function Page({ params }: { params: Promise<IParams> }) {
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="glass-card h-[calc(100vh-24px)] p-2">
         <div
-          id={"editor-root"}
+          data-editor-root
           className="relative bg-editor rounded-2xl w-full overflow-y-auto overflow-x-hidden h-full [container-type:inline-size]"
         >
           <Cover projectId={projectId} pageId={pageId} />

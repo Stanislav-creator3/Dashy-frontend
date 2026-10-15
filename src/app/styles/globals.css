@@ -5,14 +5,38 @@
 :root {
   /* base */
 
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+
   /* text */
-  --color-text: oklch(0.2 0 0);
-  --color-gray: oklch(0.55 0 0);
+  --color-text: oklch(0.145 0 0);
+  --color-text-gray: oklch(52% 0.01 90);
+  --color-text-brown: oklch(50% 0.07 45);
+  --color-text-orange: oklch(55% 0.136 55);
+  --color-text-yellow: oklch(56% 0.116 80);
+  --color-text-green: oklch(50% 0.11 155);
+  --color-text-blue: oklch(50% 0.114 240);
+  --color-text-purple: oklch(50% 0.15 305);
+  --color-text-pink: oklch(52% 0.17 350);
+  --color-text-red: oklch(53% 0.19 25);
+
+  /* background */
+  --color-bg-gray: oklch(93% 0.003 90);
+  --color-bg-brown: oklch(92% 0.022 45);
+  --color-bg-orange: oklch(92% 0.048 55);
+  --color-bg-yellow: oklch(94% 0.055 80);
+  --color-bg-green: oklch(92.5% 0.04 155);
+  --color-bg-blue: oklch(92% 0.04 240);
+  --color-bg-purple: oklch(92% 0.04 305);
+  --color-bg-pink: oklch(92% 0.045 350);
+  --color-bg-red: oklch(91.5% 0.043 25);
 
   /* base colors */
   --color-white: oklch(0.98 0 0);
   --color-black: oklch(0.25 0 0);
   --color-yellow: oklch(0.9 0.12 95);
+  --color-blue: oklch(0.471 0.155 252);
+  --color-error: oklch(50% 0.19 27);
 
   /* surfaces */
   --bg-primary: oklch(1 0 0);
@@ -20,6 +44,7 @@
   --bg-tertiary: oklch(0.95 0 0);
   --bg-hover: oklch(0.93 0 0);
   --bg-active: oklch(0.91 0 0);
+  --bg-error: oklch(50% 0.19 27);
 
   /* inputs / editor */
   --color-editor: oklch(0.98 0 0);
@@ -32,8 +57,7 @@
 
   /* gradients */
   --gradient-background: linear-gradient(137deg, oklch(0.97 0 0) 0%, oklch(0.8 0.02 90) 42%, oklch(0.9 0.12 95) 80%);
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
@@ -105,22 +129,51 @@
   --board-red-bg: oklch(0.935 0.033 29.4);
   --board-red-text: oklch(0.471 0.15 29.8);
   --board-red-border: oklch(0.874 0.054 29.7);
+  --board-default-status: oklch(0.708 0 0);
+  --board-gray-status: oklch(0.552 0.016 91.7);
+  --board-brown-status: oklch(0.564 0.11 45.9);
+  --board-orange-status: oklch(0.705 0.187 51);
+  --board-yellow-status: oklch(0.795 0.16 86);
+  --board-green-status: oklch(0.627 0.17 149.3);
+  --board-blue-status: oklch(0.629 0.187 252);
+  --board-purple-status: oklch(0.606 0.2 305);
+  --board-pink-status: oklch(0.656 0.2 353.7);
+  --board-red-status: oklch(0.637 0.207 29.8);
 }
 
 .dark {
   /* base */
-  --background: oklch(0.145 0 0);
+  --background: oklch(21.3% 0 0);
   --foreground: oklch(0.985 0 0);
 
   /* text */
-  --color-text: oklch(0.92 0 0);
-  --color-gray: oklch(0.65 0 0);
+  --color-text: oklch(100% 0.00011 271.152);
+  --color-text-gray: oklch(72% 0 0);
+  --color-text-brown: oklch(72% 0.06 45);
+  --color-text-orange: oklch(74% 0.13 55);
+  --color-text-yellow: oklch(80% 0.13 80);
+  --color-text-green: oklch(74% 0.12 155);
+  --color-text-blue: oklch(72% 0.12 240);
+  --color-text-purple: oklch(72% 0.13 305);
+  --color-text-pink: oklch(72% 0.14 350);
+  --color-text-red: oklch(70% 0.16 25);
+
+  /* background */
+  --color-bg-gray: oklch(32% 0 0);
+  --color-bg-brown: oklch(32% 0.03 45);
+  --color-bg-orange: oklch(34% 0.06 55);
+  --color-bg-yellow: oklch(36% 0.06 80);
+  --color-bg-green: oklch(32% 0.05 155);
+  --color-bg-blue: oklch(32% 0.06 240);
+  --color-bg-purple: oklch(32% 0.065 305);
+  --color-bg-pink: oklch(32% 0.065 350);
+  --color-bg-red: oklch(32% 0.07 25);
 
   /* surfaces */
   --bg-primary: oklch(0.14 0 0);
   --bg-secondary: oklch(0.16 0 0);
   --bg-tertiary: oklch(0.18 0 0);
-  --bg-hover: oklch(0.22 0 0);
+  --bg-hover: oklch(30.118% 0.00003 271.152 / 0.809);
   --bg-active: oklch(0.26 0 0);
 
   /* editor */
@@ -206,6 +259,8 @@
 
   --color-text: var(--color-text);
   --color-gray: var(--color-gray);
+  --color-blue: var(--color-blue);
+  --color-error: var(--color-error);
 
   --color-white: var(--color-white);
   --color-black: var(--color-black);
@@ -219,6 +274,7 @@
   --color-bg-tertiary: var(--bg-tertiary);
   --color-bg-hover: var(--bg-hover);
   --color-bg-active: var(--bg-active);
+  --color-bg-error: var(--bg-error);
 
   --color-border: var(--border);
   --color-border-hover: var(--border-hover);

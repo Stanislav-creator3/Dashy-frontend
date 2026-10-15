@@ -23,7 +23,8 @@ export type SlashCommandType =
   | "ListNumber"
   | "todo"
   | "callout"
-  | "board";
+  | "board"
+  | "image";
 
 export type SlashCommandItem = {
   title: string;
@@ -108,6 +109,13 @@ export const SLASH_COMMANDS: SlashCommandItem[] = [
     keywords: ["board"],
     category: "Базы данных",
   },
+  {
+    title: "Картинка",
+    description: "Добавить картинку",
+    type: "image",
+    keywords: ["image"],
+    category: "Медиа",
+  },
 ];
 
 export class SlashMenuOption extends MenuOption {
@@ -135,6 +143,7 @@ export const getNode = (
   order: number,
   tempId: string | null,
   parentId: string | null,
+  projectId: string | null,
 ) => {
   let replacement;
   switch (type) {
@@ -211,7 +220,11 @@ export const getNode = (
       setBlockTempId(replacement, tempId);
       setOrderForNode(replacement, order);
       setParentBlockIdForNode(replacement, parentId);
+
       return replacement;
+
+    // case "image":
+    // replacement = $createImageNode();
 
     default:
       replacement = $createCustomParagraphNode();

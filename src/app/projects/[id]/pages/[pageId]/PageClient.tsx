@@ -8,7 +8,7 @@ import { PageHeader } from "@/widgets/pageHeader";
 import { pagesApi } from "@/entities/pages/api/pages.api";
 import { useEffect } from "react";
 import { KEYS_API } from "@/shared/config/api";
-import { useSortable } from "@dnd-kit/react/sortable";
+import { PageSidePanel } from "@/widgets/pageSidePanel";
 
 export default function PageClient({
   pageId,
@@ -43,6 +43,7 @@ export default function PageClient({
               projectId={projectId}
               blocks={data?.blocks}
             />
+            <PageSidePanel projectId={projectId} />
           </div>
         )
       )}

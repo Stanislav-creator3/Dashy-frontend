@@ -5,7 +5,7 @@ import { ORDERED_LIST, TRANSFORMERS, UNORDERED_LIST } from "@lexical/markdown";
 import { CodeExtension } from "@lexical/code";
 import { LinkExtension } from "@lexical/link";
 import { CheckListExtension } from "@lexical/list";
-import { HeadingNode, RichTextExtension } from "@lexical/rich-text";
+import { RichTextExtension } from "@lexical/rich-text";
 import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
 import { HEADING_CUSTOM } from "../markdown/headingTransformer";
 import { BULLET_CUSTOM } from "../markdown/bulletTransformer";
@@ -25,7 +25,7 @@ import { FloatingMenuPlugin } from "../plugins/FloatingMenuPlugin";
 import { ColorStylePlugin } from "../plugins/ColorStylePlugin";
 import { IBlock } from "../model/block.types";
 import { DndPlugin } from "../plugins/DndPlugin";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { DraggableWrapper } from "../components/DraggableWrapper";
 import { LinkPageNode } from "../nodes/LinkPage";
 import BlockDeleteSkipPlugin from "../plugins/BlockDeleteSkipPlugin";
@@ -40,17 +40,14 @@ import {
   $createCustomParagraphNode,
   CustomParagraphNode,
 } from "../nodes/CustomParagraphNode";
-import {
-  $createCustomHeadingNode,
-  CustomHeadingNode,
-} from "../nodes/CustomHeadingNode";
-import {
-  $createCustomQuoteNode,
-  CustomQuoteNode,
-} from "../nodes/CustomQuoteNode";
-import { QuoteNode } from "@lexical/rich-text";
+import { CustomHeadingNode } from "../nodes/CustomHeadingNode";
+import { CustomQuoteNode } from "../nodes/CustomQuoteNode";
 import { ReactExtension } from "@lexical/react/ReactExtension";
 import { BoardNode } from "../board";
+import {
+  createDraggableStore,
+  DraggableContext,
+} from "../model/draggableStore";
 
 const EditorExtension = defineExtension({
   name: "NotionLikeEditor",
@@ -132,6 +129,9 @@ export default function BlockEditor({
   projectId: string;
   blocks: IBlock[] | undefined;
 }) {
+  const [draggableStore] = useState(() =>
+    createDraggableStore(`draggableStore:${pageId}`),
+  );
   const CustomContent = useMemo(() => {
     return (
       <DraggableWrapper>
@@ -146,27 +146,29 @@ export default function BlockEditor({
     );
   }, []);
   return (
-    <LexicalExtensionComposer
-      extension={EditorExtension}
-      contentEditable={CustomContent}
-    >
-      <EditorPanelPlugin />
-      <InitializeEditorPlugin
-        blocks={blocks}
-        isLoading={false}
-        projectId={projectId}
-      />
-      <SlashMenuPlugin pageId={pageId} projectId={projectId} />
-      <EnterCreateBlockPlugin pageId={pageId} projectId={projectId} />
-      <CreateOnClickPlugin pageId={pageId} projectId={projectId} />
-      <BlocksUpdatePlugin pageId={pageId} projectId={projectId} />
-      <BlockDeleteSkipPlugin />
-      <BlockDeletePlugin pageId={pageId} projectId={projectId} />
-      <BlockPlaceholderPlugin />
-      <FloatingMenuPlugin />
-      <ColorStylePlugin />
-      <MarkdownShortcutPlugin transformers={CUSTOM_TRANSFORMERS} />
-      <DndPlugin pageId={pageId} projectId={projectId} />
-    </LexicalExtensionComposer>
+    <DraggableContext.Provider value={draggableStore}>
+      <LexicalExtensionComposer
+        extension={EditorExtension}
+        contentEditable={CustomContent}
+      >
+        <EditorPanelPlugin />
+        <InitializeEditorPlugin
+          blocks={blocks}
+          isLoading={false}
+          projectId={projectId}
+        />
+        <SlashMenuPlugin projectId={projectId} />
+        <EnterCreateBlockPlugin pageId={pageId} projectId={projectId} />
+        <CreateOnClickPlugin pageId={pageId} projectId={projectId} />
+        <BlocksUpdatePlugin pageId={pageId} projectId={projectId} />
+        <BlockDeleteSkipPlugin />
+        <BlockDeletePlugin pageId={pageId} projectId={projectId} />
+        <BlockPlaceholderPlugin />
+        <FloatingMenuPlugin />
+        <ColorStylePlugin />
+        <MarkdownShortcutPlugin transformers={CUSTOM_TRANSFORMERS} />
+        <DndPlugin pageId={pageId} projectId={projectId} />
+      </LexicalExtensionComposer>
+    </DraggableContext.Provider>
   );
 }

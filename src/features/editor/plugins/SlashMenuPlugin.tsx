@@ -1,11 +1,11 @@
+"use client";
+
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import {
   LexicalTypeaheadMenuPlugin,
   type MenuTextMatch,
 } from "@lexical/react/LexicalTypeaheadMenuPlugin";
 import {
-  $createParagraphNode,
-  $getNodeByKey,
   $getSelection,
   $isRangeSelection,
   TextNode,
@@ -23,38 +23,14 @@ import {
   SlashMenuOption,
 } from "../utils/slashItems";
 import { getBlockIdFromNode, getOrderFromNode } from "../utils/nodeId";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { IBlockCreate } from "../model/block.types";
-import { blocksApi } from "../api/blocks.api";
-import { pagesApi } from "@/entities/pages/api/pages.api";
 import { getBlockTempId, getParentBlockId } from "../model/blockState";
 
 const genId = () =>
   `temp-${globalThis.crypto?.randomUUID?.() ?? String(Date.now())}`;
 
-export default function SlashMenuPlugin({
-  pageId,
-  projectId,
-}: {
-  pageId: string;
-  projectId: string;
-}) {
+export default function SlashMenuPlugin({ projectId }: { projectId: string }) {
   const [editor] = useLexicalComposerContext();
 
-  const queryClient = useQueryClient();
-
-  const { mutateAsync: createBlocks } = useMutation({
-    mutationFn: (data: IBlockCreate) =>
-      blocksApi.createBlocks({ id: pageId, data }),
-    onSettled: () => {
-      queryClient.invalidateQueries(
-        pagesApi.getByIdPage({
-          id: pageId,
-          projectId,
-        }),
-      );
-    },
-  });
   const [queryString, setQueryString] = useState<string | null>(null);
 
   const checkForTriggerMatch = useCallback(
@@ -110,7 +86,14 @@ export default function SlashMenuPlugin({
         nodeToReplace.remove();
       }
 
-      const replacement = getNode(commandType, nodeId, order, tempId, parentId);
+      const replacement = getNode(
+        commandType,
+        nodeId,
+        order,
+        tempId,
+        parentId,
+        projectId,
+      );
 
       const children = topLevel.getChildren();
       if ($isListNode(replacement)) {
@@ -130,7 +113,7 @@ export default function SlashMenuPlugin({
   );
 
   const onSelectOption = useCallback(
-    (
+    async (
       selectedOption: SlashMenuOption,
       nodeToReplace: TextNode | null,
       closeMenu: () => void,

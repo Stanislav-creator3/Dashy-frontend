@@ -4,17 +4,17 @@ import { AddCover } from "@/widgets/addCover";
 
 import { motion, Variants } from "motion/react";
 import { useEffect, useRef } from "react";
-import { PageTitle } from "@/shared/ui";
 import useDebounce from "@/shared/hooks/useDebounce";
-
 import { useUpdatePageTitle } from "@/entities/pages/hooks/use-update-page-title";
-import { IPage } from "@/entities/pages/model/page.types";
+import { IPage, PAGE_TYPE } from "@/entities/pages/model/page.types";
 import {
   CoverEmojiPicker,
   useCoverEmojiPicker,
 } from "@/features/pages/coverEmojiPicker";
 import { AddIconButton, useAddIcon } from "@/features/pages/AddIconButton";
 import { cn } from "@/shared/utils/utils";
+import { useUpdatePageTitleCard } from "@/entities/pages/hooks/use-updata-page-title-card";
+import { TitleContentEditable } from "@/shared/ui";
 
 const variantParent: Variants = {
   initial: {},
@@ -30,10 +30,14 @@ export default function PageHeader({
   pageId,
   projectId,
   page,
+  databaseId,
+  type = PAGE_TYPE.PAGE,
 }: {
   pageId: string;
   projectId: string;
   page: IPage;
+  databaseId?: string;
+  type?: PAGE_TYPE;
 }) {
   const { setOpenEmojiPicker, openEmojiPicker, deleteIcon } =
     useCoverEmojiPicker(pageId, projectId, page?.parentId ?? null);
@@ -53,12 +57,20 @@ export default function PageHeader({
     pageId,
   });
 
+  const { handleUpdateTitleCard } = useUpdatePageTitleCard({
+    projectId,
+    databaseId: databaseId ?? "",
+    pageId,
+  });
+
   const debouncedUpdateTitle = useDebounce((title: string) => {
-    handleUpdate({
-      id: pageId,
-      projectId,
-      body: { title: title },
-    });
+    type === PAGE_TYPE.CARD
+      ? handleUpdateTitleCard({ id: pageId, projectId, body: { title: title } })
+      : handleUpdate({
+          id: pageId,
+          projectId,
+          body: { title: title },
+        });
   }, 1000);
 
   useEffect(() => {
@@ -112,7 +124,11 @@ export default function PageHeader({
         {!page?.icon && <AddIconButton onClick={addRandomIcon} />}
       </motion.div>
 
-      <PageTitle titleRef={titleRef} onSubmit={debouncedUpdateTitle} />
+      <TitleContentEditable
+        className="mb-4"
+        titleRef={titleRef}
+        onSubmit={debouncedUpdateTitle}
+      />
     </motion.div>
   );
 }

@@ -262,13 +262,15 @@ export function serializeBlock(node: LexicalNode): IBlock | null {
   }
 
   if ($isBoardNode(node)) {
+    const { databaseId, groupByFieldId } = node.getProps();
+    if (!databaseId || !groupByFieldId) return null;
     return {
       id,
       order,
       parentId,
       tempId,
       type: "Board",
-      props: {},
+      props: { databaseId, groupByFieldId },
     };
   }
 

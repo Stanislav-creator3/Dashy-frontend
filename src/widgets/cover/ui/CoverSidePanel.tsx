@@ -57,7 +57,11 @@ export function CoverSidePanel({
   }, {});
 
   return (
-    <SidePanel className="max-w-135 w-full" isOpen={isOpen} setIsOpen={setIsOpen}>
+    <SidePanel
+      className="max-w-135 w-full p-3"
+      isOpen={isOpen}
+      setIsOpen={setIsOpen}
+    >
       {isLoading ? (
         <Skeleton />
       ) : (

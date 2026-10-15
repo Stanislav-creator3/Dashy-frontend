@@ -24,7 +24,7 @@ interface IMenuProps {
 }
 
 export function FloatingMenuEditor({ editor, coords, ref }: IMenuProps) {
-  const shouldShow = !!coords
+  const shouldShow = !!coords;
 
   const [state, setState] = useState<IMenuState>({
     isBold: false,
@@ -51,7 +51,7 @@ export function FloatingMenuEditor({ editor, coords, ref }: IMenuProps) {
             isUnderline: selection.hasFormat("underline"),
           });
         });
-      }
+      },
     );
     return unregisterListener;
   }, [editor]);
@@ -76,19 +76,16 @@ export function FloatingMenuEditor({ editor, coords, ref }: IMenuProps) {
       }}
       aria-hidden={!shouldShow}
     >
-      {
-        items.map((item, index) => (
-          <FloatingMenuItem
-            key={item.id}
-            index={index}
-            isActive={item.isActive}
-            shouldShow={shouldShow}
-          >
-            {item.render()}
-          </FloatingMenuItem>
-        ))
-      }
-
+      {items.map((item, index) => (
+        <FloatingMenuItem
+          key={item.id}
+          index={index}
+          isActive={item.isActive}
+          shouldShow={shouldShow}
+        >
+          {item.render()}
+        </FloatingMenuItem>
+      ))}
     </motion.div>
   );
 }

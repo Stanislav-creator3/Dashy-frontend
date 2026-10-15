@@ -1,120 +1,94 @@
 "use client";
 
-import { useState } from "react";
-import { Column } from "./Column";
-import { ColumnItem } from "./ColumItem";
-import { DragDropProvider } from "@dnd-kit/react";
-import { move } from "@dnd-kit/helpers";
-import { AutoScroller } from "@dnd-kit/dom";
-import { DRAGGABLE_KEY } from "../../hooks/useDragListeners";
-import { DRAGGABLE_WRAPPER_ID } from "../../components/DraggableWrapper";
-import { draggableStore, useReset } from "../../model/draggableStore";
-import { Button, LuSettings2, Popover } from "@/shared/ui";
-import { motion, Variants } from "motion/react";
-import { BoardSettings } from "./boardSettings";
+import { useEffect, useMemo, useRef, useState } from "react";
+
+import { buildBoard } from "../utils";
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { useCreateDatabase } from "@/entities/database/hooks/use-create-database";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { databaseApi } from "@/entities/database/api/database.api";
+import { $isBoardNode } from "../nodes/boardNode";
+import { $getNodeByKey } from "lexical";
+import { useParams } from "next/navigation";
+import { FIELD_TYPE } from "@/entities/database/model/database.type";
+import { BoardContent } from "./BoardContent";
 
 interface Props {
-  projectId?: string;
   pageId?: string;
+  databaseId?: string;
+  nodeKey: string;
+  blockId: string | null;
+  name?: string;
+  groupByFieldId?: string;
 }
 
-export default function BoardView({ projectId, pageId }: Props) {
-  const [items, setItems] = useState<Record<string, string[]>>({
-    A: ["A0", "A1", "A2"],
-    B: ["B0", "B1"],
-    C: ["C0", "C1", "C2", "C3"],
-    D: ["D0", "D1", "D2"],
-    E: ["E0", "E1", "E2"],
-  });
+export default function BoardView({
+  databaseId,
+  pageId,
+  nodeKey,
+  blockId,
+  groupByFieldId,
+  name,
+}: Props) {
+  const isCreatingRef = useRef(false);
 
-  const [columnOrder, setColumnOrder] = useState(() => Object.keys(items));
+  const queryClient = useQueryClient();
+  const { id: projectId } = useParams<{ id: string }>();
+  const { mutateAsync: createDatabase, isPending } = useCreateDatabase();
+  const { data: database } = useQuery(
+    databaseApi.getById({ id: databaseId, projectId }),
+  );
+
+  const [editor] = useLexicalComposerContext();
+
+  // const boardModel = useMemo(
+  //   () => database && buildBoard(database, groupByFieldId),
+  //   [database, groupByFieldId],
+  // );
+
+  const boardModel = database && buildBoard(database, groupByFieldId);
+
+  useEffect(() => {
+    if (databaseId || !blockId || isCreatingRef.current) return;
+    isCreatingRef.current = true;
+    createDatabase({
+      projectId: projectId ?? "",
+      data: {
+        name: "New Board",
+        blockId: blockId,
+      },
+    }).then((data) => {
+      queryClient.setQueryData(
+        databaseApi.getById({ projectId: projectId, id: data.id }).queryKey,
+        data,
+      );
+
+      const statusField = data.fields.find(
+        (field) => field.type === FIELD_TYPE.STATUS,
+      );
+      editor.update(() => {
+        const node = $getNodeByKey(nodeKey);
+        if (!$isBoardNode(node)) return;
+
+        node.setProps({
+          databaseId: data.id,
+          groupByFieldId: statusField?.id,
+        });
+      });
+    });
+  }, [databaseId, blockId]);
 
   return (
-    <div className="flex flex-col w-full">
-      <div className="flex justify-between items-center w-full p-4">
-        <p
-          className="font-bold text-lg w-full cursor-pointer"
-          onMouseEnter={(event) => {
-            const block = event.currentTarget.closest(`[${DRAGGABLE_KEY}]`);
-            if (!(block instanceof HTMLElement)) return;
-            const wrapper = document.getElementById(DRAGGABLE_WRAPPER_ID)!;
-            const wrapperRect = wrapper.getBoundingClientRect();
-            const titleRect = event.currentTarget.getBoundingClientRect();
-
-            draggableStore.getState().setDraggable({
-              htmlElement: block,
-              data: {
-                top: titleRect.top - wrapperRect.top - wrapper.scrollTop,
-                left: titleRect.left - wrapperRect.left - 23,
-                height: titleRect.height,
-              },
-            });
-          }}
-        >
-          Board Title
-        </p>
-        <div className="flex gap-2 justify-between ">
-          <Popover
-            placement="top"
-            offsetValue={4}
-            delay={400}
-            trigger={<BoardSettings />}
-          >
-            <div className="p-1 bg-foreground rounded-lg text-white text-sm">
-              Настройки
-            </div>
-          </Popover>
-        </div>
-      </div>
-      <div className="w-[100cqw] ml-[calc(50%-50cqw)] overflow-x-auto">
-        <DragDropProvider
-          plugins={(defaults) => [
-            ...defaults.filter((p) => p !== AutoScroller),
-            AutoScroller.configure({
-              acceleration: 12,
-              threshold: { x: 0.2, y: 0.2 },
-            }),
-          ]}
-          onDragOver={(event) => {
-            const { source, target } = event.operation;
-
-            if (source?.type === "column") return;
-
-            setItems((items) => move(items, event));
-          }}
-          onDragEnd={(event) => {
-            const { source, target } = event.operation;
-
-            if (!source || !target) return;
-
-            if (event.canceled || source.type !== "column") return;
-
-            setColumnOrder((columns) => move(columns, event));
-          }}
-        >
-          <div className="flex gap-1 items-start w-max px-[calc(50cqw_-_372px)] ">
-            {columnOrder.map((column, columnIndex) => (
-              <Column
-                key={column}
-                id={column}
-                index={columnIndex}
-                columnName={column}
-              >
-                {items[column].map((id, index) => (
-                  <ColumnItem
-                    key={id}
-                    index={index}
-                    id={id}
-                    column={column}
-                    text={"itemId"}
-                  />
-                ))}
-                <Button>Новая задача +</Button>
-              </Column>
-            ))}
-          </div>
-        </DragDropProvider>
-      </div>
-    </div>
+    databaseId &&
+    boardModel && (
+      <BoardContent
+        title={database.name}
+        cardsById={boardModel?.cardsById ?? new Map()}
+        databaseId={databaseId}
+        groupByFieldId={groupByFieldId ?? ""}
+        columnsBoard={boardModel?.columns ?? []}
+        itemsByColumnBoard={boardModel?.itemsByColumnBoard ?? {}}
+      />
+    )
   );
 }

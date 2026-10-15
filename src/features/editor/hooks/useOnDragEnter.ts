@@ -1,12 +1,16 @@
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { useCallback } from "react";
 import { DRAGGABLE_KEY } from "./useDragListeners";
-import { draggableStore } from "../model/draggableStore";
+import { useDraggableContext } from "../model/draggableStore";
 import styles from "../ui/BlockEditor.module.css";
-import { DRAGGABLE_WRAPPER_ID } from "../components/DraggableWrapper";
+import {
+  DRAGGABLE_WRAPPER_ID,
+  DRAGGABLE_WRAPPER_SELECTOR,
+} from "../components/DraggableWrapper";
 
 export const useOnDragEnter = () => {
   const [editor] = useLexicalComposerContext();
+  const setLine = useDraggableContext((state) => state.setLine);
 
   const handleOnDragEnter = useCallback(
     (event: DragEvent): boolean => {
@@ -45,7 +49,8 @@ export const useOnDragEnter = () => {
         return false;
       }
 
-      const wrapper = document.getElementById(DRAGGABLE_WRAPPER_ID);
+      // const wrapper = document.getElementById(DRAGGABLE_WRAPPER_ID);
+      const wrapper = block.closest(DRAGGABLE_WRAPPER_SELECTOR);
 
       if (!wrapper) {
         console.error("[On drag enter] Wrapper not found");
@@ -63,7 +68,7 @@ export const useOnDragEnter = () => {
         wrapper.scrollTop;
 
       if (coordinates) {
-        draggableStore.getState().setLine({
+        setLine({
           htmlElement: element,
           data: {
             top: top,

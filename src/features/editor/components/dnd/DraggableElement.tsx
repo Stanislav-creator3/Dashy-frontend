@@ -4,14 +4,9 @@ import { useCallback, DragEvent as ReactDragEvent, useState } from "react";
 import { useDraggableStore, useReset } from "../../model/draggableStore";
 import { MdDragIndicator } from "react-icons/md";
 import { FaPlus } from "react-icons/fa6";
-import { Popover } from "@/shared/ui";
+import { DropdownMenu, Popover } from "@/shared/ui";
 import { DRAGGABLE_KEY } from "../../hooks/useDragListeners";
-import {
-  $createNodeSelection,
-  $getNodeByKey,
-  $getSelection,
-  $setSelection,
-} from "lexical";
+import { $createNodeSelection, $getNodeByKey, $setSelection } from "lexical";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { BlockOptionsMenu } from "../BlockOptionsMenu/BlockOptions";
 import { $isBlockNode } from "../../model/typeGuard";
@@ -109,7 +104,9 @@ export function DraggableElement() {
       <BlockOptionsMenu
         nodeKey={activeDraggable?.htmlElement.getAttribute(DRAGGABLE_KEY)}
         open={optionsOpen}
-        setOpen={openPicker}
+        setOpen={(open) => {
+          openPicker(open);
+        }}
         trigger={
           <div
             className="
@@ -119,6 +116,9 @@ export function DraggableElement() {
        rounded-sm
        transition-colors duration-150
        hover:bg-bg-hover"
+            style={{
+              backgroundColor: optionsOpen ? "var(--color-bg-hover)" : "",
+            }}
             draggable={true}
             onDragStart={handleOnDragStart}
             onDragEnd={reset}

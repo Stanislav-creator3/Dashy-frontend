@@ -141,7 +141,8 @@ export function buildBlockNode(block: IBlock, projectId: string): LexicalNode {
     case "Board": {
       const node = applyBlockMeta($createBoardNode(), block);
       node.setProps({
-        projectId,
+        databaseId: block.props?.databaseId,
+        groupByFieldId: block.props?.groupByFieldId,
       });
 
       return node;

@@ -1,0 +1,17 @@
+export const defaultColumns = [
+  { key: "1", title: "Column 1" },
+  { key: "2", title: "Column 2" },
+  { key: "3", title: "Column 3" },
+  { key: "4", title: "Column 4" },
+  { key: "5", title: "Column 5" },
+  { key: "6", title: "Column 6" },
+  { key: "7", title: "Column 7" },
+  { key: "8", title: "Column 8" },
+  { key: "9", title: "Column 9" },
+  { key: "10", title: "Column 10" },
+  { key: "11", title: "Column 11" },
+  { key: "12", title: "Column 12" },
+  { key: "13", title: "Column 13" },
+  { key: "14", title: "Column 14" },
+  { key: "15", title: "Column 15" },
+];

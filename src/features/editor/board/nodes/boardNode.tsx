@@ -1,4 +1,3 @@
-import { PAGE_TYPE } from "@/entities/pages/model/page.types";
 import {
   $create,
   $getState,
@@ -17,14 +16,13 @@ import {
 import BoardView from "../ui/BoardView";
 
 export interface IBoardNodeProps {
-  projectId?: string;
+  databaseId?: string;
+  groupByFieldId?: string;
 }
 
 const propsState = createState("props", {
-  parse: (value) =>
-    typeof value === "object" && value !== null
-      ? (value as IBoardNodeProps)
-      : {},
+  parse: (value): IBoardNodeProps =>
+    typeof value === "object" && value !== null ? value : {},
 });
 
 export class BoardNode extends DecoratorNode<ReactNode> {
@@ -59,7 +57,13 @@ export class BoardNode extends DecoratorNode<ReactNode> {
   }
 
   decorate(): ReactNode {
-    return <BoardView {...$getState(this, propsState)} />;
+    return (
+      <BoardView
+        {...$getState(this, propsState)}
+        blockId={$getState(this, blockIdState)}
+        nodeKey={this.getKey()}
+      />
+    );
   }
 
   canMergeWith(): boolean {
