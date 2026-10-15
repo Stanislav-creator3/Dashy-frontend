@@ -17,6 +17,8 @@ interface DropdownMenuItemProps extends Omit<
   totalIndex: number;
   submenu?: boolean;
   submenuOpen?: boolean;
+  customBackground?: string;
+  color?: string;
   ref?: Ref<HTMLElement>;
 }
 
@@ -24,44 +26,48 @@ const variants = ({
   index,
   totalIndex,
   isActive,
+  customBackground,
+  color,
 }: {
   index: number;
   totalIndex: number;
   isActive: boolean;
+  customBackground?: string;
+  color?: string;
 }): Variants => ({
-  initial: { y: -10, scale: 0.3, filter: "blur(10px)", pointerEvents: "none" },
+  initial: { filter: "blur(10px)", pointerEvents: "none" },
   animate: {
-    y: 0,
-    scale: 1,
     backgroundColor: isActive
-      ? "var(--color-bg-hover)"
+      ? (customBackground ?? "var(--color-bg-hover)")
       : "var(--color-background)",
     filter: "blur(0px)",
     opacity: 1,
     pointerEvents: "auto",
+    color: isActive ? color : "var(--color-text)",
     transition: {
-      duration: 0.75,
-      delay: index * 0.1,
+      duration: 0.3,
+      // delay: index * 0.1,
       type: "spring",
       bounce: 0.45,
+      backgroundColor: { duration: 0.12, ease: "easeOut" },
       filter: {
-        duration: 0.5,
+        duration: 0.3,
         ease: "easeInOut",
       },
+      color: { duration: 0.2, ease: "easeOut" },
     },
   },
   exit: {
     y: -4,
-    scale: 0.3,
     filter: "blur(10px)",
     opacity: 0,
     transition: {
-      duration: 0.75,
-      delay: (totalIndex - index - 1) * 0.12,
+      duration: 0.3,
+      // delay: (totalIndex - index - 1) * 0.12,
       type: "spring",
       bounce: 0.35,
       filter: {
-        duration: 0.5,
+        duration: 0.3,
         ease: "easeInOut",
       },
     },
@@ -76,6 +82,8 @@ export function DropdownMenuItem({
   totalIndex,
   submenu = false,
   submenuOpen = false,
+  customBackground,
+  color,
   ref,
   ...rest
 }: DropdownMenuItemProps) {
@@ -99,12 +107,17 @@ export function DropdownMenuItem({
   });
   return (
     <motion.div
-      variants={variants({ index, totalIndex, isActive })}
+      variants={variants({
+        index,
+        totalIndex,
+        isActive,
+        customBackground,
+        color,
+      })}
       initial="initial"
       animate="animate"
       exit="exit"
-      whileTap={{ scale: 0.9 }}
-      className="p-1 bg-background rounded-xl min-w-[200px] outline-none"
+      className="p-1 bg-background text-text rounded-xl min-w-[200px] outline-none"
     >
       {href ? (
         <Link

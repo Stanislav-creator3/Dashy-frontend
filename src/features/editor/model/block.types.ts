@@ -1,4 +1,6 @@
 import { PAGE_TYPE } from "@/entities/pages/model/page.types";
+import { BoardColorId } from "../board/model/boardColors";
+import { IDatabase } from "@/entities/database/model/database.type";
 export const BLOCK_TYPES = {
   TEXT: "text",
   H1: "h1",
@@ -79,7 +81,8 @@ export type BlockType =
   | "Bullet"
   | "LinkPage"
   | "TodoList"
-  | "Callout";
+  | "Callout"
+  | "Database";
 
 interface IBaseBlock {
   id?: string | null;
@@ -89,6 +92,11 @@ interface IBaseBlock {
   backgroundColor?: string;
   childrenFlag?: boolean;
   children?: IBlock[];
+}
+
+export interface IBlockDataBase extends IBaseBlock {
+  type: "Database";
+  database: IDatabase;
 }
 
 export interface IHeadingBlock extends IBaseBlock {
@@ -152,6 +160,29 @@ export interface IQuoteBlock extends IBaseBlock {
   };
 }
 
+export interface IBoardCard {
+  id: string;
+  title: string;
+  order: number;
+  color?: BoardColorId;
+}
+
+export interface IBoardColumn {
+  id: string;
+  name: string;
+  order: number;
+  color?: BoardColorId;
+  items: IBoardCard[];
+}
+
+export interface IBoardBlock extends IBaseBlock {
+  type: "Board";
+  props: {
+    databaseId: string;
+    groupByFieldId: string;
+  };
+}
+
 export interface ICodeBlock extends IBaseBlock {
   type: "Code";
   content: ITextSegment[];
@@ -179,7 +210,9 @@ export type IBlock =
   | IQuoteBlock
   | ICodeBlock
   | ITodoList
-  | ICalloutBlock;
+  | ICalloutBlock
+  | IBoardBlock
+  | IBlockDataBase;
 
 export interface IBlockCreate {
   type: string;

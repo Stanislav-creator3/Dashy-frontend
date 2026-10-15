@@ -10,15 +10,21 @@ export function SidePanel({
   isOpen,
   setIsOpen,
   className,
+  ignoreSelectors = [],
 }: {
   children: React.ReactNode;
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
-  className?: string
+  className?: string;
+  ignoreSelectors?: string[];
 }) {
-  const ref = useOutsideClick(() => {
-    setIsOpen(false);
-  });
+  const ref = useOutsideClick(
+    () => {
+      setIsOpen(false);
+    },
+    [],
+    { ignoreSelectors },
+  );
 
   return createPortal(
     <AnimatePresence>
@@ -29,7 +35,10 @@ export function SidePanel({
             initial={{ x: "100%", opacity: 0 }}
             animate={{ x: 0, opacity: 1, transition: { duration: 0.3 } }}
             exit={{ x: "100%", opacity: 0 }}
-            className={cn("fixed overflow-scroll z-10 top-0 p-2 shadow-[-5px_-5px_5px_-5px_rgba(34, 60, 80, 0.6)] right-0 min-w-70 h-full bg-background", className)}
+            className={cn(
+              "fixed overflow-scroll z-10 top-0 rounded-xl shadow-[-5px_-5px_5px_-5px_rgba(34, 60, 80, 0.6)] right-0 min-w-70 h-full bg-background",
+              className,
+            )}
           >
             {children}
           </motion.div>

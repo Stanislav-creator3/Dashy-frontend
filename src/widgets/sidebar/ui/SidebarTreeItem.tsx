@@ -69,36 +69,22 @@ export function SidebarTreeItem({
   const [scope, animate] = useAnimate();
   const [isHover, setIsHover] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const onHoverStartAnimate = () => {
     setIsHover(true);
-    animate([
-      [
-        scope.current,
-        {
-          background: !isActive && "rgba(255,255,255,1)",
-          color: "var(--color-black)",
-        },
-        { duration: 0.3 },
-      ],
-      [".button", { opacity: [0, 1] }, { duration: 0.3, at: "<" }],
-      [".button", { y: [10, 0] }, { type: "spring", stiffness: 200, at: "<" }],
-    ]);
   };
 
   const onHoverEndAnimate = () => {
     setIsHover(false);
-    animate([
-      [
-        scope.current,
-        {
-          background: !isActive && "rgba(255,255,255,0)",
-          color: !isActive && "var(--color-text)",
-        },
-        { duration: 0.3 },
-      ],
-      [".button", { opacity: [1, 0] }, { duration: 0.3, at: "<" }],
-    ]);
+  };
+
+  const handleMenuOpenChange = (open: boolean) => {
+    setIsMenuOpen(open);
+
+    if (!isHover) {
+      onHoverEndAnimate();
+    }
   };
 
   const showArrow = hasChildren;
@@ -168,18 +154,25 @@ export function SidebarTreeItem({
             ref={mergeRefs(ref, scope)}
             onPointerDown={(e) => e.stopPropagation()}
             className={cn(
-              "flex items-center justify-between min-w-40 text-text text-sm whitespace-nowrap overflow-hidden text-ellipsis gap-2 p-2 cursor-pointer rounded-4xl",
+              "flex items-center justify-between h-10 min-w-40 text-text text-sm whitespace-nowrap overflow-hidden text-ellipsis gap-2 p-2 cursor-pointer rounded-4xl",
               className,
             )}
             initial={{
-              color: isActive ? "var(--color-black)" : "var(--color-text)",
+              color:
+                isActive || isMenuOpen || isHover
+                  ? "var(--color-black)"
+                  : "var(--color-text)",
             }}
             animate={{
               opacity: [0, 1],
-              background: isActive
-                ? "rgba(255,255,255,1)"
-                : "rgba(255,255,255,0)",
-              color: isActive ? "var(--color-black)" : "var(--color-text)",
+              background:
+                isActive || isMenuOpen || isHover
+                  ? "rgba(255,255,255,1)"
+                  : "rgba(255,255,255,0)",
+              color:
+                isActive || isMenuOpen || isHover
+                  ? "var(--color-black)"
+                  : "var(--color-text)",
             }}
             exit={{
               opacity: 0,
@@ -196,16 +189,32 @@ export function SidebarTreeItem({
                 {title}
               </p>
             </div>
-            <div className="flex gap-1 items-center justify-between button opacity-0">
-              <ButtonPageEdit
-                isHover={isHover}
-                projectId={params.id as string}
-                parentId={parentId}
-                pageId={id}
-                setIsEdit={setIsEdit}
-              />
-              <ButtonPageCreate projectId={params.id as string} parentId={id} />
-            </div>
+
+            <AnimatePresence mode="wait">
+              {(isMenuOpen || isHover) && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className="flex gap-1 items-center justify-between "
+                >
+                  <ButtonPageEdit
+                    isHover={isHover}
+                    isMenuOpen={isMenuOpen}
+                    onOpenChange={handleMenuOpenChange}
+                    projectId={params.id as string}
+                    parentId={parentId}
+                    pageId={id}
+                    setIsEdit={setIsEdit}
+                  />
+                  <ButtonPageCreate
+                    onOpenChange={handleMenuOpenChange}
+                    projectId={params.id as string}
+                    parentId={id}
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
         )}
       </AnimatePresence>

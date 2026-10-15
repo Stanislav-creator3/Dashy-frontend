@@ -1,4 +1,3 @@
-
 export const KEYS_API = {
   ACCOUNT: "ACCOUNT",
   TIME_TRACKER: "TIME_TRACKER",
@@ -8,6 +7,7 @@ export const KEYS_API = {
   BLOCKS: "BLOCKS",
   COVER: "COVER",
   RECENT_PAGES: "RECENT_PAGES",
+  DATABASE: "DATABASE",
 };
 
 export const BASE_API_URL = "http://localhost:4000";

@@ -88,7 +88,7 @@ export default function CoverEmojiPicker({
     <div ref={ref} className={className}>
       {url && (
         <button
-          className="p-1 cursor-pointer rounded-md hover:bg-gray/25"
+          className="p-1 cursor-pointer rounded-md hover:bg-bg-hover"
           onClick={() => onToggle()}
         >
           {Icon}

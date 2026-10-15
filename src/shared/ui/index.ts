@@ -18,13 +18,16 @@ import GooeyFilter from "./gooeyFilter/GooeyFilter";
 import ColorList from "./colorList/ColorList";
 import CardSkeleton from "./card/CardSkeleton";
 import Loading from "./loading/Loading";
-import PageTitle from "./pageTitle/PageTitle";
+import TitleContentEditable from "./titleContentEditable/TitleContentEditable";
 import { SidePanel } from "./sidePanel/SidePanel";
 import Popover from "./popover/Popover";
 import Separator from "./separator/Separator";
 import Heading from "./Heading/Heading";
 import Carousel from "./carousel/Carousel";
 import TimeAgo from "./timeAgo/TimeAgo";
+import ButtonEdit from "./button/ButtonEdit";
+import LuSettings2 from "./customIcon/LuSettings2";
+import ColorItem from "./colorList/ColorItem";
 
 export {
   Tooltip,
@@ -47,11 +50,14 @@ export {
   ColorList,
   CardSkeleton,
   Loading,
-  PageTitle,
+  TitleContentEditable,
   SidePanel,
   Popover,
   Separator,
   Heading,
   Carousel,
   TimeAgo,
+  ButtonEdit,
+  LuSettings2,
+  ColorItem,
 };

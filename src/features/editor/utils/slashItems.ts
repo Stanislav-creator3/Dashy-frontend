@@ -11,6 +11,7 @@ import { setBlockTempId } from "../model/blockState";
 import { $createCustomParagraphNode } from "../nodes/CustomParagraphNode";
 import { $createCustomHeadingNode } from "../nodes/CustomHeadingNode";
 import { $createCustomQuoteNode } from "../nodes/CustomQuoteNode";
+import { $createBoardNode } from "../board/nodes/boardNode";
 
 export type SlashCommandType =
   | "text"
@@ -21,7 +22,9 @@ export type SlashCommandType =
   | "quote"
   | "ListNumber"
   | "todo"
-  | "callout";
+  | "callout"
+  | "board"
+  | "image";
 
 export type SlashCommandItem = {
   title: string;
@@ -99,6 +102,20 @@ export const SLASH_COMMANDS: SlashCommandItem[] = [
     keywords: ["callout", "notice", "important"],
     category: "Базовые блоки",
   },
+  {
+    title: "Доска",
+    description: "Кабан доска",
+    type: "board",
+    keywords: ["board"],
+    category: "Базы данных",
+  },
+  {
+    title: "Картинка",
+    description: "Добавить картинку",
+    type: "image",
+    keywords: ["image"],
+    category: "Медиа",
+  },
 ];
 
 export class SlashMenuOption extends MenuOption {
@@ -126,6 +143,7 @@ export const getNode = (
   order: number,
   tempId: string | null,
   parentId: string | null,
+  projectId: string | null,
 ) => {
   let replacement;
   switch (type) {
@@ -195,6 +213,18 @@ export const getNode = (
       setOrderForNode(replacement, order);
       setParentBlockIdForNode(replacement, parentId);
       return replacement;
+
+    case "board":
+      replacement = $createBoardNode();
+      setBlockIdForNode(replacement, nodeId);
+      setBlockTempId(replacement, tempId);
+      setOrderForNode(replacement, order);
+      setParentBlockIdForNode(replacement, parentId);
+
+      return replacement;
+
+    // case "image":
+    // replacement = $createImageNode();
 
     default:
       replacement = $createCustomParagraphNode();

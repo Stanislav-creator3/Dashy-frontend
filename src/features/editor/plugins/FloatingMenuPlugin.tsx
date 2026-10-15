@@ -13,18 +13,19 @@ import { computePositionInContainer } from "../utils/computePositionInContainer"
 
 export function FloatingMenuPlugin() {
   const ref = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLElement | null>(null);
+  const containerRef = useRef<Element | null>(null);
   const [coords, setCoords] = useState<FloatingMenuCoords>(undefined);
   const [editor] = useLexicalComposerContext();
-  const [portalElement, setPortalElement] = useState<HTMLElement | null>(null);
+  const [portalElement, setPortalElement] = useState<Element | null>(null);
 
   useEffect(() => {
-    const el = document.getElementById("editor-root");
-    if (el) {
-      containerRef.current = el;
-      setPortalElement(el);
-    }
-  }, []);
+    return editor.registerRootListener((root) => {
+      const element = root?.closest("[data-editor-root]") ?? null;
+
+      containerRef.current = element;
+      setPortalElement(element);
+    });
+  }, [editor]);
 
   const { isPointerDown, isPointerReleased } = usePointerInteractions();
 
@@ -39,7 +40,7 @@ export function FloatingMenuPlugin() {
     const pos = computePositionInContainer(
       domRange,
       ref.current,
-      containerRef.current
+      containerRef.current,
     );
     setCoords(pos);
   }, [isPointerDown]);
@@ -66,7 +67,7 @@ export function FloatingMenuPlugin() {
     const unregisterListener = editor.registerUpdateListener(
       ({ editorState }) => {
         editorState.read(() => $handleSelectionChange());
-      }
+      },
     );
     return unregisterListener;
   }, [editor, $handleSelectionChange]);
@@ -97,6 +98,6 @@ export function FloatingMenuPlugin() {
 
   return createPortal(
     <FloatingMenuEditor ref={ref} editor={editor} coords={coords} />,
-    portalElement
+    portalElement,
   );
 }

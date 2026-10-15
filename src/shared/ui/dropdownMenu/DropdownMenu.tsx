@@ -13,6 +13,7 @@ import {
   FloatingPortal,
   FloatingTree,
   offset,
+  Placement,
   safePolygon,
   shift,
   useClick,
@@ -34,6 +35,10 @@ interface DropdownMenuItemProps {
   onClick?: () => void;
   href?: string;
   label: React.ReactNode;
+  visible?: boolean;
+  customBackground?: string;
+  color?: string;
+  type?: "item" | "label";
   children?: DropdownMenuItemProps[];
 }
 
@@ -56,6 +61,9 @@ interface DropdownMenuComponentProps {
   enabledClick?: boolean;
   index?: number;
   totalIndex?: number;
+  visible?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  placement?: Placement;
 }
 
 export default function DropdownMenu(props: DropdownMenuComponentProps) {
@@ -79,6 +87,8 @@ export function DropdownComponentMenu({
   enabledClick = false,
   index = 0,
   totalIndex = 1,
+  onOpenChange,
+  placement = "bottom-start",
 }: DropdownMenuComponentProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -89,11 +99,19 @@ export function DropdownComponentMenu({
 
   const isNested = parentId != null;
 
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+
+    setTimeout(() => {
+      onOpenChange?.(open);
+    }, 400);
+  };
+
   const { refs, floatingStyles, context } = useFloating({
     nodeId: nodeId,
     open: isOpen,
-    onOpenChange: setIsOpen,
-    placement: isNested ? "right-start" : "bottom-start",
+    onOpenChange: handleOpenChange,
+    placement: isNested ? "right-start" : placement,
     middleware: [
       offset({ mainAxis: isNested ? 10 : 4, alignmentAxis: isNested ? -4 : 0 }),
       flip(),
@@ -136,7 +154,7 @@ export function DropdownComponentMenu({
 
   const hover = useHover(context, {
     enabled: isNested || !enabledClick,
-    delay: { open: isNested ? 75 : 0, close: 400 },
+    delay: { open: isNested ? 75 : 0, close: 75 },
     handleClose: safePolygon(),
   });
 
@@ -148,12 +166,12 @@ export function DropdownComponentMenu({
     if (!tree) return;
 
     function handleTreeClick() {
-      setIsOpen(false);
+      // handleOpenChange?.(false);
     }
 
     function onSubMenuOpen(event: { nodeId: string; parentId: string }) {
       if (event.nodeId !== nodeId && event.parentId === parentId) {
-        setIsOpen(false);
+        // handleOpenChange?.(false);
       }
     }
 
@@ -164,7 +182,7 @@ export function DropdownComponentMenu({
       tree.events.off("click", handleTreeClick);
       tree.events.off("menuopen", onSubMenuOpen);
     };
-  }, [tree, nodeId, parentId]);
+  }, [tree, nodeId, parentId, handleOpenChange]);
 
   React.useEffect(() => {
     if (isOpen && tree) {
@@ -215,14 +233,24 @@ export function DropdownComponentMenu({
                     exit={{ opacity: 0, transition: { duration: 0.5 } }}
                     transition={{ duration: 0.2 }}
                     className={cn(
-                      "flex text-black rounded-lg shadow-2xl p-0.5 glass focus:outline-none",
+                      "flex text-black max-h-[65vh] overflow-scroll rounded-lg shadow-2xl p-0.5 glass focus:outline-none",
                       className,
                     )}
                     {...getFloatingProps()}
                   >
                     <ul className="flex relative flex-col gap-0.5">
-                      {items?.map((item, index) =>
-                        item.children ? (
+                      {items?.map((item, index) => {
+                        if (item.type === "label") {
+                          return (
+                            <li
+                              key={index}
+                              className="text-sm text-gray-600 font-bold p-2"
+                            >
+                              {item.label}
+                            </li>
+                          );
+                        }
+                        return item.children ? (
                           <DropdownComponentMenu
                             key={index}
                             trigger={item.label}
@@ -235,13 +263,15 @@ export function DropdownComponentMenu({
                           <DropdownMenuItem
                             key={index}
                             index={index}
+                            customBackground={item.customBackground}
+                            color={item.color}
                             totalIndex={items.length}
                             label={item.label}
                             href={item.href}
                             onClick={item.onClick}
                           />
-                        ),
-                      )}
+                        );
+                      })}
                     </ul>
                   </motion.div>
                 </FloatingFocusManager>

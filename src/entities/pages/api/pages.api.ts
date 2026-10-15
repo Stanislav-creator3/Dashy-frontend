@@ -136,6 +136,29 @@ export const pagesApi = {
     return await response.json();
   },
 
+  createPageCard: async ({
+    projectId,
+    data,
+  }: {
+    projectId: string;
+    data: ICreatePage;
+  }) => {
+    const response = await fetch(`${BASE_API_URL}/${projectId}/pages/card`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const errorData = await response
+        .json()
+        .catch(() => ({ message: "Ошибка сервера" }));
+      throw new Error(errorData.message);
+    }
+    return await response.json();
+  },
+
   deletePage: async ({ id, projectId }: { id: string; projectId: string }) => {
     const response = await fetch(`${BASE_API_URL}/${projectId}/pages/${id}`, {
       method: "DELETE",

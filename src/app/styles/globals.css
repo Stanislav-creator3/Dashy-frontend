@@ -5,14 +5,38 @@
 :root {
   /* base */
 
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+
   /* text */
-  --color-text: oklch(0.2 0 0);
-  --color-gray: oklch(0.55 0 0);
+  --color-text: oklch(0.145 0 0);
+  --color-text-gray: oklch(52% 0.01 90);
+  --color-text-brown: oklch(50% 0.07 45);
+  --color-text-orange: oklch(55% 0.136 55);
+  --color-text-yellow: oklch(56% 0.116 80);
+  --color-text-green: oklch(50% 0.11 155);
+  --color-text-blue: oklch(50% 0.114 240);
+  --color-text-purple: oklch(50% 0.15 305);
+  --color-text-pink: oklch(52% 0.17 350);
+  --color-text-red: oklch(53% 0.19 25);
+
+  /* background */
+  --color-bg-gray: oklch(93% 0.003 90);
+  --color-bg-brown: oklch(92% 0.022 45);
+  --color-bg-orange: oklch(92% 0.048 55);
+  --color-bg-yellow: oklch(94% 0.055 80);
+  --color-bg-green: oklch(92.5% 0.04 155);
+  --color-bg-blue: oklch(92% 0.04 240);
+  --color-bg-purple: oklch(92% 0.04 305);
+  --color-bg-pink: oklch(92% 0.045 350);
+  --color-bg-red: oklch(91.5% 0.043 25);
 
   /* base colors */
   --color-white: oklch(0.98 0 0);
   --color-black: oklch(0.25 0 0);
   --color-yellow: oklch(0.9 0.12 95);
+  --color-blue: oklch(0.471 0.155 252);
+  --color-error: oklch(50% 0.19 27);
 
   /* surfaces */
   --bg-primary: oklch(1 0 0);
@@ -20,6 +44,7 @@
   --bg-tertiary: oklch(0.95 0 0);
   --bg-hover: oklch(0.93 0 0);
   --bg-active: oklch(0.91 0 0);
+  --bg-error: oklch(50% 0.19 27);
 
   /* inputs / editor */
   --color-editor: oklch(0.98 0 0);
@@ -32,8 +57,7 @@
 
   /* gradients */
   --gradient-background: linear-gradient(137deg, oklch(0.97 0 0) 0%, oklch(0.8 0.02 90) 42%, oklch(0.9 0.12 95) 80%);
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
@@ -73,22 +97,83 @@
   --dnd-accent-foreground: oklch(0.205 0 0);
   --dnd-border: oklch(0.922 0 0);
   --dnd-ring: oklch(0.708 0 0);
+
+  /* board */
+  --board-default-bg: oklch(0.98 0 0);
+  --board-default-text: oklch(0.329 0.011 91.7);
+  --board-default-border: oklch(0.87 0 0);
+  --board-gray-bg: oklch(0.913 0.003 84.6);
+  --board-gray-text: oklch(0.329 0.011 91.7);
+  --board-gray-border: oklch(0.864 0.004 91.5);
+  --board-brown-bg: oklch(0.916 0.017 44.8);
+  --board-brown-text: oklch(0.399 0.045 45.9);
+  --board-brown-border: oklch(0.867 0.025 49.7);
+  --board-orange-bg: oklch(0.918 0.042 59.1);
+  --board-orange-text: oklch(0.482 0.106 51);
+  --board-orange-border: oklch(0.871 0.062 56.4);
+  --board-yellow-bg: oklch(0.948 0.05 85.7);
+  --board-yellow-text: oklch(0.542 0.101 85.1);
+  --board-yellow-border: oklch(0.91 0.075 87.1);
+  --board-green-bg: oklch(0.928 0.031 145.3);
+  --board-green-text: oklch(0.483 0.08 149.3);
+  --board-green-border: oklch(0.88 0.045 145.2);
+  --board-blue-bg: oklch(0.911 0.024 231.9);
+  --board-blue-text: oklch(0.455 0.069 233.3);
+  --board-blue-border: oklch(0.867 0.036 232.1);
+  --board-purple-bg: oklch(0.913 0.024 313.1);
+  --board-purple-text: oklch(0.418 0.106 305);
+  --board-purple-border: oklch(0.865 0.039 311.1);
+  --board-pink-bg: oklch(0.926 0.026 349.8);
+  --board-pink-text: oklch(0.468 0.117 353.7);
+  --board-pink-border: oklch(0.877 0.041 352.2);
+  --board-red-bg: oklch(0.935 0.033 29.4);
+  --board-red-text: oklch(0.471 0.15 29.8);
+  --board-red-border: oklch(0.874 0.054 29.7);
+  --board-default-status: oklch(0.708 0 0);
+  --board-gray-status: oklch(0.552 0.016 91.7);
+  --board-brown-status: oklch(0.564 0.11 45.9);
+  --board-orange-status: oklch(0.705 0.187 51);
+  --board-yellow-status: oklch(0.795 0.16 86);
+  --board-green-status: oklch(0.627 0.17 149.3);
+  --board-blue-status: oklch(0.629 0.187 252);
+  --board-purple-status: oklch(0.606 0.2 305);
+  --board-pink-status: oklch(0.656 0.2 353.7);
+  --board-red-status: oklch(0.637 0.207 29.8);
 }
 
 .dark {
   /* base */
-  --background: oklch(0.145 0 0);
+  --background: oklch(21.3% 0 0);
   --foreground: oklch(0.985 0 0);
 
   /* text */
-  --color-text: oklch(0.92 0 0);
-  --color-gray: oklch(0.65 0 0);
+  --color-text: oklch(100% 0.00011 271.152);
+  --color-text-gray: oklch(72% 0 0);
+  --color-text-brown: oklch(72% 0.06 45);
+  --color-text-orange: oklch(74% 0.13 55);
+  --color-text-yellow: oklch(80% 0.13 80);
+  --color-text-green: oklch(74% 0.12 155);
+  --color-text-blue: oklch(72% 0.12 240);
+  --color-text-purple: oklch(72% 0.13 305);
+  --color-text-pink: oklch(72% 0.14 350);
+  --color-text-red: oklch(70% 0.16 25);
+
+  /* background */
+  --color-bg-gray: oklch(32% 0 0);
+  --color-bg-brown: oklch(32% 0.03 45);
+  --color-bg-orange: oklch(34% 0.06 55);
+  --color-bg-yellow: oklch(36% 0.06 80);
+  --color-bg-green: oklch(32% 0.05 155);
+  --color-bg-blue: oklch(32% 0.06 240);
+  --color-bg-purple: oklch(32% 0.065 305);
+  --color-bg-pink: oklch(32% 0.065 350);
+  --color-bg-red: oklch(32% 0.07 25);
 
   /* surfaces */
   --bg-primary: oklch(0.14 0 0);
   --bg-secondary: oklch(0.16 0 0);
   --bg-tertiary: oklch(0.18 0 0);
-  --bg-hover: oklch(0.22 0 0);
+  --bg-hover: oklch(30.118% 0.00003 271.152 / 0.809);
   --bg-active: oklch(0.26 0 0);
 
   /* editor */
@@ -134,6 +219,38 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  /* board — тёмная тема */
+  --board-default-bg: oklch(0.289 0 89.9);
+  --board-default-text: oklch(0.87 0 89.9);
+  --board-default-border: oklch(0.337 0 89.9);
+  --board-gray-bg: oklch(0.39 0 89.9);
+  --board-gray-text: oklch(0.87 0 89.9);
+  --board-gray-border: oklch(0.431 0 89.9);
+  --board-brown-bg: oklch(0.342 0.039 43.5);
+  --board-brown-text: oklch(0.825 0.034 51.2);
+  --board-brown-border: oklch(0.397 0.043 49.4);
+  --board-orange-bg: oklch(0.385 0.059 55.9);
+  --board-orange-text: oklch(0.804 0.077 61.2);
+  --board-orange-border: oklch(0.438 0.067 56.3);
+  --board-yellow-bg: oklch(0.412 0.055 91.4);
+  --board-yellow-text: oklch(0.844 0.091 93.1);
+  --board-yellow-border: oklch(0.468 0.055 90.3);
+  --board-green-bg: oklch(0.34 0.034 147.9);
+  --board-green-text: oklch(0.802 0.058 146.6);
+  --board-green-border: oklch(0.401 0.039 147.4);
+  --board-blue-bg: oklch(0.358 0.037 232.9);
+  --board-blue-text: oklch(0.799 0.047 229);
+  --board-blue-border: oklch(0.421 0.043 229);
+  --board-purple-bg: oklch(0.328 0.057 305.7);
+  --board-purple-text: oklch(0.77 0.068 308);
+  --board-purple-border: oklch(0.383 0.063 305.3);
+  --board-pink-bg: oklch(0.341 0.054 354.1);
+  --board-pink-text: oklch(0.769 0.066 352.2);
+  --board-pink-border: oklch(0.393 0.063 354);
+  --board-red-bg: oklch(0.331 0.055 27.1);
+  --board-red-text: oklch(0.759 0.063 27.4);
+  --board-red-border: oklch(0.384 0.061 27.5);
 }
 
 @theme inline {
@@ -142,6 +259,8 @@
 
   --color-text: var(--color-text);
   --color-gray: var(--color-gray);
+  --color-blue: var(--color-blue);
+  --color-error: var(--color-error);
 
   --color-white: var(--color-white);
   --color-black: var(--color-black);
@@ -155,6 +274,7 @@
   --color-bg-tertiary: var(--bg-tertiary);
   --color-bg-hover: var(--bg-hover);
   --color-bg-active: var(--bg-active);
+  --color-bg-error: var(--bg-error);
 
   --color-border: var(--border);
   --color-border-hover: var(--border-hover);

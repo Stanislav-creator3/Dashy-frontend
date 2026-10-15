@@ -6,8 +6,8 @@ export interface FloatingMenuCoords {
 export function computePositionInContainer(
   range: Range,
   floatingEl: HTMLElement,
-  container: HTMLElement,
-  offset = 10
+  container: Element,
+  offset = 10,
 ): FloatingMenuCoords {
   const rangeRect = range.getBoundingClientRect();
   const floatingRect = floatingEl.getBoundingClientRect();

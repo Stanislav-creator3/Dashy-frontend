@@ -19,6 +19,7 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { BlockOptionsMenuItem } from "./BlockOptionsMenuItem";
 import { useState } from "react";
 import { useNodeLabel } from "../../hooks/useNodeLabel";
+import { DropdownMenu } from "@/shared/ui";
 
 export function BlockOptionsMenu({
   trigger,
@@ -39,40 +40,20 @@ export function BlockOptionsMenu({
   const [activeItem, setActiveItem] = useState<string | null>(null);
 
   const items = useBlockOptionsMenuItems({ editor, nodeKey });
-  const label = useNodeLabel(nodeKey);
-  const { refs, floatingStyles, context } = useFloating({
-    open: open,
-    onOpenChange: setOpen,
-    placement: placement,
-    middleware: [
-      offset(offsetValue),
-      flip({
-        fallbackAxisSideDirection: "none",
-      }),
-    ],
-    whileElementsMounted: autoUpdate,
-  });
-
-  const { isMounted, styles } = useTransitionStyles(context);
-
-  const click = useClick(context);
-
-  const dismiss = useDismiss(context, {
-    outsidePressEvent: "mousedown",
-  });
-
-  const { getReferenceProps, getFloatingProps } = useInteractions([
-    click,
-    dismiss,
-  ]);
 
   return (
     <>
-      <div ref={refs.setReference} {...getReferenceProps()}>
-        {trigger}
-      </div>
+      {items && items.length > 0 && (
+        <DropdownMenu
+          placement="left"
+          enabledClick
+          onOpenChange={setOpen}
+          trigger={trigger}
+          items={items}
+        />
+      )}
 
-      <FloatingPortal>
+      {/* <FloatingPortal>
         {isMounted && (
           <FloatingOverlay className="z-10">
             <FloatingFocusManager context={context}>
@@ -104,7 +85,7 @@ export function BlockOptionsMenu({
             </FloatingFocusManager>
           </FloatingOverlay>
         )}
-      </FloatingPortal>
+      </FloatingPortal> */}
     </>
   );
 }

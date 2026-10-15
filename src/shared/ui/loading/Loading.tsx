@@ -15,16 +15,17 @@ const variants: Variants = {
     },
   }),
 };
-export default function Loading() {
+export default function Loading({ size = 20 }: { size?: number }) {
   return (
-    <motion.div className="flex gap-2">
+    <motion.div className="flex gap-2 p-1">
       {Array.from({ length: 3 }).map((_, index) => (
         <motion.div
           custom={index}
           variants={variants}
           animate="animate"
           key={index}
-          className="w-2.5 h-6 rounded-sm bg-gray-800"
+          className="rounded-sm bg-gray-800"
+          style={{ width: `${size / 2.5}px`, height: `${size}px` }}
         />
       ))}
     </motion.div>
