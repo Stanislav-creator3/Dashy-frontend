@@ -72,12 +72,9 @@ function PopoverFlutingUI({
 
   const isOpen = open ?? defaultOpen;
 
-  const setIsOpen = (open: boolean) => {
-    if (setOpen) {
-      setOpen(open);
-    } else {
-      setDefaultOpen(open);
-    }
+  const setIsOpen = (value: boolean) => {
+    if (open === undefined) setDefaultOpen(value);
+    setOpen?.(value);
   };
 
   const { refs, floatingStyles, context, isPositioned } = useFloating({
@@ -100,7 +97,6 @@ function PopoverFlutingUI({
     enabled: enabledClick ? false : true,
     delay: {
       open: delay,
-      close: 400,
     },
   });
 

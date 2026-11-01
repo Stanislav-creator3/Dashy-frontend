@@ -9,6 +9,8 @@ import { $isCalloutNode } from "../nodes/CalloutNode";
 import { $isLinkPageNode } from "../nodes/LinkPage";
 import { $isCustomParagraphNode } from "../nodes/CustomParagraphNode";
 import { $isCustomHeadingNode } from "../nodes/CustomHeadingNode";
+import { $isImageBlockNode } from "../image/node/ImageBlockNode";
+import { $isBoardNode } from "../board/nodes/boardNode";
 
 function getNodeLabel(node: LexicalNode) {
   if ($isCustomHeadingNode(node)) {
@@ -22,6 +24,8 @@ function getNodeLabel(node: LexicalNode) {
   if ($isCodeNode(node)) return "Код";
   if ($isCalloutNode(node)) return "Выноска";
   if ($isLinkPageNode(node)) return "Страница";
+  if ($isImageBlockNode(node)) return "Изображение";
+  if ($isBoardNode(node)) return "Доска";
 
   if ($isListNode(node)) {
     const listType = node.getListType();

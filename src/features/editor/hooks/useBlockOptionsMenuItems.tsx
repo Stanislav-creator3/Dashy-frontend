@@ -9,6 +9,26 @@ import { $isCustomTextNode } from "../nodes/CustomTextNode";
 import { ColorItem } from "@/shared/ui";
 import { useNodeLabel } from "./useNodeLabel";
 import { backgroundColors, textColors } from "@/shared/utils/constants";
+import { DropdownMenuItemProps } from "@/shared/ui/dropdownMenu/DropdownMenu";
+import { LuLayoutPanelLeft } from "react-icons/lu";
+import { $isImageBlockNode } from "../image/node/ImageBlockNode";
+import { isImageLayout } from "@/widgets/imageBlock/model/types";
+import { randomColorOklch } from "@/shared/utils/randomColorOklch";
+
+const gridArea = (count: number) => {
+  switch (count) {
+    case 1:
+      return `"image1"`;
+    case 2:
+      return `"image1 image2"`;
+    case 3:
+      return `"image1 image2"
+              "image3 image2"`;
+    case 4:
+      return `"image1 image2"
+              "image3 image4"`;
+  }
+};
 
 export function useBlockOptionsMenuItems({
   editor,
@@ -17,6 +37,8 @@ export function useBlockOptionsMenuItems({
   editor: LexicalEditor;
   nodeKey: string | null;
 }) {
+  if (!nodeKey) return null;
+
   const blockData = editor.getEditorState().read(() => {
     const colors = new Set<string>();
     if (!nodeKey) return;
@@ -68,8 +90,44 @@ export function useBlockOptionsMenuItems({
     ),
     onClick: () => handleBackgroundSelect(item.color),
   }));
-  if (!nodeKey) return null;
-  const items = [
+
+  const itemsLayoutImage = [1, 2, 3, 4].map((number) => ({
+    id: number.toString(),
+    label: `${number} элемента`,
+    hoverElement: (
+      <div
+        className="grid gap-0.5"
+        style={{
+          gridTemplateColumns: `repeat(${number > 2 ? 2 : number}, minmax(0, 1fr))`,
+          gridTemplateAreas: gridArea(number),
+        }}
+      >
+        {Array.from({ length: number }).map((_, index) => {
+          return (
+            <div
+              key={index}
+              className="rounded-lg min-h-10 w-10 bg-background border border-border"
+              style={{
+                gridArea: index < 4 ? `image${index + 1}` : "",
+              }}
+            ></div>
+          );
+        })}
+      </div>
+    ),
+    onClick: () => {
+      editor.update(() => {
+        const node = $getNodeByKey(nodeKey);
+        if (!$isImageBlockNode(node)) return;
+        node.setProps({
+          ...node.getProps(),
+          layout: isImageLayout(number) ? number : 1,
+        });
+      });
+    },
+  }));
+
+  const items: DropdownMenuItemProps[] = [
     { type: "label", label: useNodeLabel(nodeKey), visible: true },
     {
       id: "colorNode",
@@ -88,6 +146,23 @@ export function useBlockOptionsMenuItems({
         { type: "label", label: "Цвет фона" },
         ...itemsColorBackground,
       ],
+    },
+    {
+      id: "image",
+      label: (
+        <p className="flex gap-1 items-center">
+          <span>
+            <LuLayoutPanelLeft size={20} />
+          </span>
+          Макет
+        </p>
+      ),
+      visible: editor.getEditorState().read(() => {
+        const node = $getNodeByKey(nodeKey);
+        return $isImageBlockNode(node);
+      }),
+
+      children: itemsLayoutImage,
     },
   ];
 

@@ -1,6 +1,7 @@
 import { PAGE_TYPE } from "@/entities/pages/model/page.types";
 import { BoardColorId } from "../board/model/boardColors";
 import { IDatabase } from "@/entities/database/model/database.type";
+import { IImageItem } from "../image/model/type";
 export const BLOCK_TYPES = {
   TEXT: "text",
   H1: "h1",
@@ -201,6 +202,11 @@ export interface ITodoList extends IBaseBlock {
   props: {};
 }
 
+export interface IImageBlock extends IBaseBlock {
+  type: "Image";
+  props: { imageList?: IImageItem[]; layout?: 1 | 2 | 3 | 4 };
+}
+
 export type IBlock =
   | IHeadingBlock
   | IParagraphBlock
@@ -212,7 +218,8 @@ export type IBlock =
   | ITodoList
   | ICalloutBlock
   | IBoardBlock
-  | IBlockDataBase;
+  | IBlockDataBase
+  | IImageBlock;
 
 export interface IBlockCreate {
   type: string;

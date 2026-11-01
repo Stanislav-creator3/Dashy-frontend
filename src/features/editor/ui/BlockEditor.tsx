@@ -48,6 +48,7 @@ import {
   createDraggableStore,
   DraggableContext,
 } from "../model/draggableStore";
+import { ImageBlockNode } from "../image/node/ImageBlockNode";
 
 const EditorExtension = defineExtension({
   name: "NotionLikeEditor",
@@ -82,6 +83,7 @@ const EditorExtension = defineExtension({
     CustomHeadingNode,
     CustomQuoteNode,
     BoardNode,
+    ImageBlockNode,
     LinkPageNode,
     {
       replace: TextNode,

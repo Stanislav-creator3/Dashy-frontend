@@ -12,6 +12,8 @@ import { $createCustomParagraphNode } from "../nodes/CustomParagraphNode";
 import { $createCustomHeadingNode } from "../nodes/CustomHeadingNode";
 import { $createCustomQuoteNode } from "../nodes/CustomQuoteNode";
 import { $createBoardNode } from "../board/nodes/boardNode";
+import { $createImageBlockNode } from "../image/node/ImageBlockNode";
+import { IImageItem } from "../image/model/type";
 
 export type SlashCommandType =
   | "text"
@@ -103,18 +105,18 @@ export const SLASH_COMMANDS: SlashCommandItem[] = [
     category: "Базовые блоки",
   },
   {
-    title: "Доска",
-    description: "Кабан доска",
-    type: "board",
-    keywords: ["board"],
-    category: "Базы данных",
-  },
-  {
     title: "Картинка",
     description: "Добавить картинку",
     type: "image",
     keywords: ["image"],
     category: "Медиа",
+  },
+  {
+    title: "Доска",
+    description: "Кабан доска",
+    type: "board",
+    keywords: ["board"],
+    category: "Базы данных",
   },
 ];
 
@@ -223,8 +225,21 @@ export const getNode = (
 
       return replacement;
 
-    // case "image":
-    // replacement = $createImageNode();
+    case "image":
+      replacement = $createImageBlockNode();
+      setBlockIdForNode(replacement, nodeId);
+      setBlockTempId(replacement, tempId);
+      setOrderForNode(replacement, order);
+      setParentBlockIdForNode(replacement, parentId);
+      const imageList: (IImageItem | null)[] = Array.from(
+        { length: 4 },
+        () => ({
+          id: crypto.randomUUID(),
+          url: null,
+        }),
+      );
+      replacement.setProps({ imageList });
+      return replacement;
 
     default:
       replacement = $createCustomParagraphNode();

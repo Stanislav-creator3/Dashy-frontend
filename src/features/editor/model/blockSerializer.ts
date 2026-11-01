@@ -29,6 +29,7 @@ import { $isCustomParagraphNode } from "../nodes/CustomParagraphNode";
 import { $isCustomHeadingNode } from "../nodes/CustomHeadingNode";
 import { $isCustomQuoteNode } from "../nodes/CustomQuoteNode";
 import { $isBoardNode } from "../board/nodes/boardNode";
+import { $isImageBlockNode } from "../image/node/ImageBlockNode";
 
 export function $createTextNodeFromSegment(segment: ITextSegment) {
   const textNode = $createCustomTextNode(
@@ -271,6 +272,18 @@ export function serializeBlock(node: LexicalNode): IBlock | null {
       tempId,
       type: "Board",
       props: { databaseId, groupByFieldId },
+    };
+  }
+
+  if ($isImageBlockNode(node)) {
+    const { imageList, layout } = node.getProps();
+    return {
+      id,
+      order,
+      parentId,
+      tempId,
+      type: "Image",
+      props: { imageList, layout },
     };
   }
 

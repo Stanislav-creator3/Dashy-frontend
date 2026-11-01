@@ -4,12 +4,24 @@ import { motion, Variants } from "motion/react";
 import Link from "next/link";
 import { useContext, type Ref } from "react";
 import { MenuContext } from "./DropdownMenu";
-import { useFloatingTree, useListItem, useMergeRefs } from "@floating-ui/react";
+import {
+  autoUpdate,
+  flip,
+  FloatingPortal,
+  offset,
+  shift,
+  useFloating,
+  useFloatingTree,
+  useListItem,
+  useMergeRefs,
+  useTransitionStyles,
+} from "@floating-ui/react";
 
-interface DropdownMenuItemProps extends Omit<
+export interface DropdownMenuItemProps extends Omit<
   React.HTMLProps<HTMLElement>,
   "label" | "onClick" | "ref"
 > {
+  id?: string;
   onClick?: (event?: React.MouseEvent<HTMLElement>) => void;
   href?: string;
   label: React.ReactNode;
@@ -20,17 +32,14 @@ interface DropdownMenuItemProps extends Omit<
   customBackground?: string;
   color?: string;
   ref?: Ref<HTMLElement>;
+  hoverElement?: React.ReactNode;
 }
 
 const variants = ({
-  index,
-  totalIndex,
   isActive,
   customBackground,
   color,
 }: {
-  index: number;
-  totalIndex: number;
   isActive: boolean;
   customBackground?: string;
   color?: string;
@@ -85,6 +94,7 @@ export function DropdownMenuItem({
   customBackground,
   color,
   ref,
+  hoverElement,
   ...rest
 }: DropdownMenuItemProps) {
   const menu = useContext(MenuContext);
@@ -94,7 +104,7 @@ export function DropdownMenuItem({
   });
 
   const isActive = item.index === menu.activeIndex || submenuOpen;
-  const mergedRef = useMergeRefs([item.ref, ref]);
+  const isHoverOpen = !!hoverElement && isActive && menu.isOpen;
 
   const itemProps = menu.getItemProps({
     ...rest,
@@ -105,11 +115,23 @@ export function DropdownMenuItem({
       }
     },
   });
+
+  const { refs, floatingStyles, context } = useFloating({
+    open: isHoverOpen,
+    placement: "right-start",
+    middleware: [
+      offset({ mainAxis: 10, alignmentAxis: -4 }),
+      flip(),
+      shift({ padding: 8 }),
+    ],
+    whileElementsMounted: autoUpdate,
+  });
+  const { isMounted, styles } = useTransitionStyles(context, { duration: 150 });
+
+  const mergedRef = useMergeRefs([item.ref, ref, refs.setReference]);
   return (
     <motion.div
       variants={variants({
-        index,
-        totalIndex,
         isActive,
         customBackground,
         color,
@@ -117,7 +139,7 @@ export function DropdownMenuItem({
       initial="initial"
       animate="animate"
       exit="exit"
-      className="p-1 bg-background text-text rounded-xl min-w-[200px] outline-none"
+      className="relative p-1 bg-background text-text rounded-xl min-w-[200px] outline-none"
     >
       {href ? (
         <Link
@@ -140,6 +162,17 @@ export function DropdownMenuItem({
         >
           {label}
         </button>
+      )}
+      {isMounted && (
+        <FloatingPortal>
+          <div
+            ref={refs.setFloating}
+            style={{ ...floatingStyles, ...styles, zIndex: 11 }}
+            className="pointer-events-none rounded-lg shadow-2xl p-2 glass"
+          >
+            {hoverElement}
+          </div>
+        </FloatingPortal>
       )}
     </motion.div>
   );

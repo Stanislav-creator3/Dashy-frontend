@@ -16,6 +16,7 @@ import {
 } from "../nodes/CustomHeadingNode";
 import { $createCustomQuoteNode } from "../nodes/CustomQuoteNode";
 import { $createBoardNode } from "../board/nodes/boardNode";
+import { $createImageBlockNode } from "../image/node/ImageBlockNode";
 
 function applyBlockMeta<T extends LexicalNode>(node: T, block: IBlock): T {
   setBlockIdForNode(node, block.id);
@@ -145,6 +146,15 @@ export function buildBlockNode(block: IBlock, projectId: string): LexicalNode {
         groupByFieldId: block.props?.groupByFieldId,
       });
 
+      return node;
+    }
+
+    case "Image": {
+      const node = applyBlockMeta($createImageBlockNode(), block);
+      node.setProps({
+        imageList: block.props?.imageList,
+        layout: block.props.layout || 1,
+      });
       return node;
     }
 

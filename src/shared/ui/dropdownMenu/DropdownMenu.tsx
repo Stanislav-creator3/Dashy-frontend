@@ -31,7 +31,8 @@ import {
 } from "@floating-ui/react";
 import { IoIosArrowForward } from "react-icons/io";
 
-interface DropdownMenuItemProps {
+export interface DropdownMenuItemProps {
+  id?: string;
   onClick?: () => void;
   href?: string;
   label: React.ReactNode;
@@ -39,6 +40,7 @@ interface DropdownMenuItemProps {
   customBackground?: string;
   color?: string;
   type?: "item" | "label";
+  hoverElement?: React.ReactNode;
   children?: DropdownMenuItemProps[];
 }
 
@@ -269,6 +271,7 @@ export function DropdownComponentMenu({
                             label={item.label}
                             href={item.href}
                             onClick={item.onClick}
+                            hoverElement={item.hoverElement}
                           />
                         );
                       })}

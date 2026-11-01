@@ -11,12 +11,17 @@ interface UploadProps {
   value?: File | null;
   onChange: (file: File | null) => void;
   className?: string;
+  text?: string;
 }
+
+const defaultText =
+  "Перетащите сюда изображение или нажмите, чтобы выбрать изображение в форматах: JPEG, JPG, GIF, WEBP. Максимальный размер 5\u00A0МБ.";
 
 export default function Upload({
   value,
   onChange,
   className,
+  text = defaultText,
   isLoading,
 }: UploadProps) {
   const [preview, setPreview] = useState<string | null>(null);
@@ -93,7 +98,7 @@ export default function Upload({
           onDragLeave={() => setIsDragOver(false)}
           onDrop={onDrop}
           className={cn(
-            "relative flex min-w-30 min-h-20 w-full h-full rounded-md overflow-hidden",
+            "relative flex min-w-70 min-h-60 w-full h-full rounded-md overflow-hidden",
             isDragOver && "border-4 border-dashed border-yellow",
             className,
           )}
@@ -113,11 +118,7 @@ export default function Upload({
             )}
           >
             <div className="flex flex-col text-black items-center gap-4 text-center px-6">
-              <p className="text-xl opacity-60">
-                Перетащите сюда изображение или нажмите, чтобы выбрать
-                изображение в форматах: JPEG, JPG, GIF, WEBP. Максимальный
-                размер 5МБ.
-              </p>
+              <p className="max-w-80 opacity-60">{text}</p>
               <PiUploadSimpleThin size={50} className="opacity-50" />{" "}
             </div>
 
@@ -125,7 +126,7 @@ export default function Upload({
               disabled={isLoading}
               type="file"
               className="hidden"
-              accept="image/jpeg,image/jpg,image/webp,image/gif"
+              accept="image/jpeg,image/jpg,image/webp,image/gif,image/png"
               onChange={(e) => handleFile(e.target.files?.[0])}
             />
           </label>
