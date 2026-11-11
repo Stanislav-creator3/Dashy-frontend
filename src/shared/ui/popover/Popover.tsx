@@ -27,6 +27,7 @@ interface PopoverProps {
   placement?: Placement;
   delay?: number;
   setOpen?: (open: boolean) => void;
+  delayClose?: number;
   open?: boolean;
   fallbackAxisSideDirection?: "none" | "start" | "end";
 }
@@ -53,6 +54,7 @@ function PopoverFlutingUI({
   offsetValue = 10,
   setOpen,
   delay = 0,
+  delayClose = 0,
   open,
   fallbackAxisSideDirection = "none",
 }: {
@@ -62,6 +64,7 @@ function PopoverFlutingUI({
   enabledClick?: boolean;
   placement?: Placement;
   delay?: number;
+  delayClose?: number;
   setOpen?: (open: boolean) => void;
   open?: boolean;
   fallbackAxisSideDirection?: "none" | "start" | "end";
@@ -97,6 +100,7 @@ function PopoverFlutingUI({
     enabled: enabledClick ? false : true,
     delay: {
       open: delay,
+      close: delayClose,
     },
   });
 

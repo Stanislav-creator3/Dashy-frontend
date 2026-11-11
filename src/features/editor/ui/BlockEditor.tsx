@@ -49,10 +49,12 @@ import {
   DraggableContext,
 } from "../model/draggableStore";
 import { ImageBlockNode } from "../image/node/ImageBlockNode";
+import { EditorContext } from "../model/editorContext";
 
 const EditorExtension = defineExtension({
   name: "NotionLikeEditor",
   namespace: "NotionLikeEditor",
+
   onError: (error: Error) => console.error(error),
   theme: {
     heading: {
@@ -148,29 +150,31 @@ export default function BlockEditor({
     );
   }, []);
   return (
-    <DraggableContext.Provider value={draggableStore}>
-      <LexicalExtensionComposer
-        extension={EditorExtension}
-        contentEditable={CustomContent}
-      >
-        <EditorPanelPlugin />
-        <InitializeEditorPlugin
-          blocks={blocks}
-          isLoading={false}
-          projectId={projectId}
-        />
-        <SlashMenuPlugin projectId={projectId} />
-        <EnterCreateBlockPlugin pageId={pageId} projectId={projectId} />
-        <CreateOnClickPlugin pageId={pageId} projectId={projectId} />
-        <BlocksUpdatePlugin pageId={pageId} projectId={projectId} />
-        <BlockDeleteSkipPlugin />
-        <BlockDeletePlugin pageId={pageId} projectId={projectId} />
-        <BlockPlaceholderPlugin />
-        <FloatingMenuPlugin />
-        <ColorStylePlugin />
-        <MarkdownShortcutPlugin transformers={CUSTOM_TRANSFORMERS} />
-        <DndPlugin pageId={pageId} projectId={projectId} />
-      </LexicalExtensionComposer>
-    </DraggableContext.Provider>
+    <EditorContext.Provider value={{ pageId, projectId }}>
+      <DraggableContext.Provider value={draggableStore}>
+        <LexicalExtensionComposer
+          extension={EditorExtension}
+          contentEditable={CustomContent}
+        >
+          <EditorPanelPlugin />
+          <InitializeEditorPlugin
+            blocks={blocks}
+            isLoading={false}
+            projectId={projectId}
+          />
+          <SlashMenuPlugin projectId={projectId} />
+          <EnterCreateBlockPlugin pageId={pageId} projectId={projectId} />
+          <CreateOnClickPlugin pageId={pageId} projectId={projectId} />
+          <BlocksUpdatePlugin pageId={pageId} projectId={projectId} />
+          <BlockDeleteSkipPlugin />
+          <BlockDeletePlugin pageId={pageId} projectId={projectId} />
+          <BlockPlaceholderPlugin />
+          <FloatingMenuPlugin />
+          <ColorStylePlugin />
+          <MarkdownShortcutPlugin transformers={CUSTOM_TRANSFORMERS} />
+          <DndPlugin pageId={pageId} projectId={projectId} />
+        </LexicalExtensionComposer>
+      </DraggableContext.Provider>
+    </EditorContext.Provider>
   );
 }

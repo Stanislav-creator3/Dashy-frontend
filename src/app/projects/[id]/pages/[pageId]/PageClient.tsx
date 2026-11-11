@@ -39,6 +39,7 @@ export default function PageClient({
           <div className="p-2">
             <PageHeader pageId={pageId} projectId={projectId} page={data} />
             <BlockEditor
+              key={pageId}
               pageId={pageId}
               projectId={projectId}
               blocks={data?.blocks}

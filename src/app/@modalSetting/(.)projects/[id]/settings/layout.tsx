@@ -21,9 +21,9 @@ export default function SettingsLayout({
 
   return (
     <RouterModal width="full">
-      <div className="grid gap-2 p-5 h-full grid-cols-[16rem_1fr]">
+      <div className="grid gap-2  h-full grid-cols-[16rem_1fr]">
         <Sidebar variants="settings" />
-        <Card className="overflow-scroll">{children}</Card>
+        <div className="overflow-scroll p-5">{children}</div>
       </div>
     </RouterModal>
   );

@@ -27,9 +27,8 @@ export default function ChangeTheme() {
           Выберите тему для Dashly на этом устройстве
         </p>
         <Popover
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          direction="end"
+          setOpen={setIsOpen}
+          delayClose={100}
           trigger={<Button>{translateTheme({ theme })}</Button>}
         >
           <div className="flex flex-col w-[136px] p-2 rounded-lg border-border bg-foreground shadow gap-2">

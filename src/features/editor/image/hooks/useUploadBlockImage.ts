@@ -9,9 +9,11 @@ import toast from "react-hot-toast";
 export const useUploadBlockImage = ({
   editor,
   nodeKey,
+  pageId,
 }: {
   editor: LexicalEditor;
   nodeKey: string;
+  pageId: string;
 }) => {
   const mutationImage = useMutation({
     mutationFn: ({
@@ -22,7 +24,7 @@ export const useUploadBlockImage = ({
       file: File;
       id: string;
       prevFileName?: string;
-    }) => filesApi.uploadImage(file),
+    }) => filesApi.uploadImage({ file, pageId }),
     onSuccess: (fileName, { id, prevFileName }) => {
       editor.update(() => {
         const node = $getNodeByKey(nodeKey);

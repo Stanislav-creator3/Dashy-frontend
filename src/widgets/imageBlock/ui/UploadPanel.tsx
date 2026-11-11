@@ -10,6 +10,7 @@ import TabsContent from "@/shared/ui/tabs/TabsContent";
 import { TextField } from "@/shared/ui/textField/TextField";
 import { useUploadBlockImage } from "@/features/editor/image/hooks/useUploadBlockImage";
 import { $isImageBlockNode } from "@/features/editor/image/node/ImageBlockNode";
+import { useParams } from "next/navigation";
 
 interface IUploadPanelProps {
   id: string;
@@ -28,11 +29,13 @@ export const UploadPanel = ({
   setOpen,
   url,
 }: IUploadPanelProps) => {
+  const { pageId } = useParams<{ pageId: string }>();
   const [value, setValue] = useState("");
   const [editor] = useLexicalComposerContext();
   const { uploadImage, getIsLoadingUpload } = useUploadBlockImage({
     editor,
     nodeKey,
+    pageId,
   });
 
   const onSubmitUrl = (event: FormEvent) => {

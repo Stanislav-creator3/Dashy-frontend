@@ -14,6 +14,7 @@ import { LuLayoutPanelLeft } from "react-icons/lu";
 import { $isImageBlockNode } from "../image/node/ImageBlockNode";
 import { isImageLayout } from "@/widgets/imageBlock/model/types";
 import { randomColorOklch } from "@/shared/utils/randomColorOklch";
+import { MdDeleteOutline } from "react-icons/md";
 
 const gridArea = (count: number) => {
   switch (count) {
@@ -163,6 +164,24 @@ export function useBlockOptionsMenuItems({
       }),
 
       children: itemsLayoutImage,
+    },
+    {
+      id: "delete",
+      label: (
+        <p className="flex gap-1 items-center">
+          <MdDeleteOutline size={20} />
+          Удалить
+        </p>
+      ),
+      color: "var(--color-error)",
+      visible: true,
+      onClick: () => {
+        editor.update(() => {
+          const node = $getNodeByKey(nodeKey);
+          if (!node) return;
+          node.remove();
+        });
+      },
     },
   ];
 

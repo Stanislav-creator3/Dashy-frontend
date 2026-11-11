@@ -6,8 +6,16 @@ export enum PAGE_TYPE {
   DATABASE = "DATABASE",
 }
 
+export enum PAGE_ROLE {
+  NO_ACCESS = "NO_ACCESS",
+  VIEWER = "VIEWER",
+  EDITOR = "EDITOR",
+  FULL_ACCESS = "FULL_ACCESS",
+}
+
 export interface IPage {
   id: string;
+  role: PAGE_ROLE;
   title: string;
   icon: string | null;
   iconColor?: string;
@@ -25,6 +33,7 @@ export interface IPage {
 export interface IPageList {
   children: IPageList[];
   id: string;
+  role: PAGE_ROLE;
   title: string;
   icon: string | null;
   iconColor?: string;

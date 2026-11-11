@@ -1,11 +1,17 @@
 import { BASE_API_URL } from "@/shared/config/api";
 
 export const filesApi = {
-  uploadImage: async (file: File): Promise<{ fileName: string }> => {
+  uploadImage: async ({
+    file,
+    pageId,
+  }: {
+    file: File;
+    pageId: string;
+  }): Promise<{ fileName: string }> => {
     const formData = new FormData();
     formData.append("file", file);
 
-    const response = await fetch(`${BASE_API_URL}/files/upload`, {
+    const response = await fetch(`${BASE_API_URL}/files/upload/${pageId}`, {
       method: "POST",
       credentials: "include",
       body: formData,
