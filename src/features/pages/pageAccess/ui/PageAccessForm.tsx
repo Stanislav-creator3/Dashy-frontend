@@ -16,7 +16,6 @@ import Link from "next/link";
 import { Controller, useForm } from "react-hook-form";
 import { useUpdatePageAccess } from "../hooks/use-update-page-access";
 import {
-  PAGE_ACCESS_NONE,
   pageAccessSchema,
   TypePageAccessSchema,
 } from "../model/pageAccess.schema";
@@ -33,7 +32,7 @@ function getDefaultValues(
     access: Object.fromEntries(
       customRoles.map((role) => [
         role.id,
-        levels.get(role.id) ?? PAGE_ACCESS_NONE,
+        levels.get(role.id) ?? ACCESS_LEVEL.NONE,
       ]),
     ),
   };
@@ -84,10 +83,10 @@ function PageAccessFormContent({
       access: inheritAccess
         ? []
         : Object.entries(access)
-            .filter(([, level]) => level !== PAGE_ACCESS_NONE)
+            .filter(([, level]) => level !== ACCESS_LEVEL.NONE)
             .map(([roleId, level]) => ({
               roleId,
-              level: level as ACCESS_LEVEL,
+              level,
             })),
     };
 
@@ -138,7 +137,7 @@ function PageAccessFormContent({
                 render={({ field }) => (
                   <AccessLevelSelect
                     ariaLabel={`Доступ роли ${role.name}`}
-                    value={field.value ?? PAGE_ACCESS_NONE}
+                    value={field.value ?? ACCESS_LEVEL.NONE}
                     onChange={field.onChange}
                     disabled={isPending}
                   />

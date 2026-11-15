@@ -8,6 +8,7 @@ export enum PAGE_TYPE {
 }
 
 export enum ACCESS_LEVEL {
+  NONE = "NONE",
   VIEW = "VIEW",
   EDIT = "EDIT",
 }

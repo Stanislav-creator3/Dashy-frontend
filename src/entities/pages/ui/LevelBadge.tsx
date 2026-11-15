@@ -13,6 +13,7 @@ const LEVELS = {
     style: LEVEL_BADGE_STYLES.edit,
   },
   [ACCESS_LEVEL.VIEW]: { label: "Просмотр", style: LEVEL_BADGE_STYLES.view },
+  [ACCESS_LEVEL.NONE]: { label: "Нет доступа", style: LEVEL_BADGE_STYLES.none },
 };
 
 const NONE = { label: "Нет доступа", style: LEVEL_BADGE_STYLES.none };

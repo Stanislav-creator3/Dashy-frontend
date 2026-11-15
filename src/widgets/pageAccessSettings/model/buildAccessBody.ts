@@ -14,12 +14,13 @@ export function buildAccessBody({
 }: {
   resolved: ResolvedAccess;
   roleId: string;
-  level: ACCESS_LEVEL | null;
+  level: ACCESS_LEVEL;
 }): IUpdatePageAccess {
   const levels = new Map(resolved.levels);
 
-  if (level) levels.set(roleId, level);
-  else levels.delete(roleId);
+  // NONE на сервер не уходит: у роли просто нет строки
+  if (level === ACCESS_LEVEL.NONE) levels.delete(roleId);
+  else levels.set(roleId, level);
 
   return {
     inheritAccess: false,

@@ -18,8 +18,8 @@ import { MdCheck } from "react-icons/md";
 import { buildAccessBody, buildInheritBody } from "../model/buildAccessBody";
 import { PageNode, ResolvedAccess } from "../model/resolvePageAccess";
 
-const LEVEL_OPTIONS: { level: ACCESS_LEVEL | null; label: string }[] = [
-  { level: null, label: "Нет доступа" },
+const LEVEL_OPTIONS: { level: ACCESS_LEVEL; label: string }[] = [
+  { level: ACCESS_LEVEL.NONE, label: "Нет доступа" },
   { level: ACCESS_LEVEL.VIEW, label: "Просмотр" },
   { level: ACCESS_LEVEL.EDIT, label: "Редактирование" },
 ];
@@ -256,13 +256,14 @@ export default function PageAccessRow({
                           label: (
                             <div className="flex w-full items-center justify-between gap-3">
                               <span>{label}</span>
-                              {(resolved.levels.get(role.id) ?? null) ===
-                                level && <MdCheck />}
+                              {(resolved.levels.get(role.id) ??
+                                ACCESS_LEVEL.NONE) === level && <MdCheck />}
                             </div>
                           ),
                           onClick: () => {
                             if (
-                              (resolved.levels.get(role.id) ?? null) === level
+                              (resolved.levels.get(role.id) ??
+                                ACCESS_LEVEL.NONE) === level
                             )
                               return;
                             updatePageAccess(

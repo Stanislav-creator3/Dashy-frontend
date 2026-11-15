@@ -1,14 +1,12 @@
+import { ACCESS_LEVEL } from "@/entities/pages/model/page.types";
 import { z } from "zod";
 
-export const PAGE_ACCESS_NONE = "NONE";
+export const pageAccessLevelSchema = z.enum(ACCESS_LEVEL);
 
-export const pageAccessLevelSchema = z.enum([PAGE_ACCESS_NONE, "VIEW", "EDIT"]);
-
-// access — уровень по id роли. «Нет доступа» на сервер не уходит: у роли просто нет строки
+// access — уровень по id роли. NONE на сервер не уходит: у роли просто нет строки
 export const pageAccessSchema = z.object({
   inheritAccess: z.boolean(),
   access: z.record(z.string(), pageAccessLevelSchema),
 });
 
 export type TypePageAccessSchema = z.infer<typeof pageAccessSchema>;
-export type TypePageAccessLevel = z.infer<typeof pageAccessLevelSchema>;

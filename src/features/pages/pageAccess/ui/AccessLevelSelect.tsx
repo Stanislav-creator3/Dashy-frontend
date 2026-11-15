@@ -4,15 +4,13 @@ import DropdownMenu from "@/shared/ui/dropdownMenu/DropdownMenu";
 import { cn } from "@/shared/utils/utils";
 import { IoIosArrowDown } from "react-icons/io";
 import { MdCheck } from "react-icons/md";
-import {
-  PAGE_ACCESS_NONE,
-  TypePageAccessLevel,
-} from "../model/pageAccess.schema";
+import { ACCESS_LEVEL } from "@/entities/pages/model/page.types";
+import LevelBadge from "@/entities/pages/ui/LevelBadge";
 
-const OPTIONS: { value: TypePageAccessLevel; label: string }[] = [
-  { value: PAGE_ACCESS_NONE, label: "Нет доступа" },
-  { value: "VIEW", label: "Просмотр" },
-  { value: "EDIT", label: "Редактирование" },
+const OPTIONS: { value: ACCESS_LEVEL; label: string }[] = [
+  { value: ACCESS_LEVEL.NONE, label: "Нет доступа" },
+  { value: ACCESS_LEVEL.VIEW, label: "Просмотр" },
+  { value: ACCESS_LEVEL.EDIT, label: "Редактирование" },
 ];
 
 export default function AccessLevelSelect({
@@ -21,13 +19,11 @@ export default function AccessLevelSelect({
   disabled,
   ariaLabel,
 }: {
-  value: TypePageAccessLevel;
-  onChange: (value: TypePageAccessLevel) => void;
+  value: ACCESS_LEVEL;
+  onChange: (value: ACCESS_LEVEL) => void;
   disabled?: boolean;
   ariaLabel?: string;
 }) {
-  const current = OPTIONS.find((option) => option.value === value);
-
   const trigger = (
     <button
       type="button"
@@ -37,7 +33,7 @@ export default function AccessLevelSelect({
         "flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-sm text-text cursor-pointer hover:bg-bg-hover disabled:opacity-50 disabled:cursor-not-allowed",
       )}
     >
-      <span>{current?.label}</span>
+      <LevelBadge level={value} />
       <IoIosArrowDown />
     </button>
   );
