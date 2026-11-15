@@ -97,7 +97,7 @@ export default function Modal({
         transition: { duration: 0.2 },
       }}
       onClick={(e) => handleOverlayClick(e)}
-      className="fixed flex items-center justify-center inset-0 
+      className="fixed flex items-center justify-center inset-0
     bg-[#0f0f0f99]  p-10 overflow-auto"
       style={{ zIndex: overlayZIndex }}
       ref={overlayRef}
@@ -106,7 +106,7 @@ export default function Modal({
         data-id="modal"
         data-modal
         className={clsx(
-          "flex flex-col relative bg-background rounded-[8px] min-h-[320px] mx-auto",
+          "flex flex-col relative bg-background rounded-[8px]  mx-auto",
           {
             md: "max-w-[640px]",
             full: "w-full h-full mx-5",
@@ -118,12 +118,12 @@ export default function Modal({
         {children}
         <button
           onClick={(e) => onHandleClose(e)}
-          className="w-6 h-6 flex rounded-[8px] 
-        items-center justify-center 
-        bg-black/20 cursor-pointer 
+          className="w-6 h-6 flex rounded-[8px]
+        items-center justify-center
+        bg-black/20 cursor-pointer
         absolute top-2 right-2
-        transition-colors duration-300 
-        hover:bg-yellow"
+        transition-colors duration-300
+        hover:bg-accent-main"
         >
           <IoClose className="w-4 h-4 text-base-white" />
         </button>

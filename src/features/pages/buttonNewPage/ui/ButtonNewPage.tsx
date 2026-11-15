@@ -23,7 +23,7 @@ const buttonVariants: Variants = {
 
 const iconVariants: Variants = {
   hover: {
-    background: "var(--color-yellow)",
+    background: "var(--color-accent-main)",
     color: "black",
     transition: { duration: 0.3 },
   },

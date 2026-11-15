@@ -99,7 +99,7 @@ export default function Upload({
           onDrop={onDrop}
           className={cn(
             "relative flex min-w-70 min-h-60 w-full h-full rounded-md overflow-hidden",
-            isDragOver && "border-4 border-dashed border-yellow",
+            isDragOver && "border-4 border-dashed border-accent-main",
             className,
           )}
         >

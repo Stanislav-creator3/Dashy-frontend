@@ -15,6 +15,7 @@ import { AddIconButton, useAddIcon } from "@/features/pages/AddIconButton";
 import { cn } from "@/shared/utils/utils";
 import { useUpdatePageTitleCard } from "@/entities/pages/hooks/use-updata-page-title-card";
 import { TitleContentEditable } from "@/shared/ui";
+import { useCanEditPage } from "@/entities/pages/hooks/use-can-edit-page";
 
 const variantParent: Variants = {
   initial: {},
@@ -39,6 +40,7 @@ export default function PageHeader({
   databaseId?: string;
   type?: PAGE_TYPE;
 }) {
+  const canEdit = useCanEditPage({ pageId, projectId });
   const { setOpenEmojiPicker, openEmojiPicker, deleteIcon } =
     useCoverEmojiPicker(pageId, projectId, page?.parentId ?? null);
 
@@ -73,6 +75,11 @@ export default function PageHeader({
         });
   }, 1000);
 
+  const handleTitleChange = (title: string) => {
+    if (!canEdit) return;
+    debouncedUpdateTitle(title);
+  };
+
   useEffect(() => {
     if (!titleRef.current || !page) return;
     if (initializedRef.current) return;
@@ -92,6 +99,7 @@ export default function PageHeader({
         <div className="relative h-1 mt-1 mb-3">
           <div className="absolute left-0 -top-17 z-20 ">
             <CoverEmojiPicker
+              canEdit={canEdit}
               pageId={pageId}
               open={openEmojiPicker}
               onToggle={() => setOpenEmojiPicker((prev) => !prev)}
@@ -120,14 +128,17 @@ export default function PageHeader({
         )}
         variants={variantChild}
       >
-        {!page?.cover && <AddCover pageId={pageId} projectId={projectId} />}
-        {!page?.icon && <AddIconButton onClick={addRandomIcon} />}
+        {!page?.cover && canEdit && (
+          <AddCover pageId={pageId} projectId={projectId} />
+        )}
+        {!page?.icon && canEdit && <AddIconButton onClick={addRandomIcon} />}
       </motion.div>
 
       <TitleContentEditable
         className="mb-4"
         titleRef={titleRef}
-        onSubmit={debouncedUpdateTitle}
+        isEditing={canEdit}
+        onSubmit={handleTitleChange}
       />
     </motion.div>
   );

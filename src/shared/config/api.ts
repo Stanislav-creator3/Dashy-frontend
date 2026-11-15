@@ -9,6 +9,8 @@ export const KEYS_API = {
   RECENT_PAGES: "RECENT_PAGES",
   DATABASE: "DATABASE",
   FILES: "FILES",
+  ROLES: "ROLES",
+  PAGE_ACCESS: "PAGE_ACCESS",
 };
 
 export const BASE_API_URL = "http://localhost:4000";

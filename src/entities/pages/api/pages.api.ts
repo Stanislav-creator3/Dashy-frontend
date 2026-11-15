@@ -3,8 +3,11 @@ import { queryOptions } from "@tanstack/react-query";
 import {
   ICreatePage,
   IPage,
+  IPageAccess,
+  IPageAccessSummary,
   IPageList,
   IUpdatePage,
+  IUpdatePageAccess,
 } from "../model/page.types";
 
 export const pagesApi = {
@@ -312,6 +315,84 @@ export const pagesApi = {
       {
         method: "DELETE",
         credentials: "include",
+      },
+    );
+    if (!response.ok) {
+      const errorData = await response
+        .json()
+        .catch(() => ({ message: "Ошибка сервера" }));
+      throw new Error(errorData.message);
+    }
+    return await response.json();
+  },
+
+  // Свой доступ всех страниц проекта. Ключ — префикс ключей getAccess
+  getProjectAccess: ({ projectId }: { projectId: string }) => {
+    return queryOptions({
+      queryKey: [KEYS_API.PAGE_ACCESS, projectId],
+      queryFn: async ({ signal }): Promise<IPageAccessSummary[]> => {
+        const response = await fetch(
+          `${BASE_API_URL}/${projectId}/pages/access`,
+          {
+            method: "GET",
+            credentials: "include",
+            signal,
+          },
+        );
+
+        if (!response.ok) {
+          const errorData = await response
+            .json()
+            .catch(() => ({ message: "Ошибка сервера" }));
+          throw new Error(errorData.message);
+        }
+
+        return response.json();
+      },
+    });
+  },
+
+  getAccess: ({ id, projectId }: { id: string; projectId: string }) => {
+    return queryOptions({
+      queryKey: [KEYS_API.PAGE_ACCESS, projectId, id],
+      queryFn: async ({ signal }): Promise<IPageAccess> => {
+        const response = await fetch(
+          `${BASE_API_URL}/${projectId}/pages/access/${id}`,
+          {
+            method: "GET",
+            credentials: "include",
+            signal,
+          },
+        );
+
+        if (!response.ok) {
+          const errorData = await response
+            .json()
+            .catch(() => ({ message: "Ошибка сервера" }));
+          throw new Error(errorData.message);
+        }
+
+        return response.json();
+      },
+    });
+  },
+
+  updateAccess: async ({
+    id,
+    projectId,
+    body,
+  }: {
+    id: string;
+    projectId: string;
+    body: IUpdatePageAccess;
+  }): Promise<IPageAccess> => {
+    const response = await fetch(
+      `${BASE_API_URL}/${projectId}/pages/access/${id}`,
+      {
+        method: "PUT",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
       },
     );
     if (!response.ok) {

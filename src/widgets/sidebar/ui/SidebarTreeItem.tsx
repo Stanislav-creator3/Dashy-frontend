@@ -9,6 +9,10 @@ import { useSideBarItem } from "../hooks/useSidebarItem";
 import { Icon } from "@/shared/utils/getIcon";
 import { IoIosArrowForward } from "react-icons/io";
 import { ButtonPageEdit } from "@/features/pages/buttonPageEdit";
+import { PageAccessModal } from "@/features/pages/pageAccess";
+import { useProjectRole } from "@/entities/projects/hooks/use-project-role";
+import { ACCESS_LEVEL } from "@/entities/pages/model/page.types";
+import { canEditPage } from "@/entities/pages/model/pageRole";
 import { SidebarPagEdit } from "./SidebarPageEdit";
 import { renderIcon } from "@/shared/utils/renderIcon";
 import { useSortable } from "@dnd-kit/react/sortable";
@@ -34,12 +38,14 @@ export function SidebarTreeItem({
   className,
   hasChildren,
   parentId,
+  access,
   level,
   index,
   depth,
 }: {
   id: string;
   parentId: string | null;
+  access: ACCESS_LEVEL;
   icon?: Icon;
   iconColor?: string;
   title: string;
@@ -53,6 +59,9 @@ export function SidebarTreeItem({
   const params = useParams();
   const pathname = usePathname();
   const router = useRouter();
+  const { isOwnerOrAdmin } = useProjectRole(params.id as string);
+  // Кнопки управления видят владелец, админы и те, у кого на странице EDIT
+  const canEdit = isOwnerOrAdmin || canEditPage(access);
 
   const { ref, isDragSource } = useSortable({
     ...config,
@@ -70,6 +79,7 @@ export function SidebarTreeItem({
   const [isHover, setIsHover] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAccessOpen, setIsAccessOpen] = useState(false);
 
   const onHoverStartAnimate = () => {
     setIsHover(true);
@@ -191,7 +201,7 @@ export function SidebarTreeItem({
             </div>
 
             <AnimatePresence mode="wait">
-              {(isMenuOpen || isHover) && (
+              {canEdit && (isMenuOpen || isHover) && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -206,6 +216,9 @@ export function SidebarTreeItem({
                     parentId={parentId}
                     pageId={id}
                     setIsEdit={setIsEdit}
+                    onOpenAccess={
+                      isOwnerOrAdmin ? () => setIsAccessOpen(true) : undefined
+                    }
                   />
                   <ButtonPageCreate
                     onOpenChange={handleMenuOpenChange}
@@ -218,6 +231,15 @@ export function SidebarTreeItem({
           </motion.div>
         )}
       </AnimatePresence>
+      {isOwnerOrAdmin && (
+        <PageAccessModal
+          projectId={params.id as string}
+          pageId={id}
+          isRoot={parentId === null}
+          isOpen={isAccessOpen}
+          onClose={() => setIsAccessOpen(false)}
+        />
+      )}
     </motion.li>
   );
 }

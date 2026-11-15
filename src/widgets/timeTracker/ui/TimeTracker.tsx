@@ -86,7 +86,7 @@ export default function TimeTracker() {
                 <motion.path
                   className={cn(styles[`base-timer__path-remaining`])}
                   strokeDasharray="0, 283"
-                  stroke="var(--color-yellow)"
+                  stroke="var(--color-accent-main)"
                   initial={false}
                   animate={{
                     strokeDasharray: strokeDasharray,

@@ -33,7 +33,9 @@ export default function Sidebar({
       <motion.div
         className={cn(
           "flex-1 py-4 px-2 scrollbar h-full w-full",
-          isSettingsPage ? "bg-gray-100 rounded-l-lg" : "glass-card",
+          isSettingsPage
+            ? "bg-gray-100 rounded-l-lg dark:bg-gray-800"
+            : "glass-card",
         )}
         animate={{ height: isSettingsPage ? "100%" : isOpen ? "90vh" : "65vh" }}
       >

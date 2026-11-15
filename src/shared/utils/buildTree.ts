@@ -1,6 +1,6 @@
 import {
   IPageList,
-  PAGE_ROLE,
+  ACCESS_LEVEL,
   PAGE_TYPE,
 } from "@/entities/pages/model/page.types";
 import { FlattenedItem } from "@/widgets/sidebar/model/types";
@@ -13,7 +13,7 @@ export function buildTree(flattenedItems: FlattenedItem[]): IPageList[] {
     icon: null,
     position: 0,
     parentId: null,
-    role: PAGE_ROLE.FULL_ACCESS,
+    access: ACCESS_LEVEL.EDIT,
     type: PAGE_TYPE.PAGE,
   };
   const nodes: Record<string, IPageList> = { [root.id]: root };
@@ -33,7 +33,7 @@ export function buildTree(flattenedItems: FlattenedItem[]): IPageList[] {
       type: item.type,
       position: item.position,
       parentId: item.parentId,
-      role: item.role,
+      access: item.access,
       children,
     };
     parent.children.push(item);

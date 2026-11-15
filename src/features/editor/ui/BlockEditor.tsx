@@ -50,68 +50,71 @@ import {
 } from "../model/draggableStore";
 import { ImageBlockNode } from "../image/node/ImageBlockNode";
 import { EditorContext } from "../model/editorContext";
+import { useCanEditPage } from "@/entities/pages/hooks/use-can-edit-page";
+import { editableExtension } from "../extensions/editableExtension";
 
-const EditorExtension = defineExtension({
-  name: "NotionLikeEditor",
-  namespace: "NotionLikeEditor",
-
-  onError: (error: Error) => console.error(error),
-  theme: {
-    heading: {
-      h1: "text-4xl font-extrabold my-4",
-      h2: "text-3xl font-bold my-3",
-      h3: "text-2xl font-semibold my-2",
-    },
-    text: {
-      bold: "font-bold",
-      italic: "italic",
-      underline: "border-b border-b-2 border-text",
-      strikethrough: "line-through",
-    },
-    quote:
-      "relative before:content-[''] before:border-l-4 before:absolute before:left-1 before:top-1 before:bottom-1 before:border-foreground pl-4 text-text my-2",
-    list: {
-      ul: "list-disc",
-      ol: "list-decimal",
-      listitem: "ml-4",
-      checklist: styles.editorChecklist,
-      listitemChecked: styles.editorListItemChecked,
-      listitemUnchecked: styles.editorListItemUnchecked,
-    },
-  },
-  nodes: [
-    CustomTextNode,
-    CustomParagraphNode,
-    CustomHeadingNode,
-    CustomQuoteNode,
-    BoardNode,
-    ImageBlockNode,
-    LinkPageNode,
-    {
-      replace: TextNode,
-      with: (node: TextNode) => {
-        const custom = $createCustomTextNode(node.getTextContent());
-        custom.setFormat(node.getFormat());
-        return custom;
+const EditorExtension = ({ canEdit = false }: { canEdit?: boolean }) =>
+  defineExtension({
+    name: "NotionLikeEditor",
+    namespace: "NotionLikeEditor",
+    onError: (error: Error) => console.error(error),
+    theme: {
+      heading: {
+        h1: "text-4xl font-extrabold my-4",
+        h2: "text-3xl font-bold my-3",
+        h3: "text-2xl font-semibold my-2",
       },
-      withKlass: CustomTextNode,
+      text: {
+        bold: "font-bold",
+        italic: "italic",
+        underline: "border-b border-b-2 border-text",
+        strikethrough: "line-through",
+      },
+      quote:
+        "relative before:content-[''] before:border-l-4 before:absolute before:left-1 before:top-1 before:bottom-1 before:border-foreground pl-4 text-text my-2",
+      list: {
+        ul: "list-disc",
+        ol: "list-decimal",
+        listitem: "ml-4",
+        checklist: styles.editorChecklist,
+        listitemChecked: styles.editorListItemChecked,
+        listitemUnchecked: styles.editorListItemUnchecked,
+      },
     },
-    {
-      replace: ParagraphNode,
-      with: () => $createCustomParagraphNode(),
-      withKlass: CustomParagraphNode,
-    },
-  ],
-  dependencies: [
-    RichTextExtension,
-    HistoryExtension,
-    CodeExtension,
-    LinkExtension,
-    CheckListExtension,
-    CalloutExtension,
-    configExtension(ReactExtension, { contentEditable: null }),
-  ],
-});
+    nodes: [
+      CustomTextNode,
+      CustomParagraphNode,
+      CustomHeadingNode,
+      CustomQuoteNode,
+      BoardNode,
+      ImageBlockNode,
+      LinkPageNode,
+      {
+        replace: TextNode,
+        with: (node: TextNode) => {
+          const custom = $createCustomTextNode(node.getTextContent());
+          custom.setFormat(node.getFormat());
+          return custom;
+        },
+        withKlass: CustomTextNode,
+      },
+      {
+        replace: ParagraphNode,
+        with: () => $createCustomParagraphNode(),
+        withKlass: CustomParagraphNode,
+      },
+    ],
+    dependencies: [
+      RichTextExtension,
+      HistoryExtension,
+      CodeExtension,
+      LinkExtension,
+      CheckListExtension,
+      CalloutExtension,
+      configExtension(editableExtension, { editable: canEdit }),
+      configExtension(ReactExtension, { contentEditable: null }),
+    ],
+  });
 
 const CUSTOM_TRANSFORMERS = [
   HEADING_CUSTOM,
@@ -133,9 +136,12 @@ export default function BlockEditor({
   projectId: string;
   blocks: IBlock[] | undefined;
 }) {
+  const canEdit = useCanEditPage({ pageId, projectId });
   const [draggableStore] = useState(() =>
     createDraggableStore(`draggableStore:${pageId}`),
   );
+
+  const extension = useMemo(() => EditorExtension({ canEdit }), []);
   const CustomContent = useMemo(() => {
     return (
       <DraggableWrapper>
@@ -153,7 +159,7 @@ export default function BlockEditor({
     <EditorContext.Provider value={{ pageId, projectId }}>
       <DraggableContext.Provider value={draggableStore}>
         <LexicalExtensionComposer
-          extension={EditorExtension}
+          extension={extension}
           contentEditable={CustomContent}
         >
           <EditorPanelPlugin />

@@ -13,7 +13,7 @@ const variants = cva({
   variants: {
     type: {
       onboarding: "text-white bg-black",
-      projects: "bg-yellow text-black",
+      projects: "bg-accent-main text-accent-main-foreground",
       output: "bg-gray text-white",
     },
   },

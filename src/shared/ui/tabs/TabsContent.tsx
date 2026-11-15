@@ -28,6 +28,8 @@ export interface ITabs {
 export interface IActions {
   label: string;
   onClick: () => void;
+  showActiveTab?: boolean;
+  tabName?: string;
 }
 
 export default function TabsContent({
@@ -49,7 +51,7 @@ export default function TabsContent({
     <div className={cn("flex flex-col gap-1", className)}>
       <div
         onMouseLeave={() => setFocused(null)}
-        className={"flex glass-panel rounded-md gap-4"}
+        className={"flex glass-panel rounded-md gap-1"}
       >
         {tabs.map((tab) => (
           <motion.button
@@ -57,8 +59,10 @@ export default function TabsContent({
             key={tab.name}
             onClick={() => setActiveTabName(tab.name)}
             className={`${
-              activeTab?.name === tab.name ? "text-white" : "text-black/60"
-            } relative rounded-md cursor-pointer px-4 py-4 text-sm text-black `}
+              activeTab?.name === tab.name
+                ? "text-white dark:text-black"
+                : "text-black/60 dark:text-white/60"
+            } relative min-w-25 rounded-md cursor-pointer p-2 text-black `}
             style={{
               WebkitTapHighlightColor: "transparent",
             }}
@@ -78,30 +82,54 @@ export default function TabsContent({
             {activeTab?.name === tab.name && (
               <motion.span
                 layoutId="bubble"
-                className="absolute inset-0 rounded-md -z-10 flex overflow-hidden bg-black"
+                className="absolute inset-0 rounded-md -z-10 flex overflow-hidden bg-accent-foreground"
                 transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
               />
             )}
             {tab.label}
           </motion.button>
         ))}
-        {actions && (
-          <div className="flex w-full justify-end">
-            {actions.map((item) => (
-              <button
-                key={item.label}
-                className={
-                  "flex bg-black rounded-md cursor-pointer px-4 py-4 text-sm text-white hover:opacity-75"
+        <AnimatePresence mode="wait">
+          {actions && (
+            <motion.div
+              key={activeTab?.name}
+              initial={{ opacity: 0, filter: "blur(4px)" }}
+              animate={{ opacity: 1, filter: "blur(0px)" }}
+              exit={{ opacity: 0, filter: "blur(4px)" }}
+              className="flex w-full gap-1 justify-end"
+            >
+              {actions.map((item) => {
+                if (item.showActiveTab && activeTab?.name === item.tabName) {
+                  return (
+                    <button
+                      key={item.label}
+                      className={
+                        "flex bg-background rounded-md cursor-pointer p-2  text-text hover:opacity-75"
+                      }
+                      onClick={item.onClick}
+                    >
+                      {item.label}
+                    </button>
+                  );
+                } else if (!item.showActiveTab) {
+                  return (
+                    <button
+                      key={item.label}
+                      className={
+                        "flex bg-background rounded-md cursor-pointer p-2  text-text hover:opacity-75"
+                      }
+                      onClick={item.onClick}
+                    >
+                      {item.label}
+                    </button>
+                  );
                 }
-                onClick={item.onClick}
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
-        )}
+              })}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-      <div>
+      <div className="flex-1">
         <AnimatePresence mode="wait">
           <motion.div
             className="w-full h-full"

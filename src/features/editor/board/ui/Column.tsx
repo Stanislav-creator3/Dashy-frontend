@@ -46,6 +46,7 @@ export function Column({
     setItemsByColumn,
     itemsByColumn,
     cardsById,
+    canEdit,
   } = useBoard();
 
   const { createCard, isPending: isPendingCard } = useCreateCardBoard({
@@ -147,6 +148,7 @@ export function Column({
     id,
     index,
     type: "column",
+    disabled: !canEdit,
     collisionPriority: CollisionPriority.Low,
     accept: ["item", "column"],
   });
@@ -215,16 +217,21 @@ export function Column({
           >
             <div
               ref={handleRef}
-              className="relative flex items-center justify-between cursor-grab"
+              className={`relative flex items-center justify-between ${
+                canEdit ? "cursor-grab" : ""
+              }`}
             >
               <div className="relative rounded-2xl p-1  hover:ring-2 hover:ring-white/50 hover:brightness-125">
                 <button
                   ref={refButton}
+                  disabled={!canEdit}
                   onClick={(e) => {
                     e.stopPropagation();
                     setIsEdit((prev) => !prev);
                   }}
-                  className="font-bold flex items-center text-text justify-center gap-1 cursor-pointer px-2 rounded-2xl"
+                  className={`font-bold flex items-center text-text justify-center gap-1 px-2 rounded-2xl ${
+                    canEdit ? "cursor-pointer" : "cursor-default"
+                  }`}
                   style={{
                     backgroundColor: colorStyle.status,
                   }}
@@ -268,49 +275,55 @@ export function Column({
                 </AnimatePresence>
               </div>
 
-              <DropdownMenu
-                enabledClick
-                placement="bottom"
-                trigger={<ButtonEdit dotColor="var(--color-text)" />}
-                items={menuItems}
-              />
+              {canEdit && (
+                <DropdownMenu
+                  enabledClick
+                  placement="bottom"
+                  trigger={<ButtonEdit dotColor="var(--color-text)" />}
+                  items={menuItems}
+                />
+              )}
             </div>
             {children}
 
-            <motion.button
-              layout="position"
-              transition={{
-                layout: { type: "spring", stiffness: 350, damping: 30 },
-              }}
-              disabled={isPendingCard}
-              className="flex items-center h-8 justify-center gap-1 rounded-md p-1 text-text cursor-pointer hover:brightness-115"
-              style={{
-                backgroundColor: `oklch(from ${colorStyle.status} calc(l + 0.25) calc(c * 0.45) h)`,
-              }}
-              onClick={() => {
-                onClickCreateCard();
-              }}
-            >
-              {isPendingCard ? (
-                <Loading size={15} />
-              ) : (
-                <span className="flex items-center gap-0.5">
-                  <GoPlus size={20} /> Добавить карточку
-                </span>
-              )}
-            </motion.button>
+            {canEdit && (
+              <motion.button
+                layout="position"
+                transition={{
+                  layout: { type: "spring", stiffness: 350, damping: 30 },
+                }}
+                disabled={isPendingCard}
+                className="flex items-center h-8 justify-center gap-1 rounded-md p-1 text-text cursor-pointer hover:brightness-115"
+                style={{
+                  backgroundColor: `oklch(from ${colorStyle.status} calc(l + 0.25) calc(c * 0.45) h)`,
+                }}
+                onClick={() => {
+                  onClickCreateCard();
+                }}
+              >
+                {isPendingCard ? (
+                  <Loading size={15} />
+                ) : (
+                  <span className="flex items-center gap-0.5">
+                    <GoPlus size={20} /> Добавить карточку
+                  </span>
+                )}
+              </motion.button>
+            )}
           </div>
         </motion.li>
       </LayoutGroup>
-      <DeleteColumnModal
-        columnId={id}
-        databaseId={databaseId}
-        openModal={openModal}
-        setOpenModal={setOpenModal}
-        columnItems={columnItems ?? []}
-        otherColumnsProperty={otherColumnsProperty}
-        groupByFieldId={groupByFieldId}
-      />
+      {canEdit && (
+        <DeleteColumnModal
+          columnId={id}
+          databaseId={databaseId}
+          openModal={openModal}
+          setOpenModal={setOpenModal}
+          columnItems={columnItems ?? []}
+          otherColumnsProperty={otherColumnsProperty}
+          groupByFieldId={groupByFieldId}
+        />
+      )}
     </>
   );
 }

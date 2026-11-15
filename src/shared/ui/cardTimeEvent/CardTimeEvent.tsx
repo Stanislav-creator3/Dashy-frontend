@@ -98,7 +98,7 @@ export default function CardTimeEvent({
             </Link>
           ))}
           {attendeesOther > 1 && (
-            <div className="w-[40px] h-[40px] -ml-4 p-1 flex items-center justify-end rounded-full bg-yellow mask-[radial-gradient(ellipse_30px_40px_at_5px_center,_#0000_13px,_#000_13.5px)]">
+            <div className="w-[40px] h-[40px] -ml-4 p-1 flex items-center justify-end rounded-full bg-accent-main mask-[radial-gradient(ellipse_30px_40px_at_5px_center,_#0000_13px,_#000_13.5px)]">
               <p className="text-sm flex items-baseline justify-end">
                 <span>
                   <FaPlus size={10} />{" "}

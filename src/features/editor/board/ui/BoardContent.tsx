@@ -33,8 +33,10 @@ export function BoardContent({
   columnsBoard = [],
   itemsByColumnBoard = {},
   cardsById,
+  canEdit,
 }: {
   title?: string;
+  canEdit: boolean;
   databaseId: string;
   groupByFieldId: string;
   columnsBoard: IBoardColumn[];
@@ -42,6 +44,7 @@ export function BoardContent({
   cardsById: Map<string, BoardCard>;
 }) {
   const { id: projectId } = useParams<{ id: string }>();
+
   const setDraggable = useDraggableContext((state) => state.setDraggable);
 
   const { updateCard } = useUpdateBoardCard({
@@ -71,6 +74,7 @@ export function BoardContent({
     databaseId,
     groupByFieldId,
     cardsById,
+    canEdit,
   };
 
   const otherColumnsProperty = (id: string) => {
@@ -156,11 +160,14 @@ export function BoardContent({
               title={title ?? "Без названия"}
               databaseId={databaseId}
               projectId={projectId}
+              canEdit={canEdit}
             />
           </div>
-          <div className="flex gap-2 justify-between ">
-            <BoardSettings color={"yellow"} />
-          </div>
+          {canEdit && (
+            <div className="flex gap-2 justify-between ">
+              <BoardSettings color={"yellow"} />
+            </div>
+          )}
         </div>
         <div className="w-[100cqw] ml-[calc(50%-50cqw)] overflow-x-auto">
           <DragDropProvider
@@ -183,7 +190,7 @@ export function BoardContent({
             onDragOver={(event) => {
               const { source, target } = event.operation;
 
-              if (source?.type === "column") return;
+              if (!canEdit || source?.type === "column") return;
 
               const moved = move(itemsByColumn, event);
               setItemsByColumn(moved);
@@ -191,7 +198,7 @@ export function BoardContent({
             onDragEnd={(event) => {
               const { source, target } = event.operation;
 
-              if (!source || !target) return;
+              if (!canEdit || !source || !target) return;
 
               if (event.canceled) return;
 
@@ -292,18 +299,20 @@ export function BoardContent({
                     </AnimatePresence>
                   </Column>
                 ))}
-                <motion.div
-                  key="new-column"
-                  layout="position"
-                  className="list-none"
-                  transition={{ type: "spring", stiffness: 350, damping: 30 }}
-                >
-                  <ButtonNewColumn
-                    createColumn={() =>
-                      createColumn({ fieldId: groupByFieldId })
-                    }
-                  />
-                </motion.div>
+                {canEdit && (
+                  <motion.div
+                    key="new-column"
+                    layout="position"
+                    className="list-none"
+                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                  >
+                    <ButtonNewColumn
+                      createColumn={() =>
+                        createColumn({ fieldId: groupByFieldId })
+                      }
+                    />
+                  </motion.div>
+                )}
               </AnimatePresence>
             </div>
           </DragDropProvider>

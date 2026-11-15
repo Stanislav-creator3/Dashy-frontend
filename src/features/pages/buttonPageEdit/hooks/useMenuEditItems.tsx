@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { MdDeleteOutline } from "react-icons/md";
-import { MdOutlineEdit } from "react-icons/md";
+import { MdLockOutline, MdOutlineEdit } from "react-icons/md";
 import { pagesApi } from "@/entities/pages/api/pages.api";
 import { useSideBarItem } from "@/widgets/sidebar/hooks/useSidebarItem";
 import { IPageList } from "@/entities/pages/model/page.types";
@@ -21,6 +21,7 @@ export const useMenuEditItems = (
   parentId: string | null,
   projectId: string,
   setIsEdit: (value: boolean) => void,
+  onOpenAccess?: () => void,
 ) => {
   const { isOpen, close } = useSideBarItem({ id: parentId });
   const queryClient = useQueryClient();
@@ -87,6 +88,22 @@ export const useMenuEditItems = (
         </p>
       ),
     },
+    // onOpenAccess передают только владельцу и админам: GET и PUT /access на бэке им одним
+    ...(onOpenAccess
+      ? [
+          {
+            onClick: onOpenAccess,
+            label: (
+              <p className="flex gap-1 items-center justify-center">
+                <span>
+                  <MdLockOutline size={20} />
+                </span>
+                Доступ
+              </p>
+            ),
+          },
+        ]
+      : []),
     {
       onClick: () => onClickDelete(),
       label: (

@@ -1,16 +1,32 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../src/app/styles/index";
-import { Mulish, Source_Code_Pro } from "next/font/google";
+import { Geist, Mulish, Source_Code_Pro } from "next/font/google";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { initialize, mswLoader } from "msw-storybook-addon";
 import type { Preview } from "@storybook/nextjs-vite";
 
 initialize({ onUnhandledRequest: "error" });
 
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
+
 const mulish = Mulish({
   variable: "--font-mulish",
   subsets: ["latin"],
 });
+
+const sourceCodePro = Source_Code_Pro({
+  variable: "--font-source-code-pro",
+  subsets: ["latin"],
+});
+
+// Как в app/layout.tsx: переменные шрифтов должны быть на <html>,
+// иначе body { font-family: var(--font-mulish) } их не увидит
+const fontClasses = [
+  "font-sans",
+  geist.variable,
+  mulish.variable,
+  sourceCodePro.variable,
+];
 
 const preview: Preview = {
   loaders: [mswLoader],
@@ -31,14 +47,17 @@ const preview: Preview = {
   },
   decorators: [
     (Story) => {
+      useEffect(() => {
+        document.documentElement.classList.add(...fontClasses);
+        return () => document.documentElement.classList.remove(...fontClasses);
+      }, []);
+
       const queryClient = new QueryClient({
         defaultOptions: { queries: { retry: false, staleTime: 0 } },
       });
       return (
         <QueryClientProvider client={queryClient}>
-          <div className={`font-sans ${mulish.variable}`}>
-            <Story />
-          </div>
+          <Story />
         </QueryClientProvider>
       );
     },

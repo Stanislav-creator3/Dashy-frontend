@@ -38,6 +38,10 @@
   --color-blue: oklch(0.471 0.155 252);
   --color-error: oklch(50% 0.19 27);
 
+  /* accent: фирменный цвет интерфейса. Меняется здесь и в .dark, не зависит от --color-yellow */
+  --color-accent-main: oklch(0.9 0.12 95);
+  --color-accent-main-foreground: oklch(0.25 0 0);
+
   /* surfaces */
   --bg-primary: oklch(1 0 0);
   --bg-secondary: oklch(0.97 0 0);
@@ -145,6 +149,10 @@
   /* base */
   --background: oklch(21.3% 0 0);
   --foreground: oklch(0.985 0 0);
+
+  /* accent */
+  --color-accent-main: oklch(0.65 0.19 300);
+  --color-accent-main-foreground: oklch(0.985 0 0);
 
   /* text */
   --color-text: oklch(100% 0.00011 271.152);
@@ -265,6 +273,8 @@
   --color-white: var(--color-white);
   --color-black: var(--color-black);
   --color-yellow: var(--color-yellow);
+  --color-accent-main: var(--color-accent-main);
+  --color-accent-main-foreground: var(--color-accent-main-foreground);
 
   --color-editor: var(--color-editor);
   --color-input: var(--color-input);
@@ -476,7 +486,7 @@
 
   .scrollbar::-webkit-scrollbar-thumb {
     border-radius: 100px;
-    background: var(--color-yellow);
+    background: var(--color-accent-main);
     border: 1px solid rgba(0, 0, 0, 0.1);
   }
 

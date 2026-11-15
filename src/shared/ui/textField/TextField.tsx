@@ -14,7 +14,13 @@ interface TextFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   isEdit?: boolean;
   error?: string;
-  textSize?: "text-xs" | "text-sm" | "text-base" | "text-lg" | "text-xl" | "text-2xl";
+  textSize?:
+    | "text-xs"
+    | "text-sm"
+    | "text-base"
+    | "text-lg"
+    | "text-xl"
+    | "text-2xl";
 }
 
 const placeholderSizeMap = {
@@ -67,12 +73,14 @@ export function TextField({
     closeEditMode();
   };
 
- 
-  
-
   return (
     <div className="flex flex-col gap-2 relative w-full">
-      <div className="flex items-center justify-between gap-2">
+      {label && (
+        <label className="text-2xl" htmlFor={id}>
+          {label}
+        </label>
+      )}
+      {/* <div className="flex items-center justify-between gap-2">
         {label && (
           <label className="text-2xl" htmlFor={id}>
             {label}
@@ -87,7 +95,7 @@ export function TextField({
                   initial="initial"
                   animate="visible"
                   exit="hidden"
-                  className="bg-input border-2 border-transparent rounded-md p-1 cursor-pointer text-xl text-center transition-[border] duration-300 hover:border-yellow focus:outline-none focus:border-yellow focus:border-2"
+                  className="bg-input border-2 border-transparent rounded-md p-1 cursor-pointer text-xl text-center transition-[border] duration-300 hover:border-accent-main focus:outline-none focus:border-accent-main focus:border-2"
                   onClick={closeEditMode}
                   aria-label="Cancel"
                   aria-controls={id}
@@ -99,7 +107,7 @@ export function TextField({
 
             <button
               ref={scope}
-              className="bg-[rgba(219,218,218,0.8)] border-2 border-transparent rounded-md p-1 cursor-pointer text-xl text-center transition-[border] duration-300 hover:border-yellow focus:outline-none focus:border-yellow focus:border-2"
+              className="bg-[rgba(219,218,218,0.8)] border-2 border-transparent rounded-md p-1 cursor-pointer text-xl text-center transition-[border] duration-300 hover:border-accent-main focus:outline-none focus:border-accent-main focus:border-2"
               onClick={editMode ? onEditHandler : openEditMode}
               aria-label={editMode ? "Save" : "Edit"}
               aria-controls={id}
@@ -116,14 +124,18 @@ export function TextField({
             </button>
           </div>
         )}
-      </div>
+      </div> */}
       <input
         id={id}
         {...props}
         ref={inputRef}
         disabled={isEdit ? !editMode : false}
         readOnly={isEdit ? !editMode : false}
-        className={cn("min-w-10 p-2.5 text-black bg-input border-2 border-transparent rounded-md transition-[border] duration-200 disabled:cursor-not-allowed focus:outline-none focus:border-yellow focus:border-2", textSize, [textSize])}
+        className={cn(
+          "min-w-10 p-1 text-black bg-input border-2 border-transparent rounded-md transition-[border] duration-200 disabled:cursor-not-allowed focus:outline-none focus:border-accent-main focus:border-2",
+          textSize,
+          [textSize],
+        )}
       />
       <AnimatePresence>
         {error && (

@@ -13,7 +13,7 @@ import {
   blockOrderState,
   blockTempIdState,
 } from "../../model/blockState";
-import BoardView from "../ui/BoardView";
+import BoardNodeView from "../ui/BoardNodeView";
 
 export interface IBoardNodeProps {
   databaseId?: string;
@@ -58,7 +58,7 @@ export class BoardNode extends DecoratorNode<ReactNode> {
 
   decorate(): ReactNode {
     return (
-      <BoardView
+      <BoardNodeView
         {...$getState(this, propsState)}
         blockId={$getState(this, blockIdState)}
         nodeKey={this.getKey()}

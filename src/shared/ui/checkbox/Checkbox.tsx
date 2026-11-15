@@ -9,6 +9,7 @@ interface Props extends HTMLMotionProps<"input"> {
   name?: string;
   label?: string;
   type?: string;
+  className?: string;
 }
 
 export default function Checkbox({
@@ -17,10 +18,11 @@ export default function Checkbox({
   label,
   onChange,
   type = "dark",
+  className,
   ...rest
 }: Props) {
   return (
-    <div>
+    <div className={cn("flex items-center justify-between gap-1", className)}>
       {label && <label htmlFor={name}>{label}</label>}
       <motion.input
         type="checkbox"
@@ -28,8 +30,8 @@ export default function Checkbox({
         className={cn(
           styles.input,
           type === "dark"
-            ? "bg-[#4E4E4E] checked:bg-yellow"
-            : "bg-white checked:bg-[#4E4E4E]"
+            ? "bg-[#4E4E4E] checked:bg-accent-main"
+            : "bg-white checked:bg-[#4E4E4E]",
         )}
         whileHover={{
           boxShadow: "0px 0px 5px 2px oklch(0.8867 0.1 105.88)",

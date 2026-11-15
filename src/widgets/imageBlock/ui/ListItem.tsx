@@ -5,6 +5,8 @@ import { FaRegImage } from "react-icons/fa";
 import { useOutsideClick } from "@/shared/hooks/useOutsideClick";
 import { Card } from "./Card";
 import { UploadPanel } from "./UploadPanel";
+import { useCanEditPage } from "@/entities/pages/hooks/use-can-edit-page";
+import { useCanEdit } from "@/features/editor/model/editorContext";
 
 interface IListItemProps {
   id: string;
@@ -25,6 +27,7 @@ export const ListItem = ({
   nodeKey,
   open,
 }: IListItemProps) => {
+  const canEdit = useCanEdit();
   const [isOpen, setIsOpen] = useState(false);
   const ref = useOutsideClick<HTMLLIElement>(() => setIsOpen(false));
 
@@ -52,6 +55,7 @@ export const ListItem = ({
           trigger={
             <button
               onClick={() => setIsOpen((prev) => !prev)}
+              disabled={!canEdit}
               className="relative cursor-pointer text-xl text-text font-bold flex gap-1 items-center justify-center w-full h-full rounded-2xl transition-[background] duration-250 hover:bg-bg-hover "
               style={{ background: isOpen ? "var(--bg-hover)" : "" }}
             >

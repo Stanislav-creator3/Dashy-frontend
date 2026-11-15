@@ -5,7 +5,7 @@ import { createJSONStorage, devtools, persist } from "zustand/middleware";
 import { create, StateCreator } from "zustand";
 
 interface IActions {
-  setProjectId: (id: string) => void;
+  setProjectId: (id: string | null) => void;
 }
 
 interface IInitialState {

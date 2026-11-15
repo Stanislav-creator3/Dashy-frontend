@@ -13,6 +13,7 @@ export default function ButtonPageEdit({
   parentId,
   setIsEdit,
   onOpenChange,
+  onOpenAccess,
 }: {
   isHover?: boolean;
   isMenuOpen?: boolean;
@@ -21,8 +22,16 @@ export default function ButtonPageEdit({
   parentId: string | null;
   setIsEdit: (value: boolean) => void;
   onOpenChange: (open: boolean) => void;
+  // Модалка живёт у родителя: эта кнопка размонтируется, когда курсор уходит со строки
+  onOpenAccess?: () => void;
 }) {
-  const itemMenu = useMenuEditItems(pageId, parentId, projectId, setIsEdit);
+  const itemMenu = useMenuEditItems(
+    pageId,
+    parentId,
+    projectId,
+    setIsEdit,
+    onOpenAccess,
+  );
   const [open, setOpen] = useState(false);
 
   return (

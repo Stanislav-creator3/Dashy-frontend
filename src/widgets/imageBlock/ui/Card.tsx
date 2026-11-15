@@ -10,6 +10,7 @@ import { getMediaSource } from "@/shared/utils/get-media-source";
 import { $isImageBlockNode } from "@/features/editor/image/node/ImageBlockNode";
 import { useRemoveImageFromBlock } from "@/entities/files/hooks/useRemoveImageFromBlock";
 import { UploadPanel } from "./UploadPanel";
+import { useCanEdit } from "@/features/editor/model/editorContext";
 
 interface ICardProps {
   open: () => void;
@@ -34,6 +35,7 @@ export const Card = ({
   selectedId,
 }: ICardProps) => {
   const [editor] = useLexicalComposerContext();
+  const canEdit = useCanEdit();
   const { removeImage, getIsLoadingRemove } = useRemoveImageFromBlock({
     editor,
     nodeKey,
@@ -75,7 +77,7 @@ export const Card = ({
         src={url.startsWith("https") ? url : getMediaSource(url)}
         alt={alt}
       />
-      {selectedId !== id && (
+      {selectedId !== id && canEdit && (
         <AnimatePresence>
           {(isHover || isActive) && (
             <motion.div

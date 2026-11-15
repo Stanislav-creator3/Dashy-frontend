@@ -13,7 +13,7 @@ export function useCanEditPage({
 }) {
   const { data } = useQuery({
     ...pagesApi.getByIdPage({ id: pageId, projectId }),
-    select: (page) => canEditPage(page.role),
+    select: (page) => canEditPage(page.access),
   });
   return data ?? false;
 }

@@ -46,14 +46,14 @@ export function Option({
           data-marker
           className={cn(
             "relative size-5 rounded-full  border-2 border-gray-300 ",
-            isChecked && "border-yellow ",
+            isChecked && "border-accent-main ",
           )}
         >
           {isChecked ? (
             <motion.span
               layoutId={`${groupName}-marker`}
               transition={{ type: "spring", stiffness: 500, damping: 30 }}
-              className="absolute inset-0 m-auto size-3 rounded-full bg-yellow"
+              className="absolute inset-0 m-auto size-3 rounded-full bg-accent-main"
             />
           ) : null}
         </div>

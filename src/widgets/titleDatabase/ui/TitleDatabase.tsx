@@ -8,11 +8,13 @@ import { useEffect, useRef } from "react";
 const TitleDatabase = ({
   databaseId,
   projectId,
+  canEdit = false,
   title,
 }: {
   databaseId: string;
   projectId: string;
   title: string;
+  canEdit?: boolean;
 }) => {
   const { updateDatabase } = useUpdateDatabase({
     databaseId,
@@ -40,6 +42,7 @@ const TitleDatabase = ({
   return (
     <TitleContentEditable
       size="h2"
+      isEditing={canEdit}
       titleRef={titleRef}
       onSubmit={handleUpdate}
     />

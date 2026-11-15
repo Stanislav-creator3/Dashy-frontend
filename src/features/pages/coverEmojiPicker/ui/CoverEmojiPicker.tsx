@@ -23,6 +23,7 @@ interface CoverEmojiPickerProps {
   onDelete: () => void;
   url?: string;
   className?: string;
+  canEdit?: boolean;
 }
 
 export default function CoverEmojiPicker({
@@ -36,6 +37,7 @@ export default function CoverEmojiPicker({
   onDelete,
   url,
   className,
+  canEdit = false,
 }: CoverEmojiPickerProps) {
   const params = useParams();
   const ref = useOutsideClick(() => onClose());
@@ -88,8 +90,9 @@ export default function CoverEmojiPicker({
     <div ref={ref} className={className}>
       {url && (
         <button
-          className="p-1 cursor-pointer rounded-md hover:bg-bg-hover"
+          className="p-1 cursor-pointer rounded-md hover:bg-bg-hover disabled:hover:bg-transparent disabled:cursor-default"
           onClick={() => onToggle()}
+          disabled={!canEdit}
         >
           {Icon}
         </button>

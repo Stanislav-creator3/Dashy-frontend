@@ -5,7 +5,7 @@ import Link from "next/link";
 export default function ProjectListItem({ data }: { data: IProject }) {
   return (
     <Link href={`/projects/${data.id}`}>
-      <Card className="flex flex-col gap-2 h-full overflow-hidden border-4 transition-[border] duration-300 hover:border-yellow">
+      <Card className="flex flex-col gap-2 h-full overflow-hidden border-4 transition-[border] duration-300 hover:border-accent-main">
         {data.previewImage && (
           <div className="-m-4 mb-1">
             <img

@@ -35,7 +35,7 @@ export default function ProgressWeekItem({
         variants={{
           hover: progress
             ? {
-                backgroundColor: "var(--color-yellow)",
+                backgroundColor: "var(--color-accent-main)",
                 transition: {
                   duration: 0.2,
                   ease: "easeInOut",
@@ -47,7 +47,7 @@ export default function ProgressWeekItem({
           "relative w-3 rounded-2xl",
           progress && "cursor-pointer",
           day === currentDay
-            ? "bg-yellow"
+            ? "bg-accent-main"
             : progress
             ? "bg-black"
             : "hr-sloping-lines"
@@ -66,7 +66,7 @@ export default function ProgressWeekItem({
           <motion.span
             className="absolute flex left-1/2 -translate-x-1/2 -translate-y-1/2 
             items-center justify-center invisible 
-            -top-5 text-sm w-15  px-1 py-2 bg-yellow 
+            -top-5 text-sm w-15  px-1 py-2 bg-accent-main 
             rounded-2xl transition-[opacity,scale] scale-0 duration-300 opacity-0 
             group-hover:visible group-hover:opacity-100 group-hover:scale-100"
           >
@@ -81,7 +81,7 @@ export default function ProgressWeekItem({
         variants={{
           hover: progress
             ? {
-                backgroundColor: "var(--color-yellow)",
+                backgroundColor: "var(--color-accent-main)",
                 transition: {
                   duration: 0.2,
                   ease: "easeInOut",
@@ -96,7 +96,7 @@ export default function ProgressWeekItem({
         className={cn(
           "h-3 w-3 rounded-2xl",
           day === currentDay
-            ? "bg-yellow"
+            ? "bg-accent-main"
             : progress
             ? "bg-black"
             : "hr-sloping-lines"

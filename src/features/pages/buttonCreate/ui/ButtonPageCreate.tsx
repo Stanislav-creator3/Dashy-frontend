@@ -35,9 +35,9 @@ export default function ButtonPageCreate({
               "flex items-center justify-center bg-black w-6 h-6 cursor-pointer rounded-2xl",
               className,
             )}
-            animate={{ background: open ? "var(--color-yellow)" : "" }}
+            animate={{ background: open ? "var(--color-accent-main)" : "" }}
             whileHover={{
-              background: "var(--color-yellow)",
+              background: "var(--color-accent-main)",
               transition: { type: "spring", stiffness: 50 },
             }}
             whileTap={{

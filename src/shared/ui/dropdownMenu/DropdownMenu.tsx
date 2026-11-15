@@ -66,6 +66,7 @@ interface DropdownMenuComponentProps {
   visible?: boolean;
   onOpenChange?: (open: boolean) => void;
   placement?: Placement;
+  zIndex?: number;
 }
 
 export default function DropdownMenu(props: DropdownMenuComponentProps) {
@@ -91,6 +92,7 @@ export function DropdownComponentMenu({
   totalIndex = 1,
   onOpenChange,
   placement = "bottom-start",
+  zIndex = 10,
 }: DropdownMenuComponentProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -139,7 +141,9 @@ export function DropdownComponentMenu({
     onMatch: isOpen ? setActiveIndex : undefined,
     activeIndex,
   });
-  const { isMounted, styles } = useTransitionStyles(context);
+  // Появлением и исчезновением занимается motion, поэтому styles не применяем:
+  // две анимации opacity на одном элементе мерцают в Safari
+  const { isMounted } = useTransitionStyles(context);
 
   const click = useClick(context, {
     enabled: isNested || enabledClick,
@@ -229,7 +233,7 @@ export function DropdownComponentMenu({
                 >
                   <motion.div
                     ref={refs.setFloating}
-                    style={{ ...floatingStyles, zIndex: 10, ...styles }}
+                    style={{ ...floatingStyles, zIndex }}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0, transition: { duration: 0.5 } }}

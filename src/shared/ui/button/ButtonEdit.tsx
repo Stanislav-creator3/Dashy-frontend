@@ -41,10 +41,10 @@ export default function ButtonEdit({
         className,
         "bg-[rgba(0,0,0,0)] flex cursor-pointer rounded-xl py-2 px-1 gap-[3px]",
       )}
-      variants={{ hover: { background: "var(--color-yellow)" } }}
+      variants={{ hover: { background: "var(--color-accent-main)" } }}
       whileHover="hover"
       style={{
-        background: isActive ? "var(--color-yellow)" : "rgba(0,0,0,0)",
+        background: isActive ? "var(--color-accent-main)" : "rgba(0,0,0,0)",
       }}
     >
       {Array.from({ length: 3 }).map((_, index) => (

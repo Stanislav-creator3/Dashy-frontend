@@ -1,4 +1,5 @@
 import { IBlock } from "@/features/editor/model/block.types";
+import { IRole } from "@/entities/roles/model/role.types";
 
 export enum PAGE_TYPE {
   PAGE = "PAGE",
@@ -6,16 +7,34 @@ export enum PAGE_TYPE {
   DATABASE = "DATABASE",
 }
 
-export enum PAGE_ROLE {
-  NO_ACCESS = "NO_ACCESS",
-  VIEWER = "VIEWER",
-  EDITOR = "EDITOR",
-  FULL_ACCESS = "FULL_ACCESS",
+export enum ACCESS_LEVEL {
+  VIEW = "VIEW",
+  EDIT = "EDIT",
+}
+
+export interface IPageAccessItem {
+  level: ACCESS_LEVEL;
+  role: IRole;
+}
+
+export interface IPageAccess {
+  inheritAccess: boolean;
+  access: IPageAccessItem[];
+}
+
+// Свой доступ страницы из списка по всему проекту
+export interface IPageAccessSummary extends IPageAccess {
+  id: string;
+}
+
+export interface IUpdatePageAccess {
+  inheritAccess: boolean;
+  access?: { roleId: string; level: ACCESS_LEVEL }[];
 }
 
 export interface IPage {
   id: string;
-  role: PAGE_ROLE;
+  access: ACCESS_LEVEL;
   title: string;
   icon: string | null;
   iconColor?: string;
@@ -33,7 +52,7 @@ export interface IPage {
 export interface IPageList {
   children: IPageList[];
   id: string;
-  role: PAGE_ROLE;
+  access: ACCESS_LEVEL;
   title: string;
   icon: string | null;
   iconColor?: string;

@@ -6,6 +6,7 @@ interface BoardContextValue {
   projectId: string;
   databaseId: string;
   groupByFieldId?: string;
+  canEdit: boolean;
   columnsItems: IBoardColumn[];
   itemsByColumn: Record<string, string[]>;
   setColumnsItems: Dispatch<SetStateAction<IBoardColumn[]>>;

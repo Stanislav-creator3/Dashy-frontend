@@ -1,6 +1,11 @@
 import { BASE_API_URL, KEYS_API } from "@/shared/config/api";
 import { queryOptions } from "@tanstack/react-query";
-import { ICreateProject, IProject } from "../model/project.types";
+import {
+  IAddMember,
+  ICreateProject,
+  IProject,
+  IProjectMember,
+} from "../model/project.types";
 
 export const projectsApi = {
   getProjects: () => {
@@ -132,6 +137,81 @@ export const projectsApi = {
       method: "DELETE",
       credentials: "include",
     });
+    if (!response.ok) {
+      const errorData = await response
+        .json()
+        .catch(() => ({ message: "Ошибка сервера" }));
+      throw new Error(errorData.message);
+    }
+    return await response.json();
+  },
+
+  addMember: async ({
+    projectId,
+    data,
+  }: {
+    projectId: string;
+    data: IAddMember;
+  }): Promise<IProjectMember> => {
+    const response = await fetch(
+      `${BASE_API_URL}/projects/${projectId}/members`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      },
+    );
+    if (!response.ok) {
+      const errorData = await response
+        .json()
+        .catch(() => ({ message: "Ошибка сервера" }));
+      throw new Error(errorData.message);
+    }
+    return await response.json();
+  },
+
+  updateMemberRole: async ({
+    projectId,
+    userId,
+    roleId,
+  }: {
+    projectId: string;
+    userId: string;
+    roleId: string;
+  }): Promise<IProjectMember> => {
+    const response = await fetch(
+      `${BASE_API_URL}/projects/${projectId}/members/${userId}`,
+      {
+        method: "PATCH",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ roleId }),
+      },
+    );
+    if (!response.ok) {
+      const errorData = await response
+        .json()
+        .catch(() => ({ message: "Ошибка сервера" }));
+      throw new Error(errorData.message);
+    }
+    return await response.json();
+  },
+
+  removeMember: async ({
+    projectId,
+    userId,
+  }: {
+    projectId: string;
+    userId: string;
+  }) => {
+    const response = await fetch(
+      `${BASE_API_URL}/projects/${projectId}/members/${userId}`,
+      {
+        method: "DELETE",
+        credentials: "include",
+      },
+    );
     if (!response.ok) {
       const errorData = await response
         .json()

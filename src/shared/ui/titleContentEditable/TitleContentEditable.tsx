@@ -22,6 +22,7 @@ interface Props extends VariantProps<typeof variants> {
   titleRef: React.RefObject<HTMLHeadingElement | null>;
   onSubmit: (title: string) => void;
   className?: string;
+  isEditing?: boolean;
 }
 
 export default function TitleContentEditable({
@@ -29,6 +30,7 @@ export default function TitleContentEditable({
   onSubmit,
   size,
   className,
+  isEditing = false,
 }: Props) {
   const HeadingTag = size ?? "h1";
 
@@ -36,7 +38,7 @@ export default function TitleContentEditable({
     <HeadingTag
       ref={titleRef}
       className={cn(variants({ size }), className)}
-      contentEditable="true"
+      contentEditable={isEditing}
       suppressContentEditableWarning
       onInput={(e) => {
         let text = e.currentTarget.textContent.trim();

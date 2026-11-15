@@ -44,7 +44,7 @@ export function ColumnItem({
   }) => void;
 }) {
   const { id: projectId } = useParams<{ id: string }>();
-  const { databaseId, setItemsByColumn, cardsById } = useBoard();
+  const { databaseId, setItemsByColumn, cardsById, canEdit } = useBoard();
   const openSidePanel = useOpenPageSidePanel();
 
   const queryClient = useQueryClient();
@@ -101,6 +101,7 @@ export function ColumnItem({
     id,
     index,
     type: "item",
+    disabled: !canEdit,
     accept: "item",
     group: column,
     sensors: [
@@ -157,7 +158,7 @@ export function ColumnItem({
     >
       <span className="max-w-50 truncate ">{text}</span>
       <AnimatePresence>
-        {(isHover || isEdit) && (
+        {canEdit && (isHover || isEdit) && (
           <motion.div
             key="edit"
             className="flex gap-1 items-center justify-between"

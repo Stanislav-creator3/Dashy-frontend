@@ -170,6 +170,7 @@ export function SidebarTree({
                   index={index}
                   key={item.id}
                   parentId={item.parentId}
+                  access={item.access}
                   icon={getIcon(item.icon ?? item.type)}
                   iconColor={item.iconColor}
                   title={item.title}

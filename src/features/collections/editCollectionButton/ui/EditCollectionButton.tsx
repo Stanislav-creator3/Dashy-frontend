@@ -38,7 +38,7 @@ export default function EditCollectionButton({
               className
             )}
             whileHover={{
-              background: "var(--color-yellow)",
+              background: "var(--color-accent-main)",
               transition: {
                 duration: 0.3,
               },

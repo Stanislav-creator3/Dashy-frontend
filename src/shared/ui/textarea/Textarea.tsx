@@ -23,7 +23,7 @@ export default function TextArea({
       <label className="text-2xl" htmlFor={id}>{label}</label>
       <textarea
         id={id}
-        className="p-2.5 bg-input border-2 border-transparent rounded-md text-xl text-black transition-[border] duration-200 disabled:cursor-not-allowed focus:outline-none focus:border-yellow focus:border-2 placeholder:text-2xl"
+        className="p-2.5 bg-input border-2 border-transparent rounded-md text-xl text-black transition-[border] duration-200 disabled:cursor-not-allowed focus:outline-none focus:border-accent-main focus:border-2 placeholder:text-2xl"
         {...props}
       ></textarea>
       <AnimatePresence>

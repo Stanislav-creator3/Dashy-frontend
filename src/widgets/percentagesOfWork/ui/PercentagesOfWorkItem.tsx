@@ -20,7 +20,7 @@ const variants = cva({
     type: {
       interviews: "text-white bg-black",
       offers: "bg-transparent border border-black",
-      projects: "bg-yellow",
+      projects: "bg-accent-main",
       output: "bg-transparent border border-black",
       onboarding: "text-white bg-black",
     },

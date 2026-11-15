@@ -48,6 +48,7 @@ const PANEL_ACTIONS: Record<
 
 export function EditorPanelPlugin() {
   const [editor] = useLexicalComposerContext();
+  const isEditable = editor.isEditable();
   const [panel, setPanel] = useState<OpenEditorPanelPayload | null>(null);
   const open = panel !== null;
 
@@ -147,6 +148,10 @@ export function EditorPanelPlugin() {
   }, [editor]);
 
   if (!panel) {
+    return null;
+  }
+
+  if (!isEditable) {
     return null;
   }
 

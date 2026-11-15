@@ -19,7 +19,7 @@ const cardVariants = cva({
       bgWhite: "bg-white",
       bgBlack: "bg-black",
       bgGray: "bg-gray",
-      bgYellow: "bg-yellow",
+      bgAccent: "bg-accent-main",
     },
   },
 });
